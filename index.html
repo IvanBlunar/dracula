@@ -201,7 +201,15 @@
       </div>
 
       <img src="assets/Background Cielo Castillo.webp" alt="Fondo Cielo Castillo" class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none" style="top:-10px; z-index:-100;" />
-      <img src="assets/Background Castillo Full.webp" alt="Castillo fondo" class="absolute inset-0 -z-10 w-full h-full object-contain pointer-events-none select-none" style="object-position:center top;" />
+      <!-- Imagen del castillo -->
+<img src="assets/Background Castillo Full.webp" alt="Castillo fondo"
+     class="absolute inset-0 z-[10] w-full h-full object-contain pointer-events-none select-none"
+     style="object-position:center top;" />
+
+<!-- Overlay oscuro más fuerte y más corto -->
+<div class="absolute inset-0 z-[15] pointer-events-none select-none"
+     style="background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 25%);"></div>
+
 
       <!-- Slot de luna en castillo -->
       <div id="castillo-moon-slot" class="absolute z-[-20] w-[60vw] aspect-square pointer-events-none select-none overflow-visible" style="top: 30svh; left: 10vw;">
@@ -215,20 +223,24 @@
       <img src="assets/Rama del Libro Morado.webp" alt="Rama libro morada" class="branch-book-purple absolute right-[-22vw] bottom-[-24vh] w-[210vw] sm:right-[-20vw] sm:bottom-[-22vh] sm:w-[185vw] md:right-[-18vw] md:bottom-[-20vh] md:w-[150vw] lg:right-[-16vw] lg:bottom-[-18vh] lg:w-[120vw] xl:right-[-14vw] xl:bottom-[-16vh] xl:w-[108vw] max-w-none object-contain pointer-events-none select-none z-[50]" />
       <img src="assets/Corte Enredadera Blurr.webp" alt="Enredaderas desenfocadas" class="vine-blurr absolute left-1/2 -translate-x-1/2 bottom-[-62vh] w-[180vw] sm:bottom-[-64vh] sm:w-[170vw] md:bottom-[-66vh] md:w-[160vw] lg:bottom-[-62vh] lg:w-[145vw] xl:bottom-[-58vh] xl:w-[135vw] max-w-none object-cover pointer-events-none select-none z-[44]" />
       <img src="assets/Corte Enredaderas.webp" alt="Enredaderas" class="vine-cut absolute left-1/2 -translate-x-1/2 bottom-[-36vh] w-[185vw] sm:bottom-[-38vh] sm:w-[165vw] md:bottom-[-40vh] md:w-[145vw] lg:bottom-[-38vh] lg:w-[128vw] xl:bottom-[-36vh] xl:w-[120vw] max-w-none object-cover pointer-events-none select-none z-[45]" />
-    </div>
-  </section>
+    </div> 
 
-<!-- ===== PODIO ===== -->
-<section id="podio" class="relative z-10 overflow-visible">
+    <!-- ===== PODIO ===== -->
+    <section id="podio" class="relative z-10 overflow-visible">
   <div class="relative w-full min-h-[180svh] md:min-h-[200vh]" style="perspective:1000px;">
     <!-- Punto focal invisible del libro -->
     <div class="podio-focus absolute left-1/2 -translate-x-1/2 
                 top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
                 h-0 w-0 pointer-events-none select-none"></div>
 
-    <!-- Fondo -->
-    <img src="assets/Background Bosque - Podio.webp" alt="Bosque Podio"
-         class="podio-bg absolute inset-0 w-full h-full object-cover pointer-events-none select-none -z-20 willchange-transform" />
+    <!-- Imagen de fondo del bosque -->
+<img src="assets/Background Bosque - Podio.webp" alt="Bosque Podio"
+     class="podio-bg absolute inset-0 w-full h-full object-cover pointer-events-none select-none -z-20 willchange-transform" />
+
+<!-- Overlay oscuro en la parte superior -->
+<div class="absolute inset-0 z-[-19] pointer-events-none select-none"
+     style="background: linear-gradient(to bottom, rgba(0,0,0,0.8) 10%, transparent 30%);"></div>
+
 
     <!-- Podios (lejos → cerca → muy cerca) -->
     <img src="assets/(01) Podio Lejos.webp" alt="Podio lejos"
@@ -279,6 +291,10 @@
                 opacity-0 pointer-events-none select-none z-[60] willchange-transform" />
   </div>
 </section>
+
+
+  </section>
+
 
 </main>
 
