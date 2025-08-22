@@ -105,14 +105,21 @@
   </div>
 
   <!-- Sello + CTA -->
-  <div class="title absolute left-1/2 -translate-x-1/2 top-[20vh] sm:top-[24vh] md:top-[30vh] w-[72vw] sm:w-[52vw] md:w-[44vw] max-w-[900px] z-[60] willchange-transform flex flex-col items-center">
+  <div class="title absolute left-1/2 -translate-x-1/2 
+            top-[20vh] sm:top-[24vh] md:top-[30vh] 
+            max-[639px]:top-[28vh]
+            w-[72vw] sm:w-[52vw] md:w-[44vw] max-w-[900px] 
+            z-[60] willchange-transform flex flex-col items-center
+            gap-2 sm:gap-3 md:gap-4">
     <img src="assets/Sello A.webp" alt="Secretos del Bosque Prohibido" class="w-full h-full object-contain mx-auto pointer-events-none select-none">
     <div class="mt-6 flex flex-col items-center">
       <a href="#trailer" class="px-6 py-3 border-2 border-lime-500 text-white font-black tracking-wider text-lg sm:text-xl bg-black hover:bg-lime-500 hover:text-black transition-colors duration-300">CONOCE LA HISTORIA</a>
       <div class="mt-3 animate-bounce">
         <svg class="w-6 h-6 text-lime-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
       </div>
-      <p class="mt-2 text-sm sm:text-base text-gray-300 text-center leading-snug max-w-xs">Haz scroll con la barra del mouse para comenzar la aventura</p>
+      <p class="mt-20 sm:mt-3 md:mt-4 
+          text-sm sm:text-base text-gray-300 text-center 
+          leading-snug max-w-xs">Haz scroll con la barra del mouse para comenzar la aventura</p>
     </div>
   </div>
 
@@ -270,34 +277,42 @@
   addEventListener('resize', fitBgToBestiarioEnd);
   addEventListener('orientationchange', fitBgToBestiarioEnd);
 
-  /* ===== Parallax del fondo en Bestiario ===== */
+  /* ===== Parallax del fondo en Bestiario (más suave) ===== */
   function mountBgParallax() {
     ScrollTrigger.killTweensOf('.bg-bosque');
     ScrollTrigger.getAll().forEach(st => { if (st.vars?.id === 'bg-parallax') st.kill(); });
     gsap.to(".bg-bosque", {
       y: () => (innerWidth >= 768 ? -240 : -120),
       ease: "none",
-      scrollTrigger: { id: "bg-parallax", trigger: "#captura-bestias", start: "top bottom", end: "bottom top", scrub: true }
+      scrollTrigger: {
+        id: "bg-parallax",
+        trigger: "#captura-bestias",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1.1
+      }
     });
   }
   addEventListener('load', mountBgParallax);
   addEventListener('resize', () => { fitBgToBestiarioEnd(); mountBgParallax(); });
 
-  /* ===== Flotación suave ===== */
+  /* ===== Flotación suave (igual) ===== */
   gsap.to(".moon",            { y: 18,  scale: 1.025, duration: 6,  yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-left",      { x: 24,  y: -8, duration: 10, yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-right",     { x: -22, y: 6, duration: 12, yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-low",       { x: 16,  y: 12, duration: 14, yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-low-left",  { x: -16, y: 12, duration: 14, yoyo:true, repeat:-1, ease:"sine.inOut" });
 
-  /* ===== Parallax en HERO ===== */
-  gsap.timeline({ scrollTrigger:{ trigger: ".hero", start: "top top", end: "bottom top", scrub: true }})
-    .to(".moon",           { y: -60 }, 0)
-    .to(".cloud-left",     { y: -40 }, 0)
-    .to(".cloud-right",    { y: -30 }, 0)
-    .to(".cloud-low",      { y: -18 }, 0)
-    .to(".cloud-low-left", { y: -18 }, 0)
-    .to(".title",          { y: -32, opacity: .98 }, 0);
+  /* ===== Parallax en HERO (más suave) ===== */
+  gsap.timeline({
+    scrollTrigger:{ trigger: ".hero", start: "top top", end: "bottom top", scrub: 1.1 }
+  })
+  .to(".moon",           { y: -60 }, 0)
+  .to(".cloud-left",     { y: -40 }, 0)
+  .to(".cloud-right",    { y: -30 }, 0)
+  .to(".cloud-low",      { y: -18 }, 0)
+  .to(".cloud-low-left", { y: -18 }, 0)
+  .to(".title",          { y: -32, opacity: .98, ease: "power1.inOut" }, 0);
 
   /* ===== Nav activo ===== */
   document.querySelectorAll('.nav-item').forEach(item=>{
@@ -307,7 +322,7 @@
     });
   });
 
-  /* ===== One-scroll: hero -> trailer ===== */
+  /* ===== One-scroll: hero -> trailer (igual; ya usa smooth) ===== */
   (function(){
     const hero = document.querySelector('.hero'), target = document.querySelector('#trailer');
     if (!hero || !target) return;
@@ -319,7 +334,7 @@
     hero.addEventListener('touchend', e=>{ if(!inV()||touchStartY==null)return; const dy=touchStartY-(e.changedTouches?.[0]?.clientY??touchStartY); touchStartY=null; if(dy>30) go(); },{passive:true});
   })();
 
-  /* ===== One-scroll: trailer -> bestiario ===== */
+  /* ===== One-scroll: trailer -> bestiario (igual; ya usa smooth) ===== */
   (function(){
     const trailer=document.querySelector('#trailer'), bestiario=document.querySelector('#captura-bestias');
     if(!trailer||!bestiario) return;
@@ -331,7 +346,7 @@
     trailer.addEventListener('touchend', e=>{ if(!inV(trailer)||touchStartY==null||locking) return; const dy=touchStartY-(e.changedTouches?.[0]?.clientY??touchStartY); touchStartY=null; if(dy>30){ locking=true; go(bestiario);} },{passive:true});
   })();
 
-  /* ===== Morph LUNA: Hero → Bestiario ===== */
+  /* ===== Morph LUNA: Hero → Bestiario (más sedoso) ===== */
   let moonMorphST;
   function centerOf(el){ const r=el.getBoundingClientRect(); return {x:r.left+r.width/2+scrollX,y:r.top+r.height/2+scrollY}; }
   function mountMoonMorph(){
@@ -341,7 +356,6 @@
     const green=document.querySelector('#captura-bestias img[alt="Luna Verde"]');
     const triggerS=document.querySelector('#captura-bestias');
     const hero=document.querySelector('.hero');
-    const trailer=document.querySelector('#trailer');
     if(!moon||!moonImg||!green||!triggerS||!hero) return;
 
     const greenTargetOpacity=parseFloat(getComputedStyle(green).opacity)||0.8;
@@ -349,11 +363,11 @@
 
     const cMoon=centerOf(moon), cGreen=centerOf(green); const dx=cGreen.x-cMoon.x, dy=cGreen.y-cMoon.y;
 
-    const tl=gsap.timeline({ scrollTrigger:{ trigger:triggerS, start:"top bottom", end:"center center", scrub:2.5 }});
-    tl.to(moon,{ x:dx, y:dy, scale:0.92, ease:"power1.out" },0)
-      .to(moonImg,{ filter:"hue-rotate(95deg) saturate(1.35) brightness(1.05)", ease:"power1.out" },0)
-      .to(green,{ opacity:greenTargetOpacity, ease:"power1.out" },0.65)
-      .to(moon,{ opacity:0, ease:"power1.out" },0.8);
+    const tl=gsap.timeline({ scrollTrigger:{ trigger:triggerS, start:"top bottom", end:"center center", scrub:3 }});
+    tl.to(moon,{ x:dx, y:dy, scale:0.92, ease:"power1.inOut" },0)
+      .to(moonImg,{ filter:"hue-rotate(95deg) saturate(1.35) brightness(1.05)", ease:"power1.inOut" },0)
+      .to(green,{ opacity:greenTargetOpacity, ease:"power1.inOut" },0.65)
+      .to(moon,{ opacity:0, ease:"power1.inOut" },0.8);
 
     moonMorphST=tl.scrollTrigger;
   }
@@ -361,7 +375,7 @@
   addEventListener('resize', ()=>{ mountMoonMorph(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountMoonMorph(); ScrollTrigger.refresh(); });
 
-  /* ===== Z-SWAP: luna HERO detrás en Bestiario y restaurar antes de Castillo ===== */
+  /* ===== Z-SWAP luna (igual) ===== */
   (function mountHeroMoonZSwap(){
     const heroMoon=document.querySelector('.moon');
     const bestiario=document.querySelector('#captura-bestias');
@@ -381,7 +395,7 @@
     });
   })();
 
-  /* ===== Nubes: descenso hero -> trailer ===== */
+  /* ===== Nubes: descenso hero -> trailer (más suave) ===== */
   function mountCloudDropToTrailer(){
     ScrollTrigger.getAll().forEach(st=>{ if(['cloud-drop-left','cloud-drop-right'].includes(st.vars?.id)) st.kill(); });
     const hero=document.querySelector('.hero'), trailer=document.querySelector('#trailer');
@@ -390,19 +404,19 @@
     const dY=(el,off=0)=> (trailer.getBoundingClientRect().top+scrollY+off)-(el.getBoundingClientRect().top+scrollY);
     const desk=()=> innerWidth>=768;
     gsap.to(leftW,{ id:'cloud-drop-left', y:()=>dY(leftW, desk()?40:24), ease:'none',
-      scrollTrigger:{ id:'cloud-drop-left', trigger:hero, start:'bottom bottom', endTrigger:'#trailer', end:'top top', scrub:true, invalidateOnRefresh:true }});
+      scrollTrigger:{ id:'cloud-drop-left', trigger:hero, start:'bottom bottom', endTrigger:'#trailer', end:'top top', scrub:1.2, invalidateOnRefresh:true }});
     gsap.to(rightW,{ id:'cloud-drop-right', y:()=>dY(rightW, desk()?20:12), ease:'none',
-      scrollTrigger:{ id:'cloud-drop-right', trigger:hero, start:'bottom bottom', endTrigger:'#trailer', end:'top top', scrub:true, invalidateOnRefresh:true }});
+      scrollTrigger:{ id:'cloud-drop-right', trigger:hero, start:'bottom bottom', endTrigger:'#trailer', end:'top top', scrub:1.2, invalidateOnRefresh:true }});
   }
   addEventListener('load', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
   addEventListener('resize', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
 
-  /* ===== Parallax continuidad en #trailer ===== */
+  /* ===== Parallax continuidad en #trailer (más suave) ===== */
   function mountTrailerCarryParallax(){
     ScrollTrigger.getAll().forEach(st=>{ if(st.vars?.id==='trailer-carry') st.kill(); });
     const desk=()=> innerWidth>=768;
-    gsap.timeline({ scrollTrigger:{ id:'trailer-carry', trigger:'#trailer', start:'top bottom', end:'bottom top', scrub:true }, defaults:{ ease:'none' }})
+    gsap.timeline({ scrollTrigger:{ id:'trailer-carry', trigger:'#trailer', start:'top bottom', end:'bottom top', scrub:1.2 }, defaults:{ ease:'none' }})
       .to('.moon',           { y:()=>desk()?'+=220':'+=150', x:()=>desk()?'+=20':'+=12',  immediateRender:false },0)
       .to('.cloud-left',     { y:()=>desk()?'+=130':'+=95',  x:()=>desk()?'-=24':'-=16', immediateRender:false },0)
       .to('.cloud-right',    { y:()=>desk()?'+=120':'+=90',  x:()=>desk()?'+=22':'+=14', immediateRender:false },0)
@@ -413,7 +427,7 @@
   addEventListener('resize', mountTrailerCarryParallax);
   addEventListener('orientationchange', mountTrailerCarryParallax);
 
-  /* ===== Video overlay + autoplay ===== */
+  /* ===== Video overlay + autoplay (igual) ===== */
   (function(){
     const video=document.getElementById('draculaTrailer'), playBtn=document.getElementById('trailerPlay');
     if(!video||!playBtn) return;
@@ -428,22 +442,25 @@
     a.addEventListener('click', e=>{ e.preventDefault(); const t=document.querySelector('#trailer'); if(t) scrollTo({ top:t.getBoundingClientRect().top+scrollY, behavior:'smooth' }); });
   });
 
-  /* ===== Castillo: reveal ramas/enredaderas ===== */
+  /* ===== Castillo: reveal ramas/enredaderas (ease + scrub más suave) ===== */
   function mountCastilloReveal(){
     const castillo=document.querySelector('section#castillo'); if(!castillo) return;
     ScrollTrigger.getAll().forEach(st=>{ if(st.vars?.id==='castillo-reveal') st.kill(); });
     const q=gsap.utils.selector(castillo);
-    gsap.timeline({ defaults:{ ease:'power2.out' }, scrollTrigger:{ id:'castillo-reveal', trigger:castillo, start:'top 85%', end:'bottom 40%', scrub:0.9, invalidateOnRefresh:true }})
-      .from(q('.branch-green-cut'), { x:-600, opacity:0, duration:1.6, immediateRender:false },0)
-      .from(q('.branch-purple-far'),{ x: 600, opacity:0, duration:1.6, immediateRender:false },0)
-      .from(q('.branch-book-purple'),{x: 700, opacity:0, duration:1.8, immediateRender:false },0.1)
-      .from(q('.vine-cut'),         { y: 460, opacity:0, duration:1.8, immediateRender:false },0.2);
+    gsap.timeline({
+      defaults:{ ease:'power1.inOut' },
+      scrollTrigger:{ id:'castillo-reveal', trigger:castillo, start:'top 85%', end:'bottom 40%', scrub:1.4, invalidateOnRefresh:true }
+    })
+    .from(q('.branch-green-cut'), { x:-600, opacity:0, immediateRender:false },0)
+    .from(q('.branch-purple-far'),{ x: 600, opacity:0, immediateRender:false },0)
+    .from(q('.branch-book-purple'),{x: 700, opacity:0, immediateRender:false },0.1)
+    .from(q('.vine-cut'),         { y: 460, opacity:0, immediateRender:false },0.2);
   }
   addEventListener('load', ()=>{ mountCastilloReveal(); ScrollTrigger.refresh(); });
   addEventListener('resize', ()=>{ mountCastilloReveal(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountCastilloReveal(); ScrollTrigger.refresh(); });
 
-  /* ===== LUNA VERDE: Bestiario → Castillo ===== */
+  /* ===== LUNA VERDE: Bestiario → Castillo (alineado con suavidad del morph) ===== */
   function mountMoonToCastillo(){
     const bestiario=document.querySelector('#captura-bestias');
     const castillo=document.querySelector('#castillo');
@@ -464,7 +481,7 @@
         start:'bottom bottom',
         endTrigger: castillo,
         end:'top 38%',
-        scrub: 2.2,
+        scrub: 2.4,
         invalidateOnRefresh:true,
         onEnter:     ()=> gsap.set(bestMoon,{ zIndex:26 }),
         onLeaveBack: ()=> gsap.set(bestMoon,{ zIndex:''  })
@@ -476,11 +493,11 @@
       y:()=>{ const b=centerOf(bestMoon), s=centerOf(slot); return s.y-b.y; },
       scale:()=>{ const rb=bestMoon.getBoundingClientRect(), rs=slot.getBoundingClientRect(); return rs.width/rb.width; },
       transformOrigin:'center center',
-      ease:'sine.inOut',
+      ease:'power1.inOut',
       immediateRender:false
     },0)
-    .to(castilloGreen,{ opacity:1, ease:'sine.inOut' },0.70)
-    .to(bestMoon,     { opacity:0, ease:'sine.inOut' },0.88);
+    .to(castilloGreen,{ opacity:1, ease:'power1.inOut' },0.70)
+    .to(bestMoon,     { opacity:0, ease:'power1.inOut' },0.88);
 
     ScrollTrigger.create({
       id:'moon-best-zswap',
@@ -497,22 +514,19 @@
   addEventListener('resize', ()=>{ mountMoonToCastillo(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountMoonToCastillo(); ScrollTrigger.refresh(); });
 
-  /* === BESTIARIO → CASTILLO: nubes verdes hasta el INICIO del castillo === */
+  /* === BESTIARIO → CASTILLO: nubes verdes (scrub suave) === */
   function getGreenWrappers() {
-    return Array.from(
-      document.querySelectorAll('#captura-bestias img[alt="Nube Verde B"]')
-    ).map(img => img.closest('div')).filter(Boolean);
+    return Array.from(document.querySelectorAll('#captura-bestias img[alt="Nube Verde B"]')).map(img => img.closest('div')).filter(Boolean);
   }
-
   function mountGreenDropToCastillo() {
-    const W    = getGreenWrappers();
+    const W = getGreenWrappers();
     const best = document.querySelector('#captura-bestias');
     const cast = document.querySelector('#castillo');
     const fondo = cast?.querySelector('img[alt="Castillo fondo"]');
     if (!W.length || !best || !cast || !fondo) return;
 
     ScrollTrigger.getAll().forEach(st => {
-      if (['green-drop-a','green-drop-b','green-drop-c','green-drop-z','green-layer-raise'].includes(st.vars?.id)) st.kill();
+      if (['green-drop-a','green-drop-b','green-drop-c','green-drop-z'].includes(st.vars?.id)) st.kill();
     });
 
     const dY = (el, offset=0) => {
@@ -520,7 +534,6 @@
       const topEl    = el.getBoundingClientRect().top + scrollY;
       return (topStart - topEl) + offset;
     };
-
     const desk = () => innerWidth >= 768;
 
     ScrollTrigger.create({
@@ -535,72 +548,30 @@
       onLeaveBack: () => W.forEach(w => gsap.set(w, { clearProps: 'zIndex' }))
     });
 
-    if (W[0]) gsap.to(W[0], {
-      id: 'green-drop-a',
-      y: () => dY(W[0], desk()?60:40),
-      ease: 'none',
-      scrollTrigger: {
-        id: 'green-drop-a',
-        trigger: best,
-        start: 'bottom bottom',
-        endTrigger: cast,
-        end: 'top top',
-        scrub: true,
-        invalidateOnRefresh: true
-      }
-    });
-
-    if (W[1]) gsap.to(W[1], {
-      id: 'green-drop-b',
-      y: () => dY(W[1], desk()?80:60),
-      ease: 'none',
-      scrollTrigger: {
-        id: 'green-drop-b',
-        trigger: best,
-        start: 'bottom bottom',
-        endTrigger: cast,
-        end: 'top top',
-        scrub: true,
-        invalidateOnRefresh: true
-      }
-    });
-
-    if (W[2]) gsap.to(W[2], {
-      id: 'green-drop-c',
-      y: () => dY(W[2], desk()?70:50),
-      ease: 'none',
-      scrollTrigger: {
-        id: 'green-drop-c',
-        trigger: best,
-        start: 'bottom bottom',
-        endTrigger: cast,
-        end: 'top top',
-        scrub: true,
-        invalidateOnRefresh: true
-      }
-    });
+    if (W[0]) gsap.to(W[0], { id:'green-drop-a', y:()=>dY(W[0], desk()?60:40), ease:'none',
+      scrollTrigger:{ id:'green-drop-a', trigger:best, start:'bottom bottom', endTrigger:cast, end:'top top', scrub:1.1, invalidateOnRefresh:true }});
+    if (W[1]) gsap.to(W[1], { id:'green-drop-b', y:()=>dY(W[1], desk()?80:60), ease:'none',
+      scrollTrigger:{ id:'green-drop-b', trigger:best, start:'bottom bottom', endTrigger:cast, end:'top top', scrub:1.1, invalidateOnRefresh:true }});
+    if (W[2]) gsap.to(W[2], { id:'green-drop-c', y:()=>dY(W[2], desk()?70:50), ease:'none',
+      scrollTrigger:{ id:'green-drop-c', trigger:best, start:'bottom bottom', endTrigger:cast, end:'top top', scrub:1.1, invalidateOnRefresh:true }});
   }
+  addEventListener('load', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
+  addEventListener('resize', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
+  addEventListener('orientationchange', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
 
-  addEventListener('load',             ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
-  addEventListener('resize',           ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
-  addEventListener('orientationchange',()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
-
-  /* ===== PODIO: acercamiento con podio/ramas más ARRIBA/ABAJO según diales ===== */
+  /* ===== PODIO: acercamiento (scrub + ease más suaves) ===== */
   let podioMM;
 
   function mountPodioSequence() {
     const podio = document.querySelector('#podio');
     if (!podio) return;
 
-    // ---- AJUSTES RÁPIDOS ----
-    const MOB_PODIO_UP_LAST = 28;   // móvil: podio sube (negativo en y final)
-    const DESK_RAISE_LAST   = 100;  // desktop: podio sube al final
+    const MOB_PODIO_UP_LAST = 28;   // móvil
+    const DESK_RAISE_LAST   = 100;  // desktop
 
-    const MOB_RAMAS_UP      = 22;   // móvil: ramas/espinas arriba (negativo)
-    const DESK_RAMAS_DOWN   = 260;  // desktop: ramas/espinas ABAJO (positivo)
-    // --------------------------
+    const MOB_RAMAS_UP      = 22;   // móvil
+    const DESK_RAMAS_DOWN   = 260;  // desktop
 
-    // Limpieza
     ScrollTrigger.getAll().forEach(st => {
       if (st.vars?.id && (st.vars.id === 'podio-sequence' || st.vars.id.startsWith('podio-'))) st.kill();
     });
@@ -615,7 +586,7 @@
       muy:   desk ? -2 : -1
     });
 
-    // ====== MOBILE (≤ 639px) ======
+    /* ====== MOBILE (≤ 639px) ====== */
     podioMM.add("(max-width: 639px)", () => {
       const fit = fitValues(false);
 
@@ -626,50 +597,46 @@
       gsap.set([q('.espinas-verdes'), q('.rama-verde'), q('.rama-morada'), q('.rama-libro'), q('.espinas-moradas')], { opacity: 0, force3D: true });
 
       const tl = gsap.timeline({
-        defaults: { ease: 'none' },
+        defaults: { ease: 'power1.inOut' },
         scrollTrigger: {
           id: 'podio-sequence',
           trigger: podio,
           start: 'top 10%',
           end: '+=180%',
-          scrub: 1.2,
+          scrub: 1.9,
           pin: true,
-          anticipatePin: 1,
+          anticipatePin: 2,
           invalidateOnRefresh: true
         }
       });
 
-      // Fondo
-      tl.to(q('.podio-bg'), { scale: 1.06, transformOrigin: 'center center' }, 0);
-
-      // Dolly (móvil)
-      tl.to(q('.podio-lejos'),    { scale: 0.985, y: fit.lejos +  6 }, 0.00)
+      // Fondo + dolly
+      tl.to(q('.podio-bg'), { scale: 1.06, transformOrigin: 'center center' }, 0)
+        .to(q('.podio-lejos'),    { scale: 0.985, y: fit.lejos +  6 }, 0.00)
         .to(q('.podio-cerca'),    { scale: 1.050, y: fit.cerca +  4 }, 0.18)
-        .to(q('.podio-muycerca'), { scale: 1.100, y: fit.muy   +  0 }, 0.46);
+        .to(q('.podio-muycerca'), { scale: 1.100, y: fit.muy   +  0 }, 0.46)
+        .to(q('.podio-lejos'),    { opacity: 0.00 }, 0.16)
+        .to(q('.podio-cerca'),    { opacity: 1.00 }, 0.18)
+        .to(q('.podio-cerca'),    { opacity: 0.00 }, 0.44)
+        .to(q('.podio-muycerca'), { opacity: 1.00 }, 0.46)
+        .to(q('.podio-muycerca'), { scale: 1.12,  y: `-=${MOB_PODIO_UP_LAST}` }, 0.68);
 
-      // Crossfades + subida final de podio
-      tl.to(q('.podio-lejos'),    { opacity: 0.00, duration: 0.36 }, 0.16)
-        .to(q('.podio-cerca'),    { opacity: 1.00, duration: 0.40 }, 0.18)
-        .to(q('.podio-cerca'),    { opacity: 0.00, duration: 0.40 }, 0.44)
-        .to(q('.podio-muycerca'), { opacity: 1.00, duration: 0.44 }, 0.46)
-        .to(q('.podio-muycerca'), { scale: 1.12,  y: `-=${MOB_PODIO_UP_LAST}`, duration: 0.28 }, 0.68);
-
-      // Ramas/espinas MÁS ARRIBA (móvil)
-      tl.to(q('.espinas-verdes'),  { opacity: 1, y: -(30 + MOB_RAMAS_UP),              duration: 0.45 }, 0.22)
-        .to(q('.rama-verde'),      { opacity: 1, x: -32, y: -(6 + MOB_RAMAS_UP*0.8),   duration: 0.50 }, 0.30)
-        .to(q('.rama-morada'),     { opacity: 1, x:  26, y: -(6 + MOB_RAMAS_UP*0.8),   duration: 0.50 }, 0.38)
-        .to(q('.rama-libro'),      { opacity: 1, y: -(34 + MOB_RAMAS_UP),              duration: 0.55 }, 0.46)
-        .to(q('.espinas-moradas'), { opacity: 1, y: -(48 + MOB_RAMAS_UP), scale: 1.06, duration: 0.60,
+      // Ramas/espinas arriba
+      tl.to(q('.espinas-verdes'),  { opacity: 1, y: -(30 + MOB_RAMAS_UP) }, 0.22)
+        .to(q('.rama-verde'),      { opacity: 1, x: -32, y: -(6 + MOB_RAMAS_UP*0.8) }, 0.30)
+        .to(q('.rama-morada'),     { opacity: 1, x:  26, y: -(6 + MOB_RAMAS_UP*0.8) }, 0.38)
+        .to(q('.rama-libro'),      { opacity: 1, y: -(34 + MOB_RAMAS_UP) }, 0.46)
+        .to(q('.espinas-moradas'), { opacity: 1, y: -(48 + MOB_RAMAS_UP), scale: 1.06,
                                      onStart: ()=> gsap.set(q('.espinas-moradas'), { zIndex: 60 }) }, 0.58);
 
-      // Parallax sutil (móvil)
+      // Parallax sutil
       gsap.to(q('.rama-morada'), { y: -(10 + MOB_RAMAS_UP*0.4), ease: 'none',
-        scrollTrigger: { id: 'podio-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: true }});
+        scrollTrigger: { id: 'podio-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1 }});
       gsap.to(q('.rama-verde'), { y: -(8 + MOB_RAMAS_UP*0.4), ease: 'none',
-        scrollTrigger: { id: 'podio-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: true }});
+        scrollTrigger: { id: 'podio-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1 }});
     });
 
-    // ====== DESKTOP (≥ 640px) ======
+    /* ====== DESKTOP (≥ 640px) ====== */
     podioMM.add("(min-width: 640px)", () => {
       const fit = fitValues(true);
 
@@ -680,47 +647,42 @@
       gsap.set([q('.espinas-verdes'), q('.rama-verde'), q('.rama-morada'), q('.rama-libro'), q('.espinas-moradas')], { opacity: 0, force3D: true });
 
       const tl = gsap.timeline({
-        defaults: { ease: 'none' },
+        defaults: { ease: 'power1.inOut' },
         scrollTrigger: {
           id: 'podio-sequence',
           trigger: podio,
           start: 'top top',
           end: '+=220%',
-          scrub: 1.6,
+          scrub: 2.0,
           pin: true,
-          anticipatePin: 1,
+          anticipatePin: 2,
           invalidateOnRefresh: true
         }
       });
 
-      tl.to(q('.podio-bg'), { scale: 1.08, transformOrigin: 'center center' }, 0);
-
-      tl.to(q('.podio-lejos'),    { scale: 0.97, y: fit.lejos + 10 }, 0.00)
+      tl.to(q('.podio-bg'), { scale: 1.08, transformOrigin: 'center center' }, 0)
+        .to(q('.podio-lejos'),    { scale: 0.97, y: fit.lejos + 10 }, 0.00)
         .to(q('.podio-cerca'),    { scale: 1.06, y: fit.cerca +  6 }, 0.20)
-        .to(q('.podio-muycerca'), { scale: 1.12, y: fit.muy   -  4 }, 0.55);
+        .to(q('.podio-muycerca'), { scale: 1.12, y: fit.muy   -  4 }, 0.55)
+        .to(q('.podio-lejos'),    { opacity: 0.00 }, 0.18)
+        .to(q('.podio-cerca'),    { opacity: 1.00 }, 0.20)
+        .to(q('.podio-cerca'),    { opacity: 0.00 }, 0.50)
+        .to(q('.podio-muycerca'), { opacity: 1.00 }, 0.55)
+        .to(q('.podio-muycerca'), { scale: 1.16, y: `-=${DESK_RAISE_LAST}` }, 0.78);
 
-      // Crossfades + SUBIDA final de podio
-      tl.to(q('.podio-lejos'),    { opacity: 0.00, duration: 0.40 }, 0.18)
-        .to(q('.podio-cerca'),    { opacity: 1.00, duration: 0.45 }, 0.20)
-        .to(q('.podio-cerca'),    { opacity: 0.00, duration: 0.45 }, 0.50)
-        .to(q('.podio-muycerca'), { opacity: 1.00, duration: 0.50 }, 0.55)
-        .to(q('.podio-muycerca'), { scale: 1.16, y: `-=${DESK_RAISE_LAST}`, duration: 0.35 }, 0.78);
-
-      // Ramas/espinas ABAJO (desktop, positivo = baja)
-      tl.to(q('.espinas-verdes'),  { opacity: 1, y: (DESK_RAMAS_DOWN - 38),             duration: 0.55 }, 0.22)
-        .to(q('.rama-verde'),      { opacity: 1, x: -56, y: (DESK_RAMAS_DOWN*0.8 - 8),  duration: 0.60 }, 0.30)
-        .to(q('.rama-morada'),     { opacity: 1, x:  46, y: (DESK_RAMAS_DOWN*0.8 - 8),  duration: 0.60 }, 0.38)
-        .to(q('.rama-libro'),      { opacity: 1, y: (DESK_RAMAS_DOWN - 52),             duration: 0.60 }, 0.46)
-        .to(q('.espinas-moradas'), { opacity: 1, y: (DESK_RAMAS_DOWN - 64), scale: 1.08, duration: 0.65,
+      tl.to(q('.espinas-verdes'),  { opacity: 1, y: (DESK_RAMAS_DOWN - 38) }, 0.22)
+        .to(q('.rama-verde'),      { opacity: 1, x: -56, y: (DESK_RAMAS_DOWN*0.8 - 8) }, 0.30)
+        .to(q('.rama-morada'),     { opacity: 1, x:  46, y: (DESK_RAMAS_DOWN*0.8 - 8) }, 0.38)
+        .to(q('.rama-libro'),      { opacity: 1, y: (DESK_RAMAS_DOWN - 52) }, 0.46)
+        .to(q('.espinas-moradas'), { opacity: 1, y: (DESK_RAMAS_DOWN - 64), scale: 1.08,
                                      onStart: ()=> gsap.set(q('.espinas-moradas'), { zIndex: 60 }) }, 0.60);
 
-      // Parallax sutil (desktop) coherente con bajada
       gsap.to(q('.rama-morada'), { y: (DESK_RAMAS_DOWN*0.3 - 24), ease: 'none',
-        scrollTrigger: { id: 'podio-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: true }});
+        scrollTrigger: { id: 'podio-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
       gsap.to(q('.rama-verde'), { y: (DESK_RAMAS_DOWN*0.3 - 18), ease: 'none',
-        scrollTrigger: { id: 'podio-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: true }});
+        scrollTrigger: { id: 'podio-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
       gsap.to(q('.rama-libro'), { x: 10, ease: 'none',
-        scrollTrigger: { id: 'podio-rl-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: true }});
+        scrollTrigger: { id: 'podio-rl-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
     });
   }
 
@@ -728,5 +690,6 @@
   addEventListener('resize', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
 </script>
+
 </body>
 </html>
