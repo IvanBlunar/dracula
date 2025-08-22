@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Drácula — Hero Parallax</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Viñeta sutil solo para el hero */
+    .vignette::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 160px rgba(0, 0, 0, .8);
+    }
+
+    .willchange-transform {
+      will-change: transform;
+    }
+
+    /* Estado activo del nav: muestra ON y oculta OFF */
+    .nav-item.is-active .off {
+      opacity: 0 !important;
+    }
+
+    .nav-item.is-active .on {
+      opacity: 1 !important;
+    }
+  </style>
+</head>
+
+<body class="bg-black text-white overflow-x-hidden antialiased">
+
+  <!-- ===== Header ===== -->
+  <header class="fixed inset-x-0 top-0 z-[100]">
+    <div class="relative mx-auto mt-4 w-[94%] max-w-[1400px]">
+      <div class="flex items-center justify-between px-4 md:px-6 py-2 bg-black/40 backdrop-blur-md rounded-xl">
+        <img src="assets/header/Logo Dracula.webp" alt="Drácula"
+          class="h-[34px] sm:h-[42px] md:h-[50px] w-auto select-none">
+
+        <nav class="hidden sm:flex items-center gap-14">
+          <a href="#bestiario" class="group relative inline-block nav-item" data-nav="bestiario" aria-label="El Bestiario">
+            <img src="assets/header/OFF EL BESTIARIO.webp" alt="El Bestiario"
+              class="off h-[24px] md:h-[28px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+            <img src="assets/header/ON EL BESTIARIO.webp" alt=""
+              class="on pointer-events-none absolute inset-0 h-[24px] md:h-[28px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+          </a>
+
+          <a href="#castillo" class="group relative inline-block nav-item" data-nav="castillo" aria-label="El Castillo">
+            <img src="assets/header/OFF El Castilo.webp" alt="El Castillo"
+              class="off h-[24px] md:h-[30px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+            <img src="assets/header/ON El Castilo.webp" alt=""
+              class="on pointer-events-none absolute inset-0 h-[24px] md:h-[30px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN WRAPPER ===== -->
+  <main class="relative z-0">
+
+    <!-- Fondo del bosque -->
+    <div class="bg-wrap absolute inset-x-0 top-0 -z-10 overflow-hidden" style="height: 100vh;">
+      <img src="assets/Background Primera Sección.webp" alt="Fondo del bosque"
+        class="bg-bosque w-full h-full object-cover object-center opacity-95 select-none willchange-transform">
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero relative min-h-[100vh] md:h-[140vh] w-full overflow-visible z-10"></section>
+
+    <!-- Luna -->
+    <div class="moon absolute left-0 top-[calc(6vh-20px)] sm:top-[calc(8vh-20px)] md:top-[calc(6vh-50px)] w-[54vw] sm:w-[50vw] md:w-[46vw] max-w-[880px] aspect-square overflow-hidden z-[1] willchange-transform">
+      <img src="assets/Luna Normal.webp" alt="Luna" class="w-full h-full object-cover pointer-events-none select-none">
+    </div>
+
+    <!-- Nubes -->
+    <div class="absolute right-0 top-[60vh] sm:top-[62vh] md:top-[66vh] w-[32vw] sm:w-[28vw] md:w-[24vw] overflow-hidden z-[3]">
+      <div class="cloud-right relative w-[66vw] sm:w-[50vw] md:w-[36vw] aspect-[2/1] willchange-transform"
+        style="-webkit-mask-image:linear-gradient(to left, rgba(0,0,0,0.1), rgba(0,0,0,1) 22%, rgba(0,0,0,1)); mask-image:linear-gradient(to left, rgba(0,0,0,0.1), rgba(0,0,0,1) 22%, rgba(0,0,0,0.1));">
+        <img src="assets/Nube Morada A.webp" alt="Nube derecha"
+          class="w-full h-full object-cover pointer-events-none select-none transform -scale-x-100">
+      </div>
+    </div>
+
+    <div class="absolute left-[-5vw] top-[55vh] sm:top-[58vh] md:top-[50vh] w-[40vw] sm:w-[35vw] md:w-[30vw] overflow-hidden z-[3]">
+      <div class="cloud-left relative w-full aspect-[2/1] willchange-transform">
+        <img src="assets/Nube Morada A.webp" alt="Nube izquierda grande"
+          class="w-full h-full object-cover pointer-events-none select-none">
+      </div>
+    </div>
+
+    <!-- Nubes inferiores -->
+    <div class="cloud-low absolute right-[-11vh] top-[92vh] sm:top-[91vh] md:top-[90vh] w-[80vw] sm:w-[60vw] md:w-[46vw] max-w-[900px] aspect-[2/1] opacity-80 z-[90] willchange-transform">
+      <img src="assets/Nube Morada Blurr B.webp" alt="Nube baja derecha"
+        class="w-full h-full object-cover pointer-events-none select-none">
+    </div>
+
+    <div class="cloud-low-left absolute left-[-11vh] top-[96vh] sm:top-[95vh] md:top-[99vh] w-[80vw] sm:w-[60vw] md:w-[46vw] max-w-[900px] aspect-[2/1] opacity-80 z-[90] willchange-transform">
+      <img src="assets/Nube Morada Blurr B.webp" alt="Nube baja izquierda"
+        class="w-full h-full object-cover pointer-events-none select-none transform -scale-x-100">
+    </div>
+
+    <!-- Niebla -->
+    <div class="fixed top-[60vh] left-0 right-0 w-full h-[40vh] z-[50] pointer-events-none">
+      <img src="assets/Niebla General (1).webp" alt="Niebla general"
+        class="w-full h-full object-fill select-none pointer-events-none" />
+    </div>
+
+    <!-- Título central -->
+    <div class="title absolute left-1/2 -translate-x-1/2 top-[20vh] sm:top-[24vh] md:top-[30vh] w-[72vw] sm:w-[52vw] md:w-[44vw] max-w-[900px] z-[60] willchange-transform">
+      <img src="assets/Sello A.webp" alt="Secretos del Bosque Prohibido"
+        class="w-full h-full object-contain mx-auto pointer-events-none select-none">
+    </div>
+
+    <!-- Fade inferior -->
+    <div class="pointer-events-none absolute inset-x-0 -bottom-1 h-16 sm:h-20 md:h-24 z-[45]"
+      style="background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.85) 100%);">
+    </div>
+
+  </main>
+
+  <!-- ===== BESTIARIO ===== -->
+  <section id="captura-bestias" class="relative z-10 min-h-[100vh] md:min-h-[110vh] flex flex-col md:flex-row-reverse items-center justify-center p-6 overflow-visible">
+    <!-- Nubes verdes -->
+    <div class="absolute top-10 right-[-1rem] w-40 sm:w-48 md:w-64 lg:w-80 opacity-90 -z-10 pointer-events-none">
+      <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
+    </div>
+
+    <div class="absolute -bottom-16 sm:-bottom-20 md:-bottom-24 lg:-bottom-40 left-6 sm:left-8 md:left-12 w-56 sm:w-72 md:w-96 lg:w-[28rem] opacity-90 -z-10 pointer-events-none">
+      <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
+    </div>
+
+    <div class="absolute top-[-8vh] sm:top-[-10vh] left-[-4vw] sm:left-[-5vw] w-56 sm:w-72 md:w-96 lg:w-[28rem] opacity-90 -z-10 pointer-events-none" id="nube-c">
+      <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
+    </div>
+
+    <!-- Castillo -->
+    <div class="relative -z-30 mt-8 md:mt-0 md:mr-12 w-[80vw] sm:w-[70vw] md:w-[60vw] max-w-[600px]">
+      <img src="assets/Castillo Maqueta.webp" alt="Castillo Maqueta" class="w-full h-auto select-none pointer-events-none" />
+      <img src="assets/Luna Verde.webp" alt="Luna Verde"
+        class="absolute top-[calc(-40vh-20px)] sm:top-[calc(-35vh-20px)] left-[-3vw] w-[54vw] max-w-[880px] aspect-square opacity-80 select-none pointer-events-none -z-40 object-cover" />
+    </div>
+
+    <!-- Texto -->
+    <div class="relative z-30 max-w-xl text-white text-center md:text-left p-4 md:p-8">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-wider mb-4 leading-tight">
+        Conviértete en el <br /> señor del Castillo Verde
+      </h2>
+      <p class="text-base sm:text-lg md:text-xl leading-relaxed max-w-md mx-auto md:mx-0">
+        Descubre los secretos y domina las fuerzas ocultas del castillo mientras capturas las bestias que merodean en la noche.
+      </p>
+    </div>
+
+    <!-- Corte de nubes -->
+    <div class="absolute bottom-[-35rem] sm:bottom-[-30rem] md:bottom-[-35rem] left-0 right-0 -z-20 w-screen pointer-events-none">
+      <img src="assets/Corte Nubes.webp" alt="Corte Nubes"
+        class="w-full h-auto object-contain select-none pointer-events-none" />
+    </div>
+  </section>
+
+  <!-- ===== CASTILLO ===== -->
+  <section id="castillo" class="relative z-10 min-h-[100vh] md:min-h-[110vh] flex items-center justify-center p-6">
+    <div class="max-w-3xl text-center opacity-90">
+      <h2 class="text-2xl sm:text-3xl md:text-5xl font-black tracking-wider">El Castillo</h2>
+      <p class="text-sm sm:text-base md:text-lg opacity-90 mt-2">Explora estancias, secretos y desafíos.</p>
+    </div>
+  </section>
+
+  <!-- ===== GSAP Animaciones y ScrollTrigger ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    function fitBgToBestiarioEnd() {
+      const castillo = document.querySelector('#castillo');
+      const bgWrap = document.querySelector('.bg-wrap');
+      if (!castillo || !bgWrap) return;
+      const topCastillo = castillo.getBoundingClientRect().top + window.scrollY;
+      bgWrap.style.height = topCastillo + 'px';
+    }
+
+    window.addEventListener('load', fitBgToBestiarioEnd);
+    window.addEventListener('resize', fitBgToBestiarioEnd);
+    window.addEventListener('orientationchange', fitBgToBestiarioEnd);
+
+    function mountBgParallax() {
+      ScrollTrigger.killTweensOf('.bg-bosque');
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.vars?.id === 'bg-parallax') st.kill();
+      });
+
+      gsap.to(".bg-bosque", {
+        y: () => (window.innerWidth >= 768 ? -240 : -120),
+        ease: "none",
+        scrollTrigger: {
+          id: "bg-parallax",
+          trigger: "#bestiario",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
+        }
+      });
+    }
+
+    window.addEventListener('load', mountBgParallax);
+    window.addEventListener('resize', () => {
+      fitBgToBestiarioEnd();
+      mountBgParallax();
+    });
+
+    gsap.to(".moon", { y: 18, scale: 1.025, duration: 6, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    gsap.to(".cloud-left", { x: 24, y: -8, duration: 10, repeat: -1, yoyo: true, ease: "sine.inOut" });
+    gsap.to(".cloud-right", { x: -22, y: 6, duration: 12, repeat: -1, yoyo: true, ease: "sine.inOut" });
+    gsap.to(".cloud-low", { x: 16, y: 12, duration: 14, repeat: -1, yoyo: true, ease: "sine.inOut" });
+    gsap.to(".cloud-low-left", { x: -16, y: 12, duration: 14, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: ".hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: true
+      }
+    })
+      .to(".moon", { y: -60 }, 0)
+      .to(".cloud-left", { y: -40 }, 0)
+      .to(".cloud-right", { y: -30 }, 0)
+      .to(".cloud-low", { y: -18 }, 0)
+      .to(".cloud-low-left", { y: -18 }, 0)
+      .to(".title", { y: -32, opacity: 0.98 }, 0);
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('is-active'));
+        item.classList.add('is-active');
+      });
+    });
+  </script>
+
+</body>
+
+</html>
