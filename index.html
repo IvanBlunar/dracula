@@ -21,6 +21,12 @@
     overscroll-behavior-x: none;   /* sin “arrastre” lateral */
     touch-action: pan-y;           /* solo desplazamiento vertical */
     position: relative;
+
+    /* Más solape libro bajo podio en móvil */
+@media (max-width: 639.98px) {
+  #libro { margin-top: -16svh !important; }  /* antes -12svh */
+  /* si aún ves una línea, prueba -18svh */
+}
   }
     
   </style>
