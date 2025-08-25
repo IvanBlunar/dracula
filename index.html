@@ -339,7 +339,7 @@
 
 <!-- ===== LIBRO (ESCENA) — DESLIGADO Y SIN PIN ===== -->
 <section id="libro" class="relative z-[9] overflow-visible">
-  <div class="relative w-full min-h-[140svh] md:min-h-[160vh]" style="perspective:1000px;">
+  <div class="relative w-full min-h-[160svh] md:min-h-[180vh]" style="perspective:1000px;">
 
     <!-- Fade superior para transición suave -->
     <div class="pointer-events-none absolute inset-x-0 top-0 h-[10svh] z-10"
@@ -350,7 +350,7 @@
     <img src="assets/Background Libro.webp" alt="Fondo Libro"
          class="libro-bg absolute inset-0 -z-20 w-full h-full object-cover pointer-events-none select-none" />
 
-    <!-- Libro -->
+    <!-- Libro (tamaño original) -->
     <img src="assets/Libro Abierto Escena.webp" alt="Libro Abierto"
          class="libro-book absolute left-1/2 -translate-x-1/2
                 top-[28svh] sm:top-[30svh] md:top-[32vh]
@@ -358,23 +358,32 @@
                 opacity-0 pointer-events-none select-none z-[20] willchange-transform"
          style="transform-origin:center center;" />
 
-    <!-- Ramas -->
+         
+
+    <!-- Ramas (reubicadas y reescaladas) -->
     <img src="assets/Rama Arbol Verde Alejandose.webp" alt="Rama verde alejándose"
          class="libro-rama-verde absolute left-1/2 -translate-x-1/2
-                top-[18%] w-[130vw] sm:w-[110vw] md:w-[100vw]
+                top-[22%] w-[150vw] sm:w-[130vw] md:w-[120vw]
                 opacity-0 pointer-events-none select-none z-[18] willchange-transform" />
 
     <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada alejándose"
          class="libro-rama-morada absolute left-1/2 -translate-x-1/2
-                top-[42%] w-[138vw] sm:w-[118vw] md:w-[108vw]
+                top-[50%] w-[160vw] sm:w-[140vw] md:w-[130vw]
                 opacity-0 pointer-events-none select-none z-[22] willchange-transform" />
 
+    <!-- Enredaderas (más cercanas al libro, menos exageradas) -->
     <img src="assets/Corte Enredaderas Final.webp" alt="Enredaderas finales"
          class="libro-enredaderas absolute left-1/2 -translate-x-1/2
-                bottom-[-24vh] w-[180vw] sm:w-[160vw] md:w-[140vw]
+                bottom-[-20vh] sm:bottom-[-24vh] md:bottom-[-28vh] lg:bottom-[-36vh]
+                w-[180vw] sm:w-[160vw] md:w-[140vw]
                 opacity-0 pointer-events-none select-none z-[24] willchange-transform" />
+
   </div>
 </section>
+
+
+
+
 
  
 </main>
@@ -986,6 +995,8 @@ window.addEventListener('orientationchange', () => {
   mountLibroScene(); 
   ScrollTrigger.refresh(); 
 });
+
+
 
 
   
