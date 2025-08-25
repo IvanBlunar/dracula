@@ -840,7 +840,7 @@ window.addEventListener('orientationchange', () => { mountCastilloReveal(); Scro
   addEventListener('resize', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
 
-  /* ===== LIBRO: entrada desde lejos y acercamiento (suave) ===== */
+/* ===== LIBRO: entrada desde lejos y acercamiento (suave) ===== */
 function mountLibroScene() {
   const section = document.querySelector('#libro');
   if (!section) return;
@@ -867,14 +867,13 @@ function mountLibroScene() {
         id:'libro-seq-mob', 
         trigger: section, 
         start:'top top',  
-        end:'+=160%', 
-        scrub: 2.2,   // más sedoso
+        end:'+=100%', 
+        scrub: 2.2,
         pin: true, 
-        anticipatePin: 1 
+        anticipatePin: 1,
+        invalidateOnRefresh: true
       }
     });
-
-    
 
     // Libro (lejos → cerca)
     tl.to(q('.libro-book'), { 
@@ -891,9 +890,9 @@ function mountLibroScene() {
 
     // Parallax suave
     gsap.to(q('.libro-rama-verde'),  { y:-30, ease:'none',
-      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1 }});
+      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1, invalidateOnRefresh: true }});
     gsap.to(q('.libro-rama-morada'), { y: 22, ease:'none',
-      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1 }});
+      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1, invalidateOnRefresh: true }});
   });
 
   /* ===== DESKTOP (≥640px) ===== */
@@ -910,15 +909,15 @@ function mountLibroScene() {
         id:'libro-seq-desk', 
         trigger: section, 
         start:'top top', 
-        end:'+=200%', 
-        scrub: 2.5,   // más suave en desktop
+        end:'+=120%',  // Reducido para menos scroll
+        scrub: 2.5,
         pin: true, 
-        anticipatePin: 2 
+        anticipatePin: 2,
+        invalidateOnRefresh: true
       }
     });
 
-    // Fondo (zoom leve)
-    //tl.to(q('.libro-bg'),   { scale: 1.08, duration:2.2 }, 0);
+    // Eliminado el zoom del fondo
 
     // Libro (lejos → cerca)
     tl.to(q('.libro-book'), { 
@@ -935,16 +934,59 @@ function mountLibroScene() {
 
     // Parallax suave
     gsap.to(q('.libro-rama-verde'),  { y:-40, ease:'none',
-      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1 }});
+      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1, invalidateOnRefresh: true }});
     gsap.to(q('.libro-rama-morada'), { y: 34, ease:'none',
-      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1 }});
+      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1, invalidateOnRefresh: true }});
   });
 }
 
-// Montaje / refresh
-window.addEventListener('load',  () => { mountLibroScene(); ScrollTrigger.refresh(); });
-window.addEventListener('resize', () => { mountLibroScene(); ScrollTrigger.refresh(); });
-window.addEventListener('orientationchange', () => { mountLibroScene(); ScrollTrigger.refresh(); });
+// Esperar imágenes antes de montar animaciones
+function waitForImagesToLoad(callback) {
+  const images = document.images;
+  let loaded = 0;
+  const total = images.length;
+
+  if (total === 0) return callback();
+
+  for (let i = 0; i < total; i++) {
+    if (images[i].complete) {
+      loaded++;
+    } else {
+      images[i].addEventListener('load', () => {
+        loaded++;
+        if (loaded === total) callback();
+      });
+      images[i].addEventListener('error', () => {
+        loaded++;
+        if (loaded === total) callback();
+      });
+    }
+  }
+
+  if (loaded === total) callback();
+}
+
+// Montaje / refresh seguro
+window.addEventListener('load', () => {
+  waitForImagesToLoad(() => {
+    mountLibroScene();
+    ScrollTrigger.refresh();
+
+    // Extra seguridad: segundo refresh pequeño delay
+    setTimeout(() => ScrollTrigger.refresh(), 300);
+  });
+});
+
+window.addEventListener('resize', () => { 
+  mountLibroScene(); 
+  ScrollTrigger.refresh(); 
+});
+
+window.addEventListener('orientationchange', () => { 
+  mountLibroScene(); 
+  ScrollTrigger.refresh(); 
+});
+
 
   
 
