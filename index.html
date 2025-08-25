@@ -21,12 +21,9 @@
     overscroll-behavior-x: none;   /* sin “arrastre” lateral */
     touch-action: pan-y;           /* solo desplazamiento vertical */
     position: relative;
+    
 
-    /* Más solape libro bajo podio en móvil */
-@media (max-width: 639.98px) {
-  #libro { margin-top: -16svh !important; }  /* antes -12svh */
-  /* si aún ves una línea, prueba -18svh */
-}
+    
   }
     
   </style>
@@ -327,19 +324,25 @@
                 w-[160vw] sm:w-[148vw] md:w-[140vw]
                 opacity-0 pointer-events-none select-none z-[60] willchange-transform" />
 
-    <!-- Fade de unión al LIBRO -->
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[18svh] z-[30]"
-         style="background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.85) 100%);"></div>
+    <!-- Puente (fade) hacia LIBRO; altura controlada por --seam -->
+    <div class="podio-fade pointer-events-none absolute inset-x-0 bottom-0 z-[30]"
+         style="height:var(--seam,20svh);
+                background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.9) 100%);"></div>
   </div>
 </section>
 
-<!-- ===== LIBRO (ESCENA) ===== -->
-<section id="libro" class="relative -mt-[12svh] z-[9] overflow-visible">
+<!-- ===== LIBRO (ESCENA) — DESLIGADO Y SIN PIN ===== -->
+<section id="libro" class="relative z-[9] overflow-visible">
   <div class="relative w-full min-h-[140svh] md:min-h-[160vh]" style="perspective:1000px;">
+
+    <!-- Fade superior para transición suave -->
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-[10svh] z-10"
+         style="background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);">
+    </div>
 
     <!-- Fondo -->
     <img src="assets/Background Libro.webp" alt="Fondo Libro"
-         class="libro-bg absolute inset-0 -z-20 w-full h-full object-cover pointer-events-none select-none willchange-transform" />
+         class="libro-bg absolute inset-0 -z-20 w-full h-full object-cover pointer-events-none select-none" />
 
     <!-- Libro -->
     <img src="assets/Libro Abierto Escena.webp" alt="Libro Abierto"
@@ -349,7 +352,7 @@
                 opacity-0 pointer-events-none select-none z-[20] willchange-transform"
          style="transform-origin:center center;" />
 
-    <!-- Ramas / enredaderas -->
+    <!-- Ramas -->
     <img src="assets/Rama Arbol Verde Alejandose.webp" alt="Rama verde alejándose"
          class="libro-rama-verde absolute left-1/2 -translate-x-1/2
                 top-[18%] w-[130vw] sm:w-[110vw] md:w-[100vw]
@@ -364,38 +367,10 @@
          class="libro-enredaderas absolute left-1/2 -translate-x-1/2
                 bottom-[-24vh] w-[180vw] sm:w-[160vw] md:w-[140vw]
                 opacity-0 pointer-events-none select-none z-[24] willchange-transform" />
-
   </div>
 </section>
 
-
-<style>
-/* Ajustes mobile-only para la escena del libro */
-@media (max-width: 639.98px) {
-  #libro .libro-book        { top: 30svh !important; width: 78vw !important; }
-  #libro .libro-rama-verde  { top: 16% !important; }
-  #libro .libro-rama-morada { top: 40% !important; }
-  #libro .libro-enredaderas { bottom: -20vh !important; }
-}
-</style>
-
-
-
-  
-
-  
-</section>
-
-
-
-
-
-
-
-
-  </section>
-
-
+ 
 </main>
 
 <!-- GSAP + ScrollTrigger -->
@@ -885,7 +860,7 @@ function mountLibroScene() {
       scrollTrigger: { 
         id:'libro-seq-mob', 
         trigger: section, 
-        start:'top 70%', 
+        start:'top 0%', 
         end:'+=160%', 
         scrub: 2.2,   // más sedoso
         pin: true, 
@@ -893,8 +868,7 @@ function mountLibroScene() {
       }
     });
 
-    // Fondo (zoom leve)
-    tl.to(q('.libro-bg'),   { scale: 1.06, duration:2.0 }, 0);
+    
 
     // Libro (lejos → cerca)
     tl.to(q('.libro-book'), { 
