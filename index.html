@@ -10,37 +10,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    html, body {
-  width: 100%;
-  overflow-x: hidden !important;
-  position: relative;
-}
-
     .vignette::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 160px rgba(0,0,0,.8); }
     .willchange-transform { will-change: transform; }
     .nav-item.is-active .off { opacity: 0 !important; }
-    .nav-item.is-active .on  { opacity: 1 !important; }ç
-
-    #castillo,
-#podio,
-.bg-wrap,
-.cloud-left-wrap,
-.cloud-right-wrap,
-.cloud-low,
-.cloud-low-left {
-  overflow-x: hidden;
-  max-width: 100vw;
-}
-
-@media (max-width: 768px) {
-  img, video, .willchange-transform {
-    max-width: 100vw !important;
-  }
-}
-
-
-
-
+    .nav-item.is-active .on  { opacity: 1 !important; }
   </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden antialiased">
@@ -313,7 +286,6 @@
                 w-[120vw] sm:w-[92vw] md:w-[90vw] max-w-[1200px]
                 opacity-0 pointer-events-none select-none z-[12] willchange-transform"
          style="transform-origin:center top;" />
-         
 
     <!-- Ramas / espinas -->
     <img src="assets/Corte Espinas Verdes.webp" alt="Espinas verdes"
@@ -691,7 +663,7 @@ window.addEventListener('orientationchange', () => { mountCastilloReveal(); Scro
     const MOB_PODIO_UP_LAST = 28;   // móvil
     const DESK_RAISE_LAST   = 100;  // desktop
 
-    const MOB_RAMAS_UP      = 100;   // móvil
+    const MOB_RAMAS_UP      = 22;   // móvil
     const DESK_RAMAS_DOWN   = 500;  // desktop
 
     ScrollTrigger.getAll().forEach(st => {
