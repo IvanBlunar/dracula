@@ -546,7 +546,7 @@ function mountCastilloReveal() {
 
   // 🌱 Enredaderas desde MÁS abajo
   tl.from(q('.vine-cut'), {
-    y: 460, opacity: 0, duration: 1.8, immediateRender: false
+    y: 300, opacity: 0, duration: 1.8, immediateRender: false
   }, 0.2);
 }
 
@@ -660,10 +660,10 @@ window.addEventListener('orientationchange', () => { mountCastilloReveal(); Scro
     const podio = document.querySelector('#podio');
     if (!podio) return;
 
-    const MOB_PODIO_UP_LAST = 100;   // móvil
+    const MOB_PODIO_UP_LAST = 80;   // móvil
     const DESK_RAISE_LAST   = 100;  // desktop
 
-    const MOB_RAMAS_UP      = 500;   // móvil
+    const MOB_RAMAS_UP      = 22;   // móvil
     const DESK_RAMAS_DOWN   = 500;  // desktop
 
     ScrollTrigger.getAll().forEach(st => {
