@@ -19,7 +19,28 @@
     .vignette::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 160px rgba(0,0,0,.8); }
     .willchange-transform { will-change: transform; }
     .nav-item.is-active .off { opacity: 0 !important; }
-    .nav-item.is-active .on  { opacity: 1 !important; }
+    .nav-item.is-active .on  { opacity: 1 !important; }ç
+
+    #castillo,
+#podio,
+.bg-wrap,
+.cloud-left-wrap,
+.cloud-right-wrap,
+.cloud-low,
+.cloud-low-left {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@media (max-width: 768px) {
+  img, video, .willchange-transform {
+    max-width: 100vw !important;
+  }
+}
+
+
+
+
   </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden antialiased">
