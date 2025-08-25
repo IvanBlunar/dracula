@@ -14,6 +14,15 @@
     .willchange-transform { will-change: transform; }
     .nav-item.is-active .off { opacity: 0 !important; }
     .nav-item.is-active .on  { opacity: 1 !important; }
+      html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;            /* corta desbordes al documento */
+    overscroll-behavior-x: none;   /* sin “arrastre” lateral */
+    touch-action: pan-y;           /* solo desplazamiento vertical */
+    position: relative;
+  }
+    
   </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden antialiased">
