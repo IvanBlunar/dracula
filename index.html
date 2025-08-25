@@ -21,6 +21,12 @@
     overscroll-behavior-x: none;   /* sin “arrastre” lateral */
     touch-action: pan-y;           /* solo desplazamiento vertical */
     position: relative;
+
+    #libro {
+  position: relative;
+  overflow: hidden; /* opcional, para evitar desbordes */
+}
+
     
 
     
@@ -860,7 +866,7 @@ function mountLibroScene() {
       scrollTrigger: { 
         id:'libro-seq-mob', 
         trigger: section, 
-        start:'top 0%', 
+        start:'top top',  
         end:'+=160%', 
         scrub: 2.2,   // más sedoso
         pin: true, 
@@ -912,7 +918,7 @@ function mountLibroScene() {
     });
 
     // Fondo (zoom leve)
-    tl.to(q('.libro-bg'),   { scale: 1.08, duration:2.2 }, 0);
+    //tl.to(q('.libro-bg'),   { scale: 1.08, duration:2.2 }, 0);
 
     // Libro (lejos → cerca)
     tl.to(q('.libro-book'), { 
