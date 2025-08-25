@@ -225,6 +225,29 @@
       <img src="assets/Corte Enredaderas.webp" alt="Enredaderas" class="vine-cut absolute left-1/2 -translate-x-1/2 bottom-[-36vh] w-[185vw] sm:bottom-[-38vh] sm:w-[165vw] md:bottom-[-40vh] md:w-[145vw] lg:bottom-[-38vh] lg:w-[128vw] xl:bottom-[-36vh] xl:w-[120vw] max-w-none object-cover pointer-events-none select-none z-[45]" />
     </div> 
 
+    <!-- Overrides SOLO móvil dentro de #castillo y #podio -->
+<style>
+@media (max-width: 639.98px) {
+  /* --- CASTILLO: subir ramas/enredaderas en móvil --- */
+  #castillo .branch-purple-far  { top: 18%  !important; }  /* antes 30% */
+  #castillo .branch-green-cut   { bottom: -8vh  !important; } /* antes -20vh */
+  #castillo .branch-book-purple { bottom: -12vh !important; } /* antes -24vh */
+  #castillo .vine-blurr         { bottom: -46vh !important; } /* antes -62vh */
+  #castillo .vine-cut           { bottom: -24vh !important; } /* antes -36vh */
+
+  /* --- PODIO: subir elementos (mismo bloque/área) --- */
+  /* Los que usan TOP: menor valor = más arriba */
+  #podio .rama-verde  { top: 14% !important; }  /* antes 18% */
+  #podio .rama-morada { top: 36% !important; }  /* antes 42% */
+
+  /* Los que usan BOTTOM: mayor valor = más arriba */
+  #podio .espinas-verdes  { bottom: 14% !important; } /* antes 10% */
+  #podio .rama-libro      { bottom: 18% !important; } /* antes 12% */
+  #podio .espinas-moradas { bottom: 4%  !important; } /* antes 0 */
+}
+</style>
+
+
     <!-- ===== PODIO ===== -->
     <section id="podio" class="relative z-10 overflow-visible">
   <div class="relative w-full min-h-[180svh] md:min-h-[200vh]" style="perspective:1000px;">
