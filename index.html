@@ -10,6 +10,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+    html, body {
+  width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
     .vignette::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 160px rgba(0,0,0,.8); }
     .willchange-transform { will-change: transform; }
     .nav-item.is-active .off { opacity: 0 !important; }
@@ -313,6 +319,8 @@
                 w-[160vw] sm:w-[148vw] md:w-[140vw]
                 opacity-0 pointer-events-none select-none z-[60] willchange-transform" />
   </div>
+
+  
 </section>
 
 
@@ -662,7 +670,7 @@ window.addEventListener('orientationchange', () => { mountCastilloReveal(); Scro
     const DESK_RAISE_LAST   = 100;  // desktop
 
     const MOB_RAMAS_UP      = 22;   // móvil
-    const DESK_RAMAS_DOWN   = 260;  // desktop
+    const DESK_RAMAS_DOWN   = 500;  // desktop
 
     ScrollTrigger.getAll().forEach(st => {
       if (st.vars?.id && (st.vars.id === 'podio-sequence' || st.vars.id.startsWith('podio-'))) st.kill();
