@@ -218,7 +218,7 @@
       <style>@media (min-width:1024px){#castillo-moon-slot{top:80svh!important; left:8vw!important;}}</style>
 
       <!-- Ramas / enredaderas -->
-      <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada" class="branch-purple-far absolute right-[-10vw] top-[30%] w-[100vw] sm:right-[-12vw] sm:top-[58%] sm:w-[115vw] md:right-[-10vw] md:top-[70%] md:w-[92vw] lg:right-[-8vw]  lg:top-[43%] lg:w-[74vw] xl:right-[-6vw]  xl:top-[40%] xl:w-[68vw] max-w-none object-contain pointer-events-none select-none z-[35]" />
+      <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada" class="branch-purple-far absolute right-[-10vw] top-[20%] w-[100vw] sm:right-[-12vw] sm:top-[58%] sm:w-[115vw] md:right-[-10vw] md:top-[70%] md:w-[92vw] lg:right-[-8vw]  lg:top-[43%] lg:w-[74vw] xl:right-[-6vw]  xl:top-[40%] xl:w-[68vw] max-w-none object-contain pointer-events-none select-none z-[35]" />
       <img src="assets/Corte Rama Arbol Verde.webp" alt="Rama verde" class="branch-green-cut absolute left-[-16vw] bottom-[-20vh] w-[190vw] sm:left-[-14vw] sm:bottom-[-14vh] sm:w-[165vw] md:left-[-10vw] md:bottom-[-8vh] md:w-[135vw] lg:left-[-8vw] lg:bottom-[-6vh] lg:w-[118vw] xl:left-[-6vw] xl:bottom-[-4vh] xl:w-[110vw] max-w-none object-contain pointer-events-none select-none z-[30]" />
       <img src="assets/Rama del Libro Morado.webp" alt="Rama libro morada" class="branch-book-purple absolute right-[-22vw] bottom-[-24vh] w-[210vw] sm:right-[-20vw] sm:bottom-[-22vh] sm:w-[185vw] md:right-[-18vw] md:bottom-[-20vh] md:w-[150vw] lg:right-[-16vw] lg:bottom-[-18vh] lg:w-[120vw] xl:right-[-14vw] xl:bottom-[-16vh] xl:w-[108vw] max-w-none object-contain pointer-events-none select-none z-[50]" />
       <img src="assets/Corte Enredadera Blurr.webp" alt="Enredaderas desenfocadas" class="vine-blurr absolute left-1/2 -translate-x-1/2 bottom-[-62vh] w-[180vw] sm:bottom-[-64vh] sm:w-[170vw] md:bottom-[-66vh] md:w-[160vw] lg:bottom-[-62vh] lg:w-[145vw] xl:bottom-[-58vh] xl:w-[135vw] max-w-none object-cover pointer-events-none select-none z-[44]" />
@@ -229,7 +229,7 @@
 <style>
 @media (max-width: 639.98px) {
   /* --- CASTILLO: subir ramas/enredaderas en móvil --- */
-  #castillo .branch-purple-far  { top: 18%  !important; }  /* antes 30% */
+  #castillo .branch-purple-far  { top: 10%  !important; }  /* antes 30% */
   #castillo .branch-green-cut   { bottom: -8vh  !important; } /* antes -20vh */
   #castillo .branch-book-purple { bottom: -12vh !important; } /* antes -24vh */
   #castillo .vine-blurr         { bottom: -46vh !important; } /* antes -62vh */
@@ -504,23 +504,53 @@
     a.addEventListener('click', e=>{ e.preventDefault(); const t=document.querySelector('#trailer'); if(t) scrollTo({ top:t.getBoundingClientRect().top+scrollY, behavior:'smooth' }); });
   });
 
-  /* ===== Castillo: reveal ramas/enredaderas (ease + scrub más suave) ===== */
-  function mountCastilloReveal(){
-    const castillo=document.querySelector('section#castillo'); if(!castillo) return;
-    ScrollTrigger.getAll().forEach(st=>{ if(st.vars?.id==='castillo-reveal') st.kill(); });
-    const q=gsap.utils.selector(castillo);
-    gsap.timeline({
-      defaults:{ ease:'power1.inOut' },
-      scrollTrigger:{ id:'castillo-reveal', trigger:castillo, start:'top 85%', end:'bottom 40%', scrub:1.4, invalidateOnRefresh:true }
-    })
-    .from(q('.branch-green-cut'), { x:-600, opacity:0, immediateRender:false },0)
-    .from(q('.branch-purple-far'),{ x: 600, opacity:0, immediateRender:false },0)
-    .from(q('.branch-book-purple'),{x: 700, opacity:0, immediateRender:false },0.1)
-    .from(q('.vine-cut'),         { y: 460, opacity:0, immediateRender:false },0.2);
-  }
-  addEventListener('load', ()=>{ mountCastilloReveal(); ScrollTrigger.refresh(); });
-  addEventListener('resize', ()=>{ mountCastilloReveal(); ScrollTrigger.refresh(); });
-  addEventListener('orientationchange', ()=>{ mountCastilloReveal(); ScrollTrigger.refresh(); });
+    /* ===== CASTILLO: ramas laterales + enredaderas desde abajo (scrub lento) ===== */
+function mountCastilloReveal() {
+  const castillos = Array.from(document.querySelectorAll('section#castillo'));
+  const castillo = castillos.at(-1);
+  if (!castillo) return;
+
+  ScrollTrigger.getAll().forEach(st => {
+    if (st.vars?.id === 'castillo-reveal') st.kill();
+  });
+
+  const q = gsap.utils.selector(castillo);
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'power2.out' },
+    scrollTrigger: {
+      id: 'castillo-reveal',
+      trigger: castillo,
+      start: 'top 85%',
+      end: 'bottom 40%',
+      scrub: 0.9,
+      invalidateOnRefresh: true,
+      // markers: true,
+    }
+  });
+
+  // 🌿 Ramas laterales → MÁS hacia los lados
+  tl.from(q('.branch-green-cut'), {
+    x: -600, opacity: 0, duration: 1.6, immediateRender: false
+  }, 0);
+
+  tl.from(q('.branch-purple-far'), {
+    x: 600, opacity: 0, duration: 1.6, immediateRender: false
+  }, 0);
+
+  tl.from(q('.branch-book-purple'), {
+    x: 700, opacity: 0, duration: 1.8, immediateRender: false
+  }, 0.1);
+
+  // 🌱 Enredaderas desde MÁS abajo
+  tl.from(q('.vine-cut'), {
+    y: 460, opacity: 0, duration: 1.8, immediateRender: false
+  }, 0.2);
+}
+
+window.addEventListener('load',  () => { mountCastilloReveal(); ScrollTrigger.refresh(); });
+window.addEventListener('resize', () => { mountCastilloReveal(); ScrollTrigger.refresh(); });
+window.addEventListener('orientationchange', () => { mountCastilloReveal(); ScrollTrigger.refresh(); });
 
   /* ===== LUNA VERDE: Bestiario → Castillo (alineado con suavidad del morph) ===== */
   function mountMoonToCastillo(){
@@ -751,6 +781,8 @@
   addEventListener('load',  ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
   addEventListener('resize', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
+
+  
 </script>
 
 </body>
