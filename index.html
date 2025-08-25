@@ -257,8 +257,8 @@
 </style>
 
 
-    <!-- ===== PODIO ===== -->
-    <section id="podio" class="relative z-10 overflow-visible">
+<!-- ===== PODIO ===== -->
+<section id="podio" class="relative z-10 overflow-visible">
   <div class="relative w-full min-h-[180svh] md:min-h-[200vh]" style="perspective:1000px;">
     <!-- Punto focal invisible del libro -->
     <div class="podio-focus absolute left-1/2 -translate-x-1/2 
@@ -266,13 +266,12 @@
                 h-0 w-0 pointer-events-none select-none"></div>
 
     <!-- Imagen de fondo del bosque -->
-<img src="assets/Background Bosque - Podio.webp" alt="Bosque Podio"
-     class="podio-bg absolute inset-0 w-full h-full object-cover pointer-events-none select-none -z-20 willchange-transform" />
+    <img src="assets/Background Bosque - Podio.webp" alt="Bosque Podio"
+         class="podio-bg absolute inset-0 w-full h-full object-cover pointer-events-none select-none -z-20 willchange-transform" />
 
-<!-- Overlay oscuro en la parte superior -->
-<div class="absolute inset-0 z-[-19] pointer-events-none select-none"
-     style="background: linear-gradient(to bottom, rgba(0,0,0,0.8) 10%, transparent 30%);"></div>
-
+    <!-- Overlay oscuro en la parte superior -->
+    <div class="absolute inset-0 z-[-19] pointer-events-none select-none"
+         style="background: linear-gradient(to bottom, rgba(0,0,0,0.8) 10%, transparent 30%);"></div>
 
     <!-- Podios (lejos → cerca → muy cerca) -->
     <img src="assets/(01) Podio Lejos.webp" alt="Podio lejos"
@@ -290,14 +289,11 @@
          style="transform-origin:center top;" />
 
     <img src="assets/(02) Podio Muy cerca.webp" alt="Podio muy cerca"
-    
          class="podio-muycerca absolute left-1/2 -translate-x-1/2 
                 top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
                 w-[120vw] sm:w-[92vw] md:w-[90vw] max-w-[1200px]
                 opacity-0 pointer-events-none select-none z-[12] willchange-transform"
          style="transform-origin:center top;" />
-
-         
 
     <!-- Ramas / espinas -->
     <img src="assets/Corte Espinas Verdes.webp" alt="Espinas verdes"
@@ -324,10 +320,71 @@
          class="espinas-moradas absolute left-[0vw] bottom-0 
                 w-[160vw] sm:w-[148vw] md:w-[140vw]
                 opacity-0 pointer-events-none select-none z-[60] willchange-transform" />
+
+    <!-- Fade de unión al LIBRO -->
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[18svh] z-[30]"
+         style="background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.85) 100%);"></div>
   </div>
+</section>
+
+<!-- ===== LIBRO (ESCENA) ===== -->
+<section id="libro" class="relative -mt-[12svh] z-[9] overflow-visible">
+  <div class="relative w-full min-h-[140svh] md:min-h-[160vh]" style="perspective:1000px;">
+
+    <!-- Fondo -->
+    <img src="assets/Background Libro.webp" alt="Fondo Libro"
+         class="libro-bg absolute inset-0 -z-20 w-full h-full object-cover pointer-events-none select-none willchange-transform" />
+
+    <!-- Libro -->
+    <img src="assets/Libro Abierto Escena.webp" alt="Libro Abierto"
+         class="libro-book absolute left-1/2 -translate-x-1/2
+                top-[28svh] sm:top-[30svh] md:top-[32vh]
+                w-[74vw] sm:w-[56vw] md:w-[46vw] lg:w-[42vw] max-w-[900px]
+                opacity-0 pointer-events-none select-none z-[20] willchange-transform"
+         style="transform-origin:center center;" />
+
+    <!-- Ramas / enredaderas -->
+    <img src="assets/Rama Arbol Verde Alejandose.webp" alt="Rama verde alejándose"
+         class="libro-rama-verde absolute left-1/2 -translate-x-1/2
+                top-[18%] w-[130vw] sm:w-[110vw] md:w-[100vw]
+                opacity-0 pointer-events-none select-none z-[18] willchange-transform" />
+
+    <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada alejándose"
+         class="libro-rama-morada absolute left-1/2 -translate-x-1/2
+                top-[42%] w-[138vw] sm:w-[118vw] md:w-[108vw]
+                opacity-0 pointer-events-none select-none z-[22] willchange-transform" />
+
+    <img src="assets/Corte Enredaderas Final.webp" alt="Enredaderas finales"
+         class="libro-enredaderas absolute left-1/2 -translate-x-1/2
+                bottom-[-24vh] w-[180vw] sm:w-[160vw] md:w-[140vw]
+                opacity-0 pointer-events-none select-none z-[24] willchange-transform" />
+
+  </div>
+</section>
+
+
+<style>
+/* Ajustes mobile-only para la escena del libro */
+@media (max-width: 639.98px) {
+  #libro .libro-book        { top: 30svh !important; width: 78vw !important; }
+  #libro .libro-rama-verde  { top: 16% !important; }
+  #libro .libro-rama-morada { top: 40% !important; }
+  #libro .libro-enredaderas { bottom: -20vh !important; }
+}
+</style>
+
+
+
+  
 
   
 </section>
+
+
+
+
+
+
 
 
   </section>
@@ -795,6 +852,115 @@ window.addEventListener('orientationchange', () => { mountCastilloReveal(); Scro
   addEventListener('load',  ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
   addEventListener('resize', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
+
+  /* ===== LIBRO: entrada desde lejos y acercamiento (suave) ===== */
+function mountLibroScene() {
+  const section = document.querySelector('#libro');
+  if (!section) return;
+
+  // Limpieza por si re-montamos
+  ScrollTrigger.getAll().forEach(st => { 
+    if (st.vars?.id?.startsWith('libro-')) st.kill(); 
+  });
+
+  const q = gsap.utils.selector(section);
+  const mm = gsap.matchMedia();
+
+  /* ===== MOBILE (≤639px) ===== */
+  mm.add("(max-width: 639px)", () => {
+    gsap.set(q('.libro-bg'),          { scale: 1 });
+    gsap.set(q('.libro-book'),        { scale: 0.78, y: 40,  opacity: 0 });
+    gsap.set(q('.libro-rama-verde'),  { y: -40, x: -20, opacity: 0 });
+    gsap.set(q('.libro-rama-morada'), { y:  30, x:  22, opacity: 0 });
+    gsap.set(q('.libro-enredaderas'), { y: 160,        opacity: 0 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'sine.inOut' },
+      scrollTrigger: { 
+        id:'libro-seq-mob', 
+        trigger: section, 
+        start:'top 70%', 
+        end:'+=160%', 
+        scrub: 2.2,   // más sedoso
+        pin: true, 
+        anticipatePin: 1 
+      }
+    });
+
+    // Fondo (zoom leve)
+    tl.to(q('.libro-bg'),   { scale: 1.06, duration:2.0 }, 0);
+
+    // Libro (lejos → cerca)
+    tl.to(q('.libro-book'), { 
+      opacity:1, scale:0.92, y:-4, duration:1.6 
+    }, 0.05)
+    .to(q('.libro-book'), { 
+      scale:1.12, y:-26, duration:2.2 
+    }, 0.55);
+
+    // Ramas y enredaderas
+    tl.to(q('.libro-rama-verde'),  { opacity:1, x:0, y:-10, duration:1.6 }, 0.18);
+    tl.to(q('.libro-rama-morada'), { opacity:1, x:0, y: 10, duration:1.6 }, 0.26);
+    tl.to(q('.libro-enredaderas'), { opacity:1, y:0,   duration:1.8 }, 0.40);
+
+    // Parallax suave
+    gsap.to(q('.libro-rama-verde'),  { y:-30, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1 }});
+    gsap.to(q('.libro-rama-morada'), { y: 22, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1 }});
+  });
+
+  /* ===== DESKTOP (≥640px) ===== */
+  mm.add("(min-width: 640px)", () => {
+    gsap.set(q('.libro-bg'),          { scale: 1 });
+    gsap.set(q('.libro-book'),        { scale: 0.72, y: 26,  opacity: 0 });
+    gsap.set(q('.libro-rama-verde'),  { y: -60, x: -30, opacity: 0 });
+    gsap.set(q('.libro-rama-morada'), { y:  46, x:  36, opacity: 0 });
+    gsap.set(q('.libro-enredaderas'), { y: 200,        opacity: 0 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'sine.inOut' },
+      scrollTrigger: { 
+        id:'libro-seq-desk', 
+        trigger: section, 
+        start:'top top', 
+        end:'+=200%', 
+        scrub: 2.5,   // más suave en desktop
+        pin: true, 
+        anticipatePin: 2 
+      }
+    });
+
+    // Fondo (zoom leve)
+    tl.to(q('.libro-bg'),   { scale: 1.08, duration:2.2 }, 0);
+
+    // Libro (lejos → cerca)
+    tl.to(q('.libro-book'), { 
+      opacity:1, scale:0.86, y:-6, duration:1.8 
+    }, 0.06)
+    .to(q('.libro-book'), { 
+      scale:1.16, y:-40, duration:2.4 
+    }, 0.62);
+
+    // Ramas y enredaderas
+    tl.to(q('.libro-rama-verde'),  { opacity:1, x:0, y:-18, duration:1.8 }, 0.20);
+    tl.to(q('.libro-rama-morada'), { opacity:1, x:0, y: 18, duration:1.8 }, 0.28);
+    tl.to(q('.libro-enredaderas'), { opacity:1, y:0,   duration:2.0 }, 0.46);
+
+    // Parallax suave
+    gsap.to(q('.libro-rama-verde'),  { y:-40, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1 }});
+    gsap.to(q('.libro-rama-morada'), { y: 34, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1 }});
+  });
+}
+
+// Montaje / refresh
+window.addEventListener('load',  () => { mountLibroScene(); ScrollTrigger.refresh(); });
+window.addEventListener('resize', () => { mountLibroScene(); ScrollTrigger.refresh(); });
+window.addEventListener('orientationchange', () => { mountLibroScene(); ScrollTrigger.refresh(); });
+
+  
 
   
 </script>
