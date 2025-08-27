@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Drácula — Hero Parallax</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .vignette::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 160px rgba(0,0,0,.8); }
+    .willchange-transform { will-change: transform; }
+    .nav-item.is-active .off { opacity: 0 !important; }
+    .nav-item.is-active .on  { opacity: 1 !important; }
+      html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;            /* corta desbordes al documento */
+    overscroll-behavior-x: none;   /* sin “arrastre” lateral */
+    touch-action: pan-y;           /* solo desplazamiento vertical */
+    position: relative;
+
+    #libro {
+  position: relative;
+  overflow: hidden; /* opcional, para evitar desbordes */
+}
+
+    
+
+    
+  }
+    
+  </style>
+</head>
+<body class="bg-black text-white overflow-x-hidden antialiased">
+
+<!-- ===== Header ===== -->
+<header class="fixed inset-x-0 top-0 z-[100]">
+  <div class="relative mx-auto mt-4 w-[94%] max-w-[1400px]">
+    <div class="flex flex-col sm:flex-row items-center justify-center sm:justify-between px-4 md:px-6 py-2 bg-black/40 backdrop-blur-md rounded-3xl">
+      <div class="flex items-center justify-center sm:justify-between w-full gap-12 sm:gap-0">
+        <img src="assets/header/Logo Dracula.webp" alt="Drácula" class="h-[50px] sm:h-[42px] md:h-[50px] w-auto select-none">
+        <nav class="flex items-center gap-10 sm:gap-14">
+          <!-- Corregido: href al id real del bestiario -->
+          <a href="#captura-bestias" class="group relative inline-block nav-item" data-nav="bestiario" aria-label="El Bestiario">
+            <img src="assets/header/OFF EL BESTIARIO.webp" alt="El Bestiario" class="off h-[22px] sm:h-[26px] md:h-[28px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+            <img src="assets/header/ON EL BESTIARIO.webp" alt="" class="on pointer-events-none absolute inset-0 h-[22px] sm:h-[26px] md:h-[28px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+          </a>
+          <a href="#castillo" class="group relative inline-block nav-item mt-[2px]" data-nav="castillo" aria-label="El Castillo">
+            <img src="assets/header/OFF El Castilo.webp" alt="El Castillo" class="off h-[30px] sm:h-[36px] md:h-[42px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+            <img src="assets/header/ON El Castilo.webp" alt="" class="on pointer-events-none absolute inset-0 h-[30px] sm:h-[36px] md:h-[42px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="relative z-0">
+  <!-- Fondo bosque que llega hasta castillo -->
+  <div class="bg-wrap absolute inset-x-0 top-0 -z-10 overflow-hidden" style="height: 100vh;">
+    <img src="assets/Background Primera Sección.webp" alt="Fondo del bosque" class="bg-bosque w-full h-full object-cover object-center opacity-95 select-none willchange-transform">
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero relative min-h-[100vh] md:h-[140vh] w-full overflow-visible z-10"></section>
+
+  <!-- Luna HERO (z alto por defecto) -->
+  <div class="moon absolute left-0 top-[calc(6vh-20px)] sm:top-[calc(8vh-20px)] md:top-[calc(6vh-50px)]
+              w-[54vw] sm:w-[50vw] md:w-[46vw] max-w-[880px] aspect-square overflow-hidden z-[50] willchange-transform">
+    <img src="assets/Luna Normal.webp" alt="Luna" class="w-full h-full object-cover pointer-events-none select-none">
+  </div>
+
+  <!-- ===== TRAILER ===== -->
+  <section id="trailer" class="relative min-h-[100vh] md:h-[140vh] w-full overflow-visible z-10">
+    <img src="assets/Background Primera Sección.webp" alt="" class="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none select-none -z-10">
+    <div class="mx-auto mt-24 md:mt-28 w-[92%] max-w-[1100px]">
+      <div class="relative rounded-3xl border-4 border-lime-500/90 bg-black/40 backdrop-blur-sm overflow-hidden shadow-[0_0_40px_rgba(132,255,0,0.2)]">
+        <video id="draculaTrailer" class="block w-full aspect-video object-cover" preload="metadata" playsinline muted controlslist="nodownload noplaybackrate" poster="assets/posters/trailer-poster.jpg">
+          <source src="assets/video/dracula-trailer.mp4" type="video/mp4">
+          Tu navegador no soporta video HTML5.
+        </video>
+        <button id="trailerPlay" class="group absolute inset-0 grid place-items-center transition-opacity duration-300">
+          <span class="inline-grid place-items-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-black/60 backdrop-blur text-white border-2 border-white/70 shadow-lg">
+            <svg class="w-10 h-10 md:w-12 md:h-12 translate-x-[2px]" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+        </button>
+      </div>
+      <div class="mt-6 text-center">
+        <a href="#captura-bestias" class="inline-block px-6 py-3 border-2 border-lime-500 bg-black text-white font-black tracking-wider text-lg hover:bg-lime-500 hover:text-black transition-colors">EXPLORA UNA NUEVA AVENTURA</a>
+        <div class="mt-3 animate-bounce text-lime-500">
+          <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nubes hero/trailer -->
+  <div class="cloud-right-wrap absolute right-0 top-[60vh] sm:top-[62vh] md:top-[66vh] w-[32vw] sm:w-[28vw] md:w-[24vw] overflow-hidden z-[3] willchange-transform">
+    <div class="cloud-right relative w-[66vw] sm:w-[50vw] md:w-[36vw] aspect-[2/1] willchange-transform"
+         style="-webkit-mask-image:linear-gradient(to left, rgba(0,0,0,0.1), rgba(0,0,0,1) 22%, rgba(0,0,0,1));
+                mask-image:linear-gradient(to left, rgba(0,0,0,0.1), rgba(0,0,0,1) 22%, rgba(0,0,0,0.1));">
+      <img src="assets/Nube Morada A.webp" alt="Nube derecha" class="w-full h-full object-cover pointer-events-none select-none transform -scale-x-100">
+    </div>
+  </div>
+  <div class="cloud-left-wrap absolute left-[-5vw] top-[55vh] sm:top-[58vh] md:top-[50vh] w-[40vw] sm:w-[35vw] md:w-[30vw] overflow-hidden z-[50] willchange-transform">
+    <div class="cloud-left relative w-full aspect-[2/1] willchange-transform">
+      <img src="assets/Nube Morada A.webp" alt="Nube izquierda grande" class="w-full h-full object-cover pointer-events-none select-none">
+    </div>
+  </div>
+  <div class="cloud-low absolute right-[-11vh] top-[92vh] sm:top-[91vh] md:top-[90vh] w-[80vw] sm:w-[60vw] md:w-[46vw] max-w-[900px] aspect-[2/1] opacity-80 z-[90] willchange-transform">
+    <img src="assets/Nube Morada Blurr B.webp" alt="Nube baja derecha" class="w-full h-full object-cover pointer-events-none select-none">
+  </div>
+  <div class="cloud-low-left absolute left-[-11vh] top-[96vh] sm:top-[95vh] md:top-[99vh] w-[80vw] sm:w-[60vw] md:w-[46vw] max-w-[900px] aspect-[2/1] opacity-80 z-[90] willchange-transform">
+    <img src="assets/Nube Morada Blurr B.webp" alt="Nube baja izquierda" class="w-full h-full object-cover pointer-events-none select-none transform -scale-x-100">
+  </div>
+
+  <!-- Niebla -->
+  <div class="fixed top-[60vh] left-0 right-0 w-full h-[40vh] z-[50] pointer-events-none">
+    <img src="assets/Niebla General (1).webp" alt="Niebla general" class="w-full h-full object-fill select-none pointer-events-none" />
+  </div>
+
+  <!-- Sello + CTA -->
+  <div class="title absolute left-1/2 -translate-x-1/2 
+            top-[20vh] sm:top-[24vh] md:top-[30vh] 
+            max-[639px]:top-[28vh]
+            w-[72vw] sm:w-[52vw] md:w-[44vw] max-w-[900px] 
+            z-[60] willchange-transform flex flex-col items-center
+            gap-0 sm:gap-3 md:gap-0">
+    <img src="assets/Sello A.webp" alt="Secretos del Bosque Prohibido" class="w-full h-full object-contain mx-auto pointer-events-none select-none">
+    <div class="mt-6 flex flex-col items-center">
+      <a href="#trailer" class="px-6 py-3 border-2 border-lime-500 text-white font-black tracking-wider text-lg sm:text-xl bg-black hover:bg-lime-500 hover:text-black transition-colors duration-300">CONOCE LA HISTORIA</a>
+      <div class="mt-3 animate-bounce">
+        <svg class="w-6 h-6 text-lime-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
+      </div>
+      <p class="mt-10 sm:mt-3 md:mt-0 
+          text-sm sm:text-base text-gray-300 text-center 
+          leading-snug max-w-xs flex items-center justify-center gap-2">
+          <p class="mt-10 sm:mt-3 md:mt-4 
+          text-sm sm:text-base text-gray-300 text-center 
+          leading-snug max-w-xs flex flex-col sm:flex-row items-center justify-center gap-2">
+  <!-- Icono -->
+  <img src="assets/icons/Icon Scroll.svg" alt="Icono Scroll" 
+       class="w-6 h-6 sm:w-5 sm:h-5 animate-soft-blink">
+  
+  <!-- Texto -->
+  Haz scroll con la barra del mouse para comenzar la aventura
+</p>
+
+<style>
+/* Titileo suave */
+@keyframes soft-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; } /* no desaparece del todo, solo baja un poco */
+}
+.animate-soft-blink {
+  animation: soft-blink 2.5s ease-in-out infinite; /* más lento y suave */
+}
+</style>
+
+
+    </div>
+  </div>
+
+  <!-- ===== BESTIARIO ===== -->
+  <section id="captura-bestias" class="relative z-10 min-h-[100vh] md:min-h-[110vh] flex flex-col md:flex-row-reverse items-center justify-center p-6 overflow-visible">
+    <!-- nubes verdes decorativas -->
+    <div class="absolute top-10 right-[-1rem] w-40 sm:w-48 md:w-64 lg:w-80 opacity-90 -z-10 pointer-events-none">
+      <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
+    </div>
+    <div class="absolute -bottom-16 sm:-bottom-20 md:-bottom-24 lg:-bottom-40 left-6 sm:left-8 md:left-12 w-56 sm:w-72 md:w-96 lg:w-[28rem] opacity-90 -z-10 pointer-events-none">
+      <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
+    </div>
+    <div class="absolute top-[-8vh] sm:top-[-20vh] left-[-4vw] sm:left-[-5vw] w-56 sm:w-72 md:w-96 lg:w-[28rem] opacity-90 -z-10 pointer-events-none" id="nube-c">
+      <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
+    </div>
+
+    <!-- Castillo maqueta + LUNA VERDE -->
+    <div class="relative -z-30 mt-8 md:mt-0 md:mr-12 w-[80vw] sm:w-[70vw] md:w-[60vw] max-w-[600px]">
+      <img src="assets/Castillo Maqueta.webp" alt="Castillo Maqueta" class="w-full h-auto select-none pointer-events-none" />
+      <img src="assets/Luna Verde.webp" alt="Luna Verde"
+           class="absolute top-[calc(-40vh-20px)]
+                  max-[639px]:top-[-20vh]
+                  sm:top-[calc(-35vh-20px)]
+                  left-[-3vw]
+                  w-[54vw] max-w-[880px] aspect-square
+                  opacity-80 select-none pointer-events-none
+                  -z-40 object-cover" />
+    </div>
+
+    <!-- Texto -->
+    <div class="relative z-30 max-w-xl text-white text-center md:text-center p-4 md:p-8 flex flex-col items-center md:items-start">
+      <h2 class="text-xl sm:text-2xl md:text-3xl font-black uppercase leading-tight mb-4">Conviértete en el<br /><span class="text-white">Señor del Castillo Drácula</span></h2>
+      <div class="border-2 border-lime-500 bg-black text-white p-4 md:p-6 rounded-lg max-w-md text-sm sm:text-base leading-relaxed text-center md:text-left mb-6">
+        Lorem ipsum dolor sit amet consectetur. Id tortor ipsum nisl duis massa. In non amet urna at in proin sed. Tellus facilisis ipsum iaculis mauris eget nisl in laoreet et.
+      </div>
+      <div class="text-center mt-2">
+        <p class="text-xs sm:text-sm uppercase tracking-widest text-gray-300 mb-1">Tienes el castillo. Ahora</p>
+        <p class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white uppercase tracking-wide mb-2">Captura a las bestias</p>
+        <div class="mt-2 animate-bounce">
+          <svg class="w-6 h-6 text-lime-500 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" /></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Corte nubes borde inferior -->
+    <div class="absolute bottom-[14rem] sm:bottom-[-24rem] md:bottom-[-26rem] lg:bottom-[-30rem] left-0 right-0 w-full -z-20 pointer-events-none">
+      <img src="assets/Corte Nubes.webp" alt="Corte Nubes" class="w-full h-auto object-cover select-none pointer-events-none" />
+    </div>
+  </section>
+
+  <!-- ===== CASTILLO ===== -->
+  <section id="castillo" class="relative z-10 overflow-visible">
+    <div class="relative w-full h-[calc(100vw*2.0833)] min-h-screen">
+      <div class="absolute -top-[11rem] sm:-top-[14rem] md:-top-[16rem] lg:-top-[27rem] left-0 right-0 w-full z-[30] pointer-events-none">
+        <img src="assets/Corte Nubes.webp" alt="Corte Nubes" class="w-full h-auto object-cover select-none pointer-events-none" />
+      </div>
+
+      <img src="assets/Background Cielo Castillo.webp" alt="Fondo Cielo Castillo" class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none" style="top:-10px; z-index:-100;" />
+      <!-- Imagen del castillo -->
+<img src="assets/Background Castillo Full.webp" alt="Castillo fondo"
+     class="absolute inset-0 z-[10] w-full h-full object-contain pointer-events-none select-none"
+     style="object-position:center top;" />
+
+<!-- Overlay oscuro más fuerte y más corto -->
+<div class="absolute inset-0 z-[15] pointer-events-none select-none"
+     style="background: linear-gradient(to top, rgba(0,0,0,0.9) 10%, transparent 25%);"></div>
+
+
+      <!-- Slot de luna en castillo -->
+      <div id="castillo-moon-slot" class="absolute z-[-20] w-[60vw] aspect-square pointer-events-none select-none overflow-visible" style="top: 30svh; left: 10vw;">
+        <img src="assets/Luna Verde.webp" alt="Luna Verde Castillo" class="castillo-green-moon absolute inset-0 w-full h-full object-contain opacity-0 willchange-transform pointer-events-none select-none" />
+      </div>
+      <style>@media (min-width:1024px){#castillo-moon-slot{top:80svh!important; left:8vw!important;}}</style>
+
+      <!-- Ramas / enredaderas -->
+      <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada" class="branch-purple-far absolute right-[-10vw] top-[20%] w-[100vw] sm:right-[-12vw] sm:top-[58%] sm:w-[115vw] md:right-[-10vw] md:top-[70%] md:w-[92vw] lg:right-[-8vw]  lg:top-[43%] lg:w-[74vw] xl:right-[-6vw]  xl:top-[40%] xl:w-[68vw] max-w-none object-contain pointer-events-none select-none z-[35]" />
+      <img src="assets/Corte Rama Arbol Verde.webp" alt="Rama verde" class="branch-green-cut absolute left-[-16vw] bottom-[-20vh] w-[190vw] sm:left-[-14vw] sm:bottom-[-14vh] sm:w-[165vw] md:left-[-10vw] md:bottom-[-8vh] md:w-[135vw] lg:left-[-8vw] lg:bottom-[-6vh] lg:w-[118vw] xl:left-[-6vw] xl:bottom-[-4vh] xl:w-[110vw] max-w-none object-contain pointer-events-none select-none z-[30]" />
+      <img src="assets/Rama del Libro Morado.webp" alt="Rama libro morada" class="branch-book-purple absolute right-[-22vw] bottom-[-24vh] w-[210vw] sm:right-[-20vw] sm:bottom-[-22vh] sm:w-[185vw] md:right-[-18vw] md:bottom-[-20vh] md:w-[150vw] lg:right-[-16vw] lg:bottom-[-18vh] lg:w-[120vw] xl:right-[-14vw] xl:bottom-[-16vh] xl:w-[108vw] max-w-none object-contain pointer-events-none select-none z-[50]" />
+      <img src="assets/Corte Enredadera Blurr.webp" alt="Enredaderas desenfocadas" class="vine-blurr absolute left-1/2 -translate-x-1/2 bottom-[-62vh] w-[180vw] sm:bottom-[-64vh] sm:w-[170vw] md:bottom-[-66vh] md:w-[160vw] lg:bottom-[-62vh] lg:w-[145vw] xl:bottom-[-58vh] xl:w-[135vw] max-w-none object-cover pointer-events-none select-none z-[44]" />
+      <img src="assets/Corte Enredaderas.webp" alt="Enredaderas" class="vine-cut absolute left-1/2 -translate-x-1/2 bottom-[-36vh] w-[185vw] sm:bottom-[-38vh] sm:w-[165vw] md:bottom-[-40vh] md:w-[145vw] lg:bottom-[-38vh] lg:w-[128vw] xl:bottom-[-36vh] xl:w-[120vw] max-w-none object-cover pointer-events-none select-none z-[45]" />
+    </div> 
+
+    <!-- Overrides SOLO móvil dentro de #castillo y #podio -->
+<style>
+@media (max-width: 639.98px) {
+  /* --- CASTILLO: subir ramas/enredaderas en móvil --- */
+  #castillo .branch-purple-far  { top: 10%  !important; }  /* antes 30% */
+  #castillo .branch-green-cut   { bottom: -8vh  !important; } /* antes -20vh */
+  #castillo .branch-book-purple { bottom: -12vh !important; } /* antes -24vh */
+  #castillo .vine-blurr         { bottom: -46vh !important; } /* antes -62vh */
+  #castillo .vine-cut           { bottom: -24vh !important; } /* antes -36vh */
+
+  /* --- PODIO: subir elementos (mismo bloque/área) --- */
+  /* Los que usan TOP: menor valor = más arriba */
+  #podio .rama-verde  { top: 14% !important; }  /* antes 18% */
+  #podio .rama-morada { top: 36% !important; }  /* antes 42% */
+
+  /* Los que usan BOTTOM: mayor valor = más arriba */
+  #podio .espinas-verdes  { bottom: 14% !important; } /* antes 10% */
+  #podio .rama-libro      { bottom: 18% !important; } /* antes 12% */
+  #podio .espinas-moradas { bottom: 4%  !important; } /* antes 0 */
+}
+</style>
+
+
+<!-- ===== PODIO ===== -->
+<section id="podio" class="relative z-10 overflow-visible">
+  <div class="relative w-full min-h-[180svh] md:min-h-[200vh]" style="perspective:1000px;">
+    <!-- Punto focal invisible del libro -->
+    <div class="podio-focus absolute left-1/2 -translate-x-1/2 
+                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
+                h-0 w-0 pointer-events-none select-none"></div>
+
+    <!-- Imagen de fondo del bosque -->
+    <img src="assets/Background Bosque - Podio.webp" alt="Bosque Podio"
+         class="podio-bg absolute inset-0 w-full h-full object-cover pointer-events-none select-none -z-20 willchange-transform" />
+
+    <!-- Overlay oscuro en la parte superior -->
+    <div class="absolute inset-0 z-[-19] pointer-events-none select-none"
+         style="background: linear-gradient(to bottom, rgba(0,0,0,0.8) 10%, transparent 30%);"></div>
+
+    <!-- Podios (lejos → cerca → muy cerca) -->
+    <img src="assets/(01) Podio Lejos.webp" alt="Podio lejos"
+         class="podio-lejos absolute left-1/2 -translate-x-1/2 
+                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
+                w-[100vw] sm:w-[76vw] md:w-[70vw] max-w-[1000px]
+                opacity-100 pointer-events-none select-none z-[10] willchange-transform"
+         style="transform-origin:center top;" />
+
+    <img src="assets/(02) Podio Cerca.webp" alt="Podio cerca"
+         class="podio-cerca absolute left-1/2 -translate-x-1/2 
+                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
+                w-[110vw] sm:w-[84vw] md:w-[80vw] max-w-[1100px]
+                opacity-0 pointer-events-none select-none z-[11] willchange-transform"
+         style="transform-origin:center top;" />
+
+    <img src="assets/(02) Podio Muy cerca.webp" alt="Podio muy cerca"
+         class="podio-muycerca absolute left-1/2 -translate-x-1/2 
+                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
+                w-[120vw] sm:w-[92vw] md:w-[90vw] max-w-[1200px]
+                opacity-0 pointer-events-none select-none z-[12] willchange-transform"
+         style="transform-origin:center top;" />
+
+    <!-- Ramas / espinas -->
+    <img src="assets/Corte Espinas Verdes.webp" alt="Espinas verdes"
+         class="espinas-verdes absolute left-[-4vw] bottom-[10%]
+                w-[140vw] sm:w-[125vw] md:w-[120vw]
+                opacity-0 pointer-events-none select-none z-[20] willchange-transform" />
+
+    <img src="assets/Corte Rama Arbol Verde.webp" alt="Rama verde"
+         class="rama-verde absolute right-[-6vw] top-[18%]
+                w-[120vw] sm:w-[108vw] md:w-[100vw]
+                opacity-0 pointer-events-none select-none z-[21] willchange-transform" />
+
+    <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada"
+         class="rama-morada absolute left-[0vw] top-[42%]
+                w-[130vw] sm:w-[118vw] md:w-[110vw]
+                opacity-0 pointer-events-none select-none z-[22] willchange-transform" />
+
+    <img src="assets/Corte Ramas Libro.webp" alt="Ramas libro"
+         class="rama-libro absolute right-[-10vw] bottom-[12%]
+                w-[150vw] sm:w-[138vw] md:w-[130vw]
+                opacity-0 pointer-events-none select-none z-[23] willchange-transform" />
+
+    <img src="assets/Corte Espinas Moradas.webp" alt="Espinas moradas"
+         class="espinas-moradas absolute left-[0vw] bottom-0 
+                w-[160vw] sm:w-[148vw] md:w-[140vw]
+                opacity-0 pointer-events-none select-none z-[60] willchange-transform" />
+
+    <!-- Puente (fade) hacia LIBRO; altura controlada por --seam -->
+    <div class="podio-fade pointer-events-none absolute inset-x-0 bottom-0 z-[30]"
+         style="height:var(--seam,20svh);
+                background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.9) 100%);"></div>
+  </div>
+</section>
+
+<!-- ===== LIBRO (ESCENA) — DESLIGADO Y SIN PIN ===== -->
+<section id="libro" class="relative z-[9] overflow-visible">
+  <div class="relative w-full min-h-[160svh] md:min-h-[180vh]" style="perspective:1000px;">
+
+    <!-- Fade superior para transición suave -->
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-[10svh] z-10"
+         style="background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);"></div>
+
+    <!-- Fondo -->
+    <img src="assets/Background Libro.webp" alt="Fondo Libro"
+         class="libro-bg absolute inset-0 -z-20 w-full h-full object-cover pointer-events-none select-none" />
+
+    <!-- Contenedor del libro + UI interior -->
+    <div class="absolute left-1/2 -translate-x-1/2
+                top-[28svh] sm:top-[30svh] md:top-[32vh]
+                w-[74vw] sm:w-[56vw] md:w-[46vw] lg:w-[42vw] max-w-[900px]
+                z-[20]" style="transform-origin:center center;">
+      
+      <!-- Libro -->
+      <img src="assets/Libro Abierto Escena.webp" alt="Libro Abierto"
+           class="libro-book w-full h-auto opacity-0 pointer-events-none select-none willchange-transform" />
+
+      <!-- ======= CONTENIDO INTERIOR ======= -->
+      <div id="libro-contenido"
+           class="pointer-events-auto absolute inset-0 opacity-0 transition-opacity duration-700 ease-out">
+
+        <!-- Página izquierda -->
+        <div class="absolute top-[5%] left-[6%] w-[44%] h-[50%] grid place-items-center">
+          <img src="assets/Sello Intro Libro.webp" alt="Sello Intro"
+               class="max-w-[88%] drop-shadow-[0_12px_24px_rgba(0,0,0,.35)]" />
+        </div>
+
+        <!-- Página derecha - Íconos más pegados horizontalmente -->
+        <div class="absolute top-[15%] right-[3%] w-[45%]">
+          <div class="grid grid-cols-2 icon-grid-tight col-gap-tighter">
+            <!-- fila 1 -->
+            <button class="stamp">
+              <img src="assets/Icon Reino Pantano.webp" alt="Reino Pantano" class="stamp-icon" />
+            </button>
+            <button class="stamp">
+              <img src="assets/Icon Reino Bestial.webp" alt="Reino Bestial" class="stamp-icon" />
+            </button>
+            <!-- fila 2 -->
+            <button class="stamp">
+              <img src="assets/Icon Reino Vampirico.webp" alt="Reino Vampírico" class="stamp-icon" />
+            </button>
+            <button class="stamp">
+              <img src="assets/Icon Reino Floral.webp" alt="Reino Floral" class="stamp-icon" />
+            </button>
+            <!-- fila 3 -->
+            <button class="stamp">
+              <img src="assets/Icon Reino Rocoso.webp" alt="Reino Rocoso" class="stamp-icon" />
+            </button>
+            <!-- celda vacía para mantener simetría -->
+            <div aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+      <!-- ======= /CONTENIDO INTERIOR ======= -->
+    </div>
+
+    <!-- Ramas -->
+    <img src="assets/Rama Arbol Verde Alejandose.webp" alt="Rama verde alejándose"
+         class="libro-rama-verde absolute left-1/2 -translate-x-1/2
+                top-[22%] w-[150vw] sm:w-[130vw] md:w-[120vw]
+                opacity-0 pointer-events-none select-none z-[18] willchange-transform" />
+
+    <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada alejándose"
+         class="libro-rama-morada absolute left-1/2 -translate-x-1/2
+                top-[50%] w-[160vw] sm:w-[140vw] md:w-[130vw]
+                opacity-0 pointer-events-none select-none z-[22] willchange-transform" />
+
+    <!-- Enredaderas -->
+    <img src="assets/Corte Enredaderas Final.webp" alt="Enredaderas finales"
+         class="libro-enredaderas absolute left-1/2 -translate-x-1/2
+                bottom-[-20vh] sm:bottom-[-24vh] md:bottom-[-28vh] lg:bottom-[-36vh]
+                w-[180vw] sm:w-[160vw] md:w-[140vw]
+                opacity-0 pointer-events-none select-none z-[24] willchange-transform" />
+  </div>
+
+  <!-- ===== Script de aparición (1s) ===== -->
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const c = document.getElementById('libro-contenido');
+        if (c) c.classList.remove('opacity-0');
+      }, 1000);
+    });
+  </script>
+</section>
+
+<!-- ====== Estilos personalizados para control de espaciado ====== -->
+<style>
+.icon-grid-tight {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: -10px !important; /* Espacio negativo para máxima cercanía */
+  row-gap: 6px;
+  justify-items: center; /* Puedes usar start/end/stretch según lo que prefieras */
+  align-items: center;
+}
+
+.stamp {
+  padding: 0;
+  margin: 0;
+}
+
+.stamp-icon {
+  width: 72%;
+  transition: all 0.3s ease;
+}
+
+/* En móviles, ajusta el ancho aún más */
+@media (max-width: 640px) {
+  .stamp-icon {
+    width: 65%;
+  }
+
+  .icon-grid-tight {
+    column-gap: -14px !important; /* más negativo en móviles */
+  }
+}
+
+.stamp-icon:hover {
+  transform: scale(1.05);
+  filter: brightness(1.5) drop-shadow(0 0 8px limegreen);
+}
+
+/* Clase auxiliar para espaciado entre columnas ultra pegado */
+.col-gap-tighter {
+  column-gap: -60px !important;
+}
+
+/* En móviles, aún más pegadas */
+@media (max-width: 640px) {
+  .col-gap-tighter {
+    column-gap: -16px !important;
+  }
+}
+
+</style>
+
+
+
+
+
+ 
+</main>
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ===== Ajustar altura del fondo hasta el inicio de #castillo ===== */
+  function fitBgToBestiarioEnd() {
+    const castillo = document.querySelector('#castillo');
+    const bgWrap   = document.querySelector('.bg-wrap');
+    if (!castillo || !bgWrap) return;
+    const topCastillo = castillo.getBoundingClientRect().top + window.scrollY;
+    bgWrap.style.height = topCastillo + 'px';
+  }
+  addEventListener('load', fitBgToBestiarioEnd);
+  addEventListener('resize', fitBgToBestiarioEnd);
+  addEventListener('orientationchange', fitBgToBestiarioEnd);
+
+  /* ===== Parallax del fondo en Bestiario (más suave) ===== */
+  function mountBgParallax() {
+    ScrollTrigger.killTweensOf('.bg-bosque');
+    ScrollTrigger.getAll().forEach(st => { if (st.vars?.id === 'bg-parallax') st.kill(); });
+    gsap.to(".bg-bosque", {
+      y: () => (innerWidth >= 768 ? -240 : -120),
+      ease: "none",
+      scrollTrigger: {
+        id: "bg-parallax",
+        trigger: "#captura-bestias",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1.1
+      }
+    });
+  }
+  addEventListener('load', mountBgParallax);
+  addEventListener('resize', () => { fitBgToBestiarioEnd(); mountBgParallax(); });
+
+  /* ===== Flotación suave (igual) ===== */
+  gsap.to(".moon",            { y: 18,  scale: 1.025, duration: 6,  yoyo:true, repeat:-1, ease:"sine.inOut" });
+  gsap.to(".cloud-left",      { x: 24,  y: -8, duration: 10, yoyo:true, repeat:-1, ease:"sine.inOut" });
+  gsap.to(".cloud-right",     { x: -22, y: 6, duration: 12, yoyo:true, repeat:-1, ease:"sine.inOut" });
+  gsap.to(".cloud-low",       { x: 16,  y: 12, duration: 14, yoyo:true, repeat:-1, ease:"sine.inOut" });
+  gsap.to(".cloud-low-left",  { x: -16, y: 12, duration: 14, yoyo:true, repeat:-1, ease:"sine.inOut" });
+
+  /* ===== Parallax en HERO (más suave) ===== */
+  gsap.timeline({
+    scrollTrigger:{ trigger: ".hero", start: "top top", end: "bottom top", scrub: 1.1 }
+  })
+  .to(".moon",           { y: -60 }, 0)
+  .to(".cloud-left",     { y: -40 }, 0)
+  .to(".cloud-right",    { y: -30 }, 0)
+  .to(".cloud-low",      { y: -18 }, 0)
+  .to(".cloud-low-left", { y: -18 }, 0)
+  .to(".title",          { y: -32, opacity: .98, ease: "power1.inOut" }, 0);
+
+  /* ===== Nav activo ===== */
+  document.querySelectorAll('.nav-item').forEach(item=>{
+    item.addEventListener('click', ()=>{
+      document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('is-active'));
+      item.classList.add('is-active');
+    });
+  });
+
+  /* ===== One-scroll: hero -> trailer (igual; ya usa smooth) ===== */
+  (function(){
+    const hero = document.querySelector('.hero'), target = document.querySelector('#trailer');
+    if (!hero || !target) return;
+    let locking=false, touchStartY=null;
+    const inV = ()=>{ const r=hero.getBoundingClientRect(); return r.top<innerHeight && r.bottom>0; };
+    const go = ()=>{ if (locking) return; locking=true; const top=target.getBoundingClientRect().top+scrollY; scrollTo({top,behavior:'smooth'}); setTimeout(()=>locking=false,1200);};
+    hero.addEventListener('wheel', e=>{ if(!inV())return; if(e.deltaY>15){ e.preventDefault(); go(); }},{passive:false});
+    hero.addEventListener('touchstart', e=>{ if(!inV())return; if(e.touches?.length===1) touchStartY=e.touches[0].clientY; },{passive:true});
+    hero.addEventListener('touchend', e=>{ if(!inV()||touchStartY==null)return; const dy=touchStartY-(e.changedTouches?.[0]?.clientY??touchStartY); touchStartY=null; if(dy>30) go(); },{passive:true});
+  })();
+
+  /* ===== One-scroll: trailer -> bestiario (igual; ya usa smooth) ===== */
+  (function(){
+    const trailer=document.querySelector('#trailer'), bestiario=document.querySelector('#captura-bestias');
+    if(!trailer||!bestiario) return;
+    let locking=false, touchStartY=null;
+    const inV=el=>{ const r=el.getBoundingClientRect(); return r.top<innerHeight && r.bottom>0; };
+    const go=el=>{ const top=el.getBoundingClientRect().top+scrollY; scrollTo({top,behavior:'smooth'}); setTimeout(()=>locking=false,1200); };
+    trailer.addEventListener('wheel', e=>{ if(!inV(trailer)||locking) return; if(e.deltaY>15){ e.preventDefault(); locking=true; go(bestiario);} },{passive:false});
+    trailer.addEventListener('touchstart', e=>{ if(!inV(trailer))return; if(e.touches?.length===1) touchStartY=e.touches[0].clientY; },{passive:true});
+    trailer.addEventListener('touchend', e=>{ if(!inV(trailer)||touchStartY==null||locking) return; const dy=touchStartY-(e.changedTouches?.[0]?.clientY??touchStartY); touchStartY=null; if(dy>30){ locking=true; go(bestiario);} },{passive:true});
+  })();
+
+  /* ===== Morph LUNA: Hero → Bestiario (más sedoso) ===== */
+  let moonMorphST;
+  function centerOf(el){ const r=el.getBoundingClientRect(); return {x:r.left+r.width/2+scrollX,y:r.top+r.height/2+scrollY}; }
+  function mountMoonMorph(){
+    if(moonMorphST){ moonMorphST.kill(); moonMorphST=null; }
+    const moon=document.querySelector('.moon');
+    const moonImg=moon?.querySelector('img');
+    const green=document.querySelector('#captura-bestias img[alt="Luna Verde"]');
+    const triggerS=document.querySelector('#captura-bestias');
+    const hero=document.querySelector('.hero');
+    if(!moon||!moonImg||!green||!triggerS||!hero) return;
+
+    const greenTargetOpacity=parseFloat(getComputedStyle(green).opacity)||0.8;
+    gsap.set(moon,{clearProps:"x,y,opacity,scale"}); gsap.set(moonImg,{filter:"hue-rotate(0deg) saturate(1) brightness(1)"}); gsap.set(green,{opacity:0});
+
+    const cMoon=centerOf(moon), cGreen=centerOf(green); const dx=cGreen.x-cMoon.x, dy=cGreen.y-cMoon.y;
+
+    const tl=gsap.timeline({ scrollTrigger:{ trigger:triggerS, start:"top bottom", end:"center center", scrub:3 }});
+    tl.to(moon,{ x:dx, y:dy, scale:0.92, ease:"power1.inOut" },0)
+      .to(moonImg,{ filter:"hue-rotate(95deg) saturate(1.35) brightness(1.05)", ease:"power1.inOut" },0)
+      .to(green,{ opacity:greenTargetOpacity, ease:"power1.inOut" },0.65)
+      .to(moon,{ opacity:0, ease:"power1.inOut" },0.8);
+
+    moonMorphST=tl.scrollTrigger;
+  }
+  addEventListener('load',  mountMoonMorph);
+  addEventListener('resize', ()=>{ mountMoonMorph(); ScrollTrigger.refresh(); });
+  addEventListener('orientationchange', ()=>{ mountMoonMorph(); ScrollTrigger.refresh(); });
+
+  /* ===== Z-SWAP luna (igual) ===== */
+  (function mountHeroMoonZSwap(){
+    const heroMoon=document.querySelector('.moon');
+    const bestiario=document.querySelector('#captura-bestias');
+    const castillo=document.querySelector('#castillo');
+    if(!heroMoon||!bestiario||!castillo) return;
+    ScrollTrigger.getAll().forEach(st=>{ if(st.vars?.id==='moon-z-swap-hero-best') st.kill(); });
+    ScrollTrigger.create({
+      id:'moon-z-swap-hero-best',
+      trigger:bestiario,
+      start:'top 95%',
+      endTrigger: castillo,
+      end:'top bottom',
+      onEnter:     ()=> gsap.set(heroMoon,{ zIndex:-40 }),
+      onEnterBack: ()=> gsap.set(heroMoon,{ zIndex:-40 }),
+      onLeave:     ()=> gsap.set(heroMoon,{ zIndex:20  }),
+      onLeaveBack: ()=> gsap.set(heroMoon,{ zIndex:60  })
+    });
+  })();
+
+  /* ===== Nubes: descenso hero -> trailer (más suave) ===== */
+  function mountCloudDropToTrailer(){
+    ScrollTrigger.getAll().forEach(st=>{ if(['cloud-drop-left','cloud-drop-right'].includes(st.vars?.id)) st.kill(); });
+    const hero=document.querySelector('.hero'), trailer=document.querySelector('#trailer');
+    const leftW=document.querySelector('.cloud-left-wrap'), rightW=document.querySelector('.cloud-right-wrap');
+    if(!hero||!trailer||!leftW||!rightW) return;
+    const dY=(el,off=0)=> (trailer.getBoundingClientRect().top+scrollY+off)-(el.getBoundingClientRect().top+scrollY);
+    const desk=()=> innerWidth>=768;
+    gsap.to(leftW,{ id:'cloud-drop-left', y:()=>dY(leftW, desk()?40:24), ease:'none',
+      scrollTrigger:{ id:'cloud-drop-left', trigger:hero, start:'bottom bottom', endTrigger:'#trailer', end:'top top', scrub:1.2, invalidateOnRefresh:true }});
+    gsap.to(rightW,{ id:'cloud-drop-right', y:()=>dY(rightW, desk()?20:12), ease:'none',
+      scrollTrigger:{ id:'cloud-drop-right', trigger:hero, start:'bottom bottom', endTrigger:'#trailer', end:'top top', scrub:1.2, invalidateOnRefresh:true }});
+  }
+  addEventListener('load', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
+  addEventListener('resize', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
+  addEventListener('orientationchange', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
+
+  /* ===== Parallax continuidad en #trailer (más suave) ===== */
+  function mountTrailerCarryParallax(){
+    ScrollTrigger.getAll().forEach(st=>{ if(st.vars?.id==='trailer-carry') st.kill(); });
+    const desk=()=> innerWidth>=768;
+    gsap.timeline({ scrollTrigger:{ id:'trailer-carry', trigger:'#trailer', start:'top bottom', end:'bottom top', scrub:1.2 }, defaults:{ ease:'none' }})
+      .to('.moon',           { y:()=>desk()?'+=220':'+=150', x:()=>desk()?'+=20':'+=12',  immediateRender:false },0)
+      .to('.cloud-left',     { y:()=>desk()?'+=130':'+=95',  x:()=>desk()?'-=24':'-=16', immediateRender:false },0)
+      .to('.cloud-right',    { y:()=>desk()?'+=120':'+=90',  x:()=>desk()?'+=22':'+=14', immediateRender:false },0)
+      .to('.cloud-low',      { y:()=>desk()?'+=60':'+=42',   x:()=>desk()?'+=10':'+=6',  immediateRender:false },0)
+      .to('.cloud-low-left', { y:()=>desk()?'+=60':'+=42',   x:()=>desk()?'-=10':'-=6',  immediateRender:false },0);
+  }
+  addEventListener('load',  mountTrailerCarryParallax);
+  addEventListener('resize', mountTrailerCarryParallax);
+  addEventListener('orientationchange', mountTrailerCarryParallax);
+
+  /* ===== Video overlay + autoplay (igual) ===== */
+  (function(){
+    const video=document.getElementById('draculaTrailer'), playBtn=document.getElementById('trailerPlay');
+    if(!video||!playBtn) return;
+    playBtn.addEventListener('click', async ()=>{ try{ video.muted=false; await video.play(); }catch(e){} playBtn.style.opacity='0'; playBtn.style.pointerEvents='none'; });
+    video.addEventListener('play',  ()=>{ playBtn.style.opacity='0'; playBtn.style.pointerEvents='none'; });
+    video.addEventListener('pause', ()=>{ playBtn.style.opacity='1'; playBtn.style.pointerEvents='auto'; });
+    const io=new IntersectionObserver(entries=>{ entries.forEach(async e=>{ if(e.isIntersecting){ try{ await video.play(); }catch(_){}} else { video.pause(); } }); }, {threshold:0.4});
+    io.observe(video);
+  })();
+
+  document.querySelectorAll('a[href="#trailer"]').forEach(a=>{
+    a.addEventListener('click', e=>{ e.preventDefault(); const t=document.querySelector('#trailer'); if(t) scrollTo({ top:t.getBoundingClientRect().top+scrollY, behavior:'smooth' }); });
+  });
+
+    /* ===== CASTILLO: ramas laterales + enredaderas desde abajo (scrub lento) ===== */
+function mountCastilloReveal() {
+  const castillos = Array.from(document.querySelectorAll('section#castillo'));
+  const castillo = castillos.at(-1);
+  if (!castillo) return;
+
+  ScrollTrigger.getAll().forEach(st => {
+    if (st.vars?.id === 'castillo-reveal') st.kill();
+  });
+
+  const q = gsap.utils.selector(castillo);
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'power2.out' },
+    scrollTrigger: {
+      id: 'castillo-reveal',
+      trigger: castillo,
+      start: 'top 85%',
+      end: 'bottom 40%',
+      scrub: 0.9,
+      invalidateOnRefresh: true,
+      // markers: true,
+    }
+  });
+
+  // 🌿 Ramas laterales → MÁS hacia los lados
+  tl.from(q('.branch-green-cut'), {
+    x: -600, opacity: 0, duration: 1.6, immediateRender: false
+  }, 0);
+
+  tl.from(q('.branch-purple-far'), {
+    x: 600, opacity: 0, duration: 1.6, immediateRender: false
+  }, 0);
+
+  tl.from(q('.branch-book-purple'), {
+    x: 700, opacity: 0, duration: 1.8, immediateRender: false
+  }, 0.1);
+
+  // 🌱 Enredaderas desde MÁS abajo
+  tl.from(q('.vine-cut'), {
+    y: 300, opacity: 0, duration: 1.8, immediateRender: false
+  }, 0.2);
+}
+
+window.addEventListener('load',  () => { mountCastilloReveal(); ScrollTrigger.refresh(); });
+window.addEventListener('resize', () => { mountCastilloReveal(); ScrollTrigger.refresh(); });
+window.addEventListener('orientationchange', () => { mountCastilloReveal(); ScrollTrigger.refresh(); });
+
+  /* ===== LUNA VERDE: Bestiario → Castillo (alineado con suavidad del morph) ===== */
+  function mountMoonToCastillo(){
+    const bestiario=document.querySelector('#captura-bestias');
+    const castillo=document.querySelector('#castillo');
+    const bestMoon=bestiario?.querySelector('img[alt="Luna Verde"]');
+    const slot=castillo?.querySelector('#castillo-moon-slot');
+    const castilloGreen=castillo?.querySelector('.castillo-green-moon');
+    if(!bestiario||!castillo||!bestMoon||!slot||!castilloGreen) return;
+
+    const centerOf=el=>{ const r=el.getBoundingClientRect(); return {x:r.left+r.width/2+scrollX, y:r.top+r.height/2+scrollY}; };
+
+    ScrollTrigger.getAll().forEach(st=>{ if(st.vars?.id==='moon-best->cast'||st.vars?.id==='moon-best-zswap') st.kill(); });
+    gsap.set(castilloGreen,{ opacity:0 });
+
+    const tl=gsap.timeline({
+      scrollTrigger:{
+        id:'moon-best->cast',
+        trigger:bestiario,
+        start:'bottom bottom',
+        endTrigger: castillo,
+        end:'top 38%',
+        scrub: 2.4,
+        invalidateOnRefresh:true,
+        onEnter:     ()=> gsap.set(bestMoon,{ zIndex:26 }),
+        onLeaveBack: ()=> gsap.set(bestMoon,{ zIndex:''  })
+      }
+    });
+
+    tl.to(bestMoon,{
+      x:()=>{ const b=centerOf(bestMoon), s=centerOf(slot); return s.x-b.x; },
+      y:()=>{ const b=centerOf(bestMoon), s=centerOf(slot); return s.y-b.y; },
+      scale:()=>{ const rb=bestMoon.getBoundingClientRect(), rs=slot.getBoundingClientRect(); return rs.width/rb.width; },
+      transformOrigin:'center center',
+      ease:'power1.inOut',
+      immediateRender:false
+    },0)
+    .to(castilloGreen,{ opacity:1, ease:'power1.inOut' },0.70)
+    .to(bestMoon,     { opacity:0, ease:'power1.inOut' },0.88);
+
+    ScrollTrigger.create({
+      id:'moon-best-zswap',
+      trigger: castillo,
+      start: 'top bottom',
+      onLeaveBack: ()=>{
+        gsap.set(bestMoon,{ clearProps:'x,y,scale,opacity,zIndex' });
+        gsap.set(castilloGreen,{ opacity:0 });
+        ScrollTrigger.refresh();
+      }
+    });
+  }
+  addEventListener('load',  ()=>{ mountMoonToCastillo(); ScrollTrigger.refresh(); });
+  addEventListener('resize', ()=>{ mountMoonToCastillo(); ScrollTrigger.refresh(); });
+  addEventListener('orientationchange', ()=>{ mountMoonToCastillo(); ScrollTrigger.refresh(); });
+
+  /* === BESTIARIO → CASTILLO: nubes verdes (scrub suave) === */
+  function getGreenWrappers() {
+    return Array.from(document.querySelectorAll('#captura-bestias img[alt="Nube Verde B"]')).map(img => img.closest('div')).filter(Boolean);
+  }
+  function mountGreenDropToCastillo() {
+    const W = getGreenWrappers();
+    const best = document.querySelector('#captura-bestias');
+    const cast = document.querySelector('#castillo');
+    const fondo = cast?.querySelector('img[alt="Castillo fondo"]');
+    if (!W.length || !best || !cast || !fondo) return;
+
+    ScrollTrigger.getAll().forEach(st => {
+      if (['green-drop-a','green-drop-b','green-drop-c','green-drop-z'].includes(st.vars?.id)) st.kill();
+    });
+
+    const dY = (el, offset=0) => {
+      const topStart = fondo.getBoundingClientRect().top + scrollY;
+      const topEl    = el.getBoundingClientRect().top + scrollY;
+      return (topStart - topEl) + offset;
+    };
+    const desk = () => innerWidth >= 768;
+
+    ScrollTrigger.create({
+      id: 'green-drop-z',
+      trigger: best,
+      start: 'bottom bottom',
+      endTrigger: cast,
+      end: 'top top',
+      onEnter:     () => W.forEach(w => gsap.set(w, { zIndex: 200 })),
+      onEnterBack: () => W.forEach(w => gsap.set(w, { zIndex: 200 })),
+      onLeave:     () => W.forEach(w => gsap.set(w, { clearProps: 'zIndex' })),
+      onLeaveBack: () => W.forEach(w => gsap.set(w, { clearProps: 'zIndex' }))
+    });
+
+    if (W[0]) gsap.to(W[0], { id:'green-drop-a', y:()=>dY(W[0], desk()?60:40), ease:'none',
+      scrollTrigger:{ id:'green-drop-a', trigger:best, start:'bottom bottom', endTrigger:cast, end:'top top', scrub:1.1, invalidateOnRefresh:true }});
+    if (W[1]) gsap.to(W[1], { id:'green-drop-b', y:()=>dY(W[1], desk()?80:60), ease:'none',
+      scrollTrigger:{ id:'green-drop-b', trigger:best, start:'bottom bottom', endTrigger:cast, end:'top top', scrub:1.1, invalidateOnRefresh:true }});
+    if (W[2]) gsap.to(W[2], { id:'green-drop-c', y:()=>dY(W[2], desk()?70:50), ease:'none',
+      scrollTrigger:{ id:'green-drop-c', trigger:best, start:'bottom bottom', endTrigger:cast, end:'top top', scrub:1.1, invalidateOnRefresh:true }});
+  }
+  addEventListener('load', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
+  addEventListener('resize', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
+  addEventListener('orientationchange', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
+
+  /* ===== PODIO: acercamiento (scrub + ease más suaves) ===== */
+  let podioMM;
+
+  function mountPodioSequence() {
+    const podio = document.querySelector('#podio');
+    if (!podio) return;
+
+    const MOB_PODIO_UP_LAST = 83;   // móvil
+    const DESK_RAISE_LAST   = 100;  // desktop
+
+    const MOB_RAMAS_UP      = 150;   // móvil
+    const DESK_RAMAS_DOWN   = 500;  // desktop
+
+    ScrollTrigger.getAll().forEach(st => {
+      if (st.vars?.id && (st.vars.id === 'podio-sequence' || st.vars.id.startsWith('podio-'))) st.kill();
+    });
+    if (podioMM) { podioMM.revert(); podioMM = null; }
+
+    const q = gsap.utils.selector(podio);
+    podioMM = gsap.matchMedia();
+
+    const fitValues = (desk) => ({
+      lejos: desk ? -6 : -4,
+      cerca: desk ? -4 : -3,
+      muy:   desk ? -2 : -1
+    });
+
+    /* ====== MOBILE (≤ 639px) ====== */
+    podioMM.add("(max-width: 639px)", () => {
+      const fit = fitValues(false);
+
+      gsap.set(q('.podio-bg'),       { scale: 1, force3D: true });
+      gsap.set(q('.podio-lejos'),    { opacity: 1, scale: 1.00, y: fit.lejos,   force3D: true });
+      gsap.set(q('.podio-cerca'),    { opacity: 0, scale: 1.02, y: fit.cerca,   force3D: true });
+      gsap.set(q('.podio-muycerca'), { opacity: 0, scale: 1.04, y: fit.muy,     force3D: true });
+      gsap.set([q('.espinas-verdes'), q('.rama-verde'), q('.rama-morada'), q('.rama-libro'), q('.espinas-moradas')], { opacity: 0, force3D: true });
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power1.inOut' },
+        scrollTrigger: {
+          id: 'podio-sequence',
+          trigger: podio,
+          start: 'top 10%',
+          end: '+=180%',
+          scrub: 1.9,
+          pin: true,
+          anticipatePin: 2,
+          invalidateOnRefresh: true
+        }
+      });
+
+      // Fondo + dolly
+      tl.to(q('.podio-bg'), { scale: 1.06, transformOrigin: 'center center' }, 0)
+        .to(q('.podio-lejos'),    { scale: 0.985, y: fit.lejos +  6 }, 0.00)
+        .to(q('.podio-cerca'),    { scale: 1.050, y: fit.cerca +  4 }, 0.18)
+        .to(q('.podio-muycerca'), { scale: 1.100, y: fit.muy   +  0 }, 0.46)
+        .to(q('.podio-lejos'),    { opacity: 0.00 }, 0.16)
+        .to(q('.podio-cerca'),    { opacity: 1.00 }, 0.18)
+        .to(q('.podio-cerca'),    { opacity: 0.00 }, 0.44)
+        .to(q('.podio-muycerca'), { opacity: 1.00 }, 0.46)
+        .to(q('.podio-muycerca'), { scale: 1.12,  y: `-=${MOB_PODIO_UP_LAST}` }, 0.68);
+
+      // Ramas/espinas arriba
+      tl.to(q('.espinas-verdes'),  { opacity: 1, y: -(30 + MOB_RAMAS_UP) }, 0.22)
+        .to(q('.rama-verde'),      { opacity: 1, x: -32, y: -(6 + MOB_RAMAS_UP*0.8) }, 0.30)
+        .to(q('.rama-morada'),     { opacity: 1, x:  26, y: -(6 + MOB_RAMAS_UP*0.8) }, 0.38)
+        .to(q('.rama-libro'),      { opacity: 1, y: -(34 + MOB_RAMAS_UP) }, 0.46)
+        .to(q('.espinas-moradas'), { opacity: 1, y: -(48 + MOB_RAMAS_UP), scale: 1.06,
+                                     onStart: ()=> gsap.set(q('.espinas-moradas'), { zIndex: 60 }) }, 0.58);
+
+      // Parallax sutil
+      gsap.to(q('.rama-morada'), { y: -(10 + MOB_RAMAS_UP*0.4), ease: 'none',
+        scrollTrigger: { id: 'podio-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1 }});
+      gsap.to(q('.rama-verde'), { y: -(8 + MOB_RAMAS_UP*0.4), ease: 'none',
+        scrollTrigger: { id: 'podio-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1 }});
+    });
+
+    /* ====== DESKTOP (≥ 640px) ====== */
+    podioMM.add("(min-width: 640px)", () => {
+      const fit = fitValues(true);
+
+      gsap.set(q('.podio-bg'),       { scale: 1, force3D: true });
+      gsap.set(q('.podio-lejos'),    { opacity: 1, scale: 1.00, y: fit.lejos,   force3D: true });
+      gsap.set(q('.podio-cerca'),    { opacity: 0, scale: 1.02, y: fit.cerca,   force3D: true });
+      gsap.set(q('.podio-muycerca'), { opacity: 0, scale: 1.04, y: fit.muy,     force3D: true });
+      gsap.set([q('.espinas-verdes'), q('.rama-verde'), q('.rama-morada'), q('.rama-libro'), q('.espinas-moradas')], { opacity: 0, force3D: true });
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power1.inOut' },
+        scrollTrigger: {
+          id: 'podio-sequence',
+          trigger: podio,
+          start: 'top top',
+          end: '+=220%',
+          scrub: 2.0,
+          pin: true,
+          anticipatePin: 2,
+          invalidateOnRefresh: true
+        }
+      });
+
+      tl.to(q('.podio-bg'), { scale: 1.08, transformOrigin: 'center center' }, 0)
+        .to(q('.podio-lejos'),    { scale: 0.97, y: fit.lejos + 10 }, 0.00)
+        .to(q('.podio-cerca'),    { scale: 1.06, y: fit.cerca +  6 }, 0.20)
+        .to(q('.podio-muycerca'), { scale: 1.12, y: fit.muy   -  4 }, 0.55)
+        .to(q('.podio-lejos'),    { opacity: 0.00 }, 0.18)
+        .to(q('.podio-cerca'),    { opacity: 1.00 }, 0.20)
+        .to(q('.podio-cerca'),    { opacity: 0.00 }, 0.50)
+        .to(q('.podio-muycerca'), { opacity: 1.00 }, 0.55)
+        .to(q('.podio-muycerca'), { scale: 1.16, y: `-=${DESK_RAISE_LAST}` }, 0.78);
+
+      tl.to(q('.espinas-verdes'),  { opacity: 1, y: (DESK_RAMAS_DOWN - 38) }, 0.22)
+        .to(q('.rama-verde'),      { opacity: 1, x: -56, y: (DESK_RAMAS_DOWN*0.8 - 8) }, 0.30)
+        .to(q('.rama-morada'),     { opacity: 1, x:  46, y: (DESK_RAMAS_DOWN*0.8 - 8) }, 0.38)
+        .to(q('.rama-libro'),      { opacity: 1, y: (DESK_RAMAS_DOWN - 52) }, 0.46)
+        .to(q('.espinas-moradas'), { opacity: 1, y: (DESK_RAMAS_DOWN - 64), scale: 1.08,
+                                     onStart: ()=> gsap.set(q('.espinas-moradas'), { zIndex: 60 }) }, 0.60);
+
+      gsap.to(q('.rama-morada'), { y: (DESK_RAMAS_DOWN*0.3 - 24), ease: 'none',
+        scrollTrigger: { id: 'podio-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
+      gsap.to(q('.rama-verde'), { y: (DESK_RAMAS_DOWN*0.3 - 18), ease: 'none',
+        scrollTrigger: { id: 'podio-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
+      gsap.to(q('.rama-libro'), { x: 10, ease: 'none',
+        scrollTrigger: { id: 'podio-rl-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
+    });
+  }
+
+  addEventListener('load',  ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
+  addEventListener('resize', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
+  addEventListener('orientationchange', ()=>{ mountPodioSequence(); ScrollTrigger.refresh(); });
+
+/* ===== LIBRO: entrada desde lejos y acercamiento (suave) ===== */
+function mountLibroScene() {
+  const section = document.querySelector('#libro');
+  if (!section) return;
+
+  // Limpieza por si re-montamos
+  ScrollTrigger.getAll().forEach(st => { 
+    if (st.vars?.id?.startsWith('libro-')) st.kill(); 
+  });
+
+  const q = gsap.utils.selector(section);
+  const mm = gsap.matchMedia();
+
+  /* ===== MOBILE (≤639px) ===== */
+  mm.add("(max-width: 639px)", () => {
+    gsap.set(q('.libro-bg'),          { scale: 1 });
+    gsap.set(q('.libro-book'),        { scale: 0.78, y: 40,  opacity: 0 });
+    gsap.set(q('.libro-rama-verde'),  { y: -40, x: -20, opacity: 0 });
+    gsap.set(q('.libro-rama-morada'), { y:  30, x:  22, opacity: 0 });
+    gsap.set(q('.libro-enredaderas'), { y: 160,        opacity: 0 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'sine.inOut' },
+      scrollTrigger: { 
+        id:'libro-seq-mob', 
+        trigger: section, 
+        start:'top top',  
+        end:'+=100%', 
+        scrub: 2.2,
+        pin: true, 
+        anticipatePin: 1,
+        invalidateOnRefresh: true
+      }
+    });
+
+    // Libro (lejos → cerca)
+    tl.to(q('.libro-book'), { 
+      opacity:1, scale:0.92, y:-4, duration:1.6 
+    }, 0.05)
+    .to(q('.libro-book'), { 
+      scale:1.12, y:-26, duration:2.2 
+    }, 0.55);
+
+    // Ramas y enredaderas
+    tl.to(q('.libro-rama-verde'),  { opacity:1, x:0, y:-10, duration:1.6 }, 0.18);
+    tl.to(q('.libro-rama-morada'), { opacity:1, x:0, y: 10, duration:1.6 }, 0.26);
+    tl.to(q('.libro-enredaderas'), { opacity:1, y:0,   duration:1.8 }, 0.40);
+
+    // Parallax suave
+    gsap.to(q('.libro-rama-verde'),  { y:-30, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1, invalidateOnRefresh: true }});
+    gsap.to(q('.libro-rama-morada'), { y: 22, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1, invalidateOnRefresh: true }});
+  });
+
+  /* ===== DESKTOP (≥640px) ===== */
+  mm.add("(min-width: 640px)", () => {
+    gsap.set(q('.libro-bg'),          { scale: 1 });
+    gsap.set(q('.libro-book'),        { scale: 0.72, y: 26,  opacity: 0 });
+    gsap.set(q('.libro-rama-verde'),  { y: -60, x: -30, opacity: 0 });
+    gsap.set(q('.libro-rama-morada'), { y:  46, x:  36, opacity: 0 });
+    gsap.set(q('.libro-enredaderas'), { y: 200,        opacity: 0 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'sine.inOut' },
+      scrollTrigger: { 
+        id:'libro-seq-desk', 
+        trigger: section, 
+        start:'top top', 
+        end:'+=120%',  // Reducido para menos scroll
+        scrub: 2.5,
+        pin: true, 
+        anticipatePin: 2,
+        invalidateOnRefresh: true
+      }
+    });
+
+    // Eliminado el zoom del fondo
+
+    // Libro (lejos → cerca)
+    tl.to(q('.libro-book'), { 
+      opacity:1, scale:0.86, y:-6, duration:1.8 
+    }, 0.06)
+    .to(q('.libro-book'), { 
+      scale:1.16, y:-40, duration:2.4 
+    }, 0.62);
+
+    // Ramas y enredaderas
+    tl.to(q('.libro-rama-verde'),  { opacity:1, x:0, y:-18, duration:1.8 }, 0.20);
+    tl.to(q('.libro-rama-morada'), { opacity:1, x:0, y: 18, duration:1.8 }, 0.28);
+    tl.to(q('.libro-enredaderas'), { opacity:1, y:0,   duration:2.0 }, 0.46);
+
+    // Parallax suave
+    gsap.to(q('.libro-rama-verde'),  { y:-40, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-verde', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1, invalidateOnRefresh: true }});
+    gsap.to(q('.libro-rama-morada'), { y: 34, ease:'none',
+      scrollTrigger:{ id:'libro-parallax-morada', trigger:section, start:'top top', end:'bottom bottom', scrub:1.1, invalidateOnRefresh: true }});
+  });
+}
+
+// Esperar imágenes antes de montar animaciones
+function waitForImagesToLoad(callback) {
+  const images = document.images;
+  let loaded = 0;
+  const total = images.length;
+
+  if (total === 0) return callback();
+
+  for (let i = 0; i < total; i++) {
+    if (images[i].complete) {
+      loaded++;
+    } else {
+      images[i].addEventListener('load', () => {
+        loaded++;
+        if (loaded === total) callback();
+      });
+      images[i].addEventListener('error', () => {
+        loaded++;
+        if (loaded === total) callback();
+      });
+    }
+  }
+
+  if (loaded === total) callback();
+}
+
+// Montaje / refresh seguro
+window.addEventListener('load', () => {
+  waitForImagesToLoad(() => {
+    mountLibroScene();
+    ScrollTrigger.refresh();
+
+    // Extra seguridad: segundo refresh pequeño delay
+    setTimeout(() => ScrollTrigger.refresh(), 300);
+  });
+});
+
+window.addEventListener('resize', () => { 
+  mountLibroScene(); 
+  ScrollTrigger.refresh(); 
+});
+
+window.addEventListener('orientationchange', () => { 
+  mountLibroScene(); 
+  ScrollTrigger.refresh(); 
+});
+
+
+
+
+  
+
+  
+</script>
+
+</body>
+</html>

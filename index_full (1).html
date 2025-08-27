@@ -34,7 +34,7 @@
     
   </style>
 
-<!-- === BEGIN estilos del LIBRO (importados de libro.html) === -->
+<!-- === BEGIN estilos del LIBRO (importados) === -->
 <style>
     html, body { max-width:100%; overflow-x:hidden; touch-action:pan-y; }
     .hidden { display:none !important; }
@@ -687,28 +687,6 @@
 
 <!-- ===== LIBRO (ESCENA) — DESLIGADO Y SIN PIN ===== -->
 <section id="libro" class="relative min-h-[120svh] py-16 sm:py-20 md:py-24">
-  <!-- === Decoraciones heredadas del index original (fondo/ramas) === -->
-  <img src="assets/Background Libro.webp" alt="Fondo Libro"
-         class="libro-bg absolute inset-0 -z-20 w-full h-full object-cover pointer-events-none select-none" />
-
-         <!-- Ramas -->
-
-
-    <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada alejándose"
-         class="libro-rama-morada absolute left-1/2 -translate-x-1/2
-                top-[50%] w-[160vw] sm:w-[140vw] md:w-[130vw]
-                opacity-0 pointer-events-none select-none z-[22] willchange-transform" />
-
-    <!-- Enredaderas -->
-    <img src="assets/Corte Enredaderas Final.webp" alt="Enredaderas finales"
-         class="libro-enredaderas absolute left-1/2 -translate-x-1/2
-                bottom-[-20vh] sm:bottom-[-24vh] md:bottom-[-28vh] lg:bottom-[-36vh]
-                w-[180vw] sm:w-[160vw] md:w-[140vw]
-                opacity-0 pointer-events-none select-none z-[24] willchange-transform" />
-  </div>
-
-  <!-- === Fin decoraciones heredadas === -->
-
     <div class="mx-auto w-[95%] max-w-[1200px]">
       <div class="relative mx-auto w-[100%] sm:w-[92%] md:w-[82%] lg:w-[74%]">
 
@@ -2082,7 +2060,6 @@ window.addEventListener('orientationchange', () => {
 
 
 <!-- === BEGIN scripts del LIBRO (importados) === -->
-<script src="https://cdn.tailwindcss.com"></script>
 <script>
   // Orden de navegación (Home → resto)
 const order = [
