@@ -158,7 +158,7 @@
       height:auto;
     }
     @media (min-width:1280px){
-      #cta-salir{ bottom: 26.5%; }
+      #cta-salir{ bottom:-1.5%; }
     }
     @media (max-width:768px){
       #cta-salir{ bottom:25% !important; }
@@ -1406,77 +1406,6 @@
     </div>
   </section>
 
-<!-- ===== PODIO (AWAY) — copia del podio, se aleja con scroll ===== -->
-<section id="podio-away" class="relative z-10 overflow-visible">
-  <div class="relative w-full min-h-[180svh] md:min-h-[200vh]" style="perspective:1000px;">
-    <!-- Punto focal invisible del libro -->
-    <div class="podio-focus absolute left-1/2 -translate-x-1/2 
-                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
-                h-0 w-0 pointer-events-none select-none"></div>
-
-    <!-- Imagen de fondo del bosque -->
-    <img src="assets/Background Bosque - Podio.webp" alt="Bosque Podio"
-         class="podio-bg absolute inset-0 w-full h-full object-cover pointer-events-none select-none -z-20 willchange-transform" />
-
-    <!-- Overlay oscuro en la parte superior -->
-    <div class="absolute inset-0 z-[-19] pointer-events-none select-none"
-         style="background: linear-gradient(to bottom, rgba(0,0,0,0.8) 10%, transparent 30%);"></div>
-
-    <!-- Podios (lejos → cerca → muy cerca) -->
-    <img src="assets/(01) Podio Lejos.webp" alt="Podio lejos"
-         class="podio-lejos absolute left-1/2 -translate-x-1/2 
-                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
-                w-[100vw] sm:w-[76vw] md:w-[70vw] max-w-[1000px]
-                opacity-100 pointer-events-none select-none z-[10] willchange-transform"
-         style="transform-origin:center top;" />
-
-    <img src="assets/(02) Podio Cerca.webp" alt="Podio cerca"
-         class="podio-cerca absolute left-1/2 -translate-x-1/2 
-                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
-                w-[110vw] sm:w-[84vw] md:w-[80vw] max-w-[1100px]
-                opacity-0 pointer-events-none select-none z-[11] willchange-transform"
-         style="transform-origin:center top;" />
-
-    <img src="assets/(02) Podio Muy cerca.webp" alt="Podio muy cerca"
-         class="podio-muycerca absolute left-1/2 -translate-x-1/2 
-                top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
-                w-[120vw] sm:w-[92vw] md:w-[90vw] max-w-[1200px]
-                opacity-0 pointer-events-none select-none z-[12] willchange-transform"
-         style="transform-origin:center top;" />
-
-    <!-- Ramas / espinas -->
-    <img src="assets/Corte Espinas Verdes.webp" alt="Espinas verdes"
-         class="espinas-verdes absolute left-[-4vw] bottom-[10%]
-                w-[140vw] sm:w-[125vw] md:w-[120vw]
-                opacity-0 pointer-events-none select-none z-[20] willchange-transform" />
-
-    <img src="assets/Corte Rama Arbol Verde.webp" alt="Rama verde"
-         class="rama-verde absolute right-[-6vw] top-[18%]
-                w-[120vw] sm:w-[108vw] md:w-[100vw]
-                opacity-0 pointer-events-none select-none z-[21] willchange-transform" />
-
-    <img src="assets/Rama Arbol Morado Alejandose.webp" alt="Rama morada"
-         class="rama-morada absolute left-[0vw] top-[42%]
-                w-[130vw] sm:w-[118vw] md:w-[110vw]
-                opacity-0 pointer-events-none select-none z-[22] willchange-transform" />
-
-    <img src="assets/Corte Ramas Libro.webp" alt="Ramas libro"
-         class="rama-libro absolute right-[-10vw] bottom-[12%]
-                w-[150vw] sm:w-[138vw] md:w-[130vw]
-                opacity-0 pointer-events-none select-none z-[23] willchange-transform" />
-
-    <img src="assets/Corte Espinas Moradas.webp" alt="Espinas moradas"
-         class="espinas-moradas absolute left-[0vw] bottom-0 
-                w-[160vw] sm:w-[148vw] md:w-[140vw]
-                opacity-0 pointer-events-none select-none z-[60] willchange-transform" />
-
-    <!-- Puente (fade) hacia LIBRO; altura controlada por --seam -->
-    <div class="podio-fade pointer-events-none absolute inset-x-0 bottom-0 z-[30]"
-         style="height:var(--seam,20svh);
-                background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.9) 100%);"></div>
-  </div>
-</section>
-
 <!-- ===== FORTNITE CTA — escena con scroll suave hacia abajo ===== -->
 <section id="fortnite-cta" class="relative z-[8] overflow-hidden">
   <div class="relative w-full min-h-[100vh] md:min-h-[120vh]">
@@ -2275,8 +2204,6 @@ const order = [
     });
   });
 
-  
-
   // Click en los “destacados” sobre la intro (ZELVIRA/DRACUTÁNICOS)
   document.querySelectorAll('.hero-monster').forEach(btn=>{
     btn.addEventListener('click', ()=> show(btn.dataset.goto));
@@ -2348,135 +2275,43 @@ const order = [
 </script>
 <!-- === END scripts del LIBRO === -->
 
-<!-- === Animación para PODIO (AWAY): se aleja al hacer scroll === -->
+
+<!-- ===== Animación Fortnite CTA (scroll suave hacia abajo) ===== -->
 <script>
 (function(){
-  function mountPodioAwaySequence(){
-    const podio = document.querySelector('#podio-away');
-    if (!podio || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  function mountFortniteCTA(){
+    const sec = document.querySelector('#fortnite-cta');
+    if (!sec || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    const q = gsap.utils.selector(sec);
 
-    ScrollTrigger.getAll().forEach(st => {
-      if (st.vars?.id && (st.vars.id === 'podio2-sequence' || String(st.vars.id).startsWith('podio2-'))) st.kill();
+    ScrollTrigger.getAll().forEach(st => { if (st.vars?.id === 'fortnite-cta') st.kill(); });
+
+    gsap.set(q('.fortnite-bg'), { yPercent: -6 });
+    gsap.set(q('.fortnite-badge'), { opacity: 0, scale: 0.94, y: -12 });
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'sine.inOut' },
+      scrollTrigger: {
+        id: 'fortnite-cta',
+        trigger: sec,
+        start: 'top top',
+        end: '+=140%',
+        scrub: 1.6,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true
+      }
     });
 
-    const q = gsap.utils.selector(podio);
-    const mm = gsap.matchMedia();
-
-    const fitValues = (desk) => ({
-      lejos: desk ? -6 : -4,
-      cerca: desk ? -4 : -3,
-      muy:   desk ? -2 : -1
-    });
-
-    const MOB_PODIO_DOWN_LAST = 83;
-    const DESK_LOWER_LAST     = 100;
-
-    const MOB_RAMAS_DOWN      = 150;
-    const DESK_RAMAS_UP       = 500;
-
-    mm.add("(max-width: 639px)", () => {
-      const fit = fitValues(false);
-      gsap.set(q('.podio-bg'),       { scale: 1.08, force3D: true });
-      gsap.set(q('.podio-lejos'),    { opacity: 0, scale: 0.99, y: fit.lejos,   force3D: true });
-      gsap.set(q('.podio-cerca'),    { opacity: 0, scale: 1.04, y: fit.cerca,   force3D: true });
-      gsap.set(q('.podio-muycerca'), { opacity: 1, scale: 1.10, y: fit.muy,     force3D: true });
-      gsap.set([q('.espinas-verdes'), q('.rama-verde'), q('.rama-morada'), q('.rama-libro'), q('.espinas-moradas')], { opacity: 0, y: 0 });
-
-      const tl = gsap.timeline({
-        defaults: { ease: 'power1.inOut' },
-        scrollTrigger: {
-          id: 'podio2-sequence',
-          trigger: podio,
-          start: 'top 10%',
-          end: '+=180%',
-          scrub: 1.9,
-          pin: true,
-          anticipatePin: 2,
-          invalidateOnRefresh: true
-        }
-      });
-
-      tl.to(q('.podio-bg'), { scale: 1.00, transformOrigin: 'center center' }, 0)
-        .to(q('.podio-muycerca'), { scale: 1.06, y: `+=${MOB_PODIO_DOWN_LAST*0.2}` }, 0.06)
-        .to(q('.podio-cerca'),    { opacity: 1.00, scale: 1.02, y: `+=${MOB_PODIO_DOWN_LAST*0.3}` }, 0.18)
-        .to(q('.podio-muycerca'), { opacity: 0.00 }, 0.22)
-        .to(q('.podio-cerca'),    { opacity: 0.00 }, 0.44)
-        .to(q('.podio-lejos'),    { opacity: 1.00, scale: 0.985, y: `+=${MOB_PODIO_DOWN_LAST}` }, 0.46)
-        .to(q('.espinas-verdes'),  { opacity: 1, y: ( 30 + MOB_RAMAS_DOWN) }, 0.24)
-        .to(q('.rama-verde'),      { opacity: 1, x: -22, y: ( 6 + MOB_RAMAS_DOWN*0.8) }, 0.30)
-        .to(q('.rama-morada'),     { opacity: 1, x:  18, y: ( 6 + MOB_RAMAS_DOWN*0.8) }, 0.36)
-        .to(q('.rama-libro'),      { opacity: 1, y: ( 34 + MOB_RAMAS_DOWN) }, 0.44)
-        .to(q('.espinas-moradas'), { opacity: 1, y: ( 48 + MOB_RAMAS_DOWN), scale: 1.02,
-                                     onStart: ()=> gsap.set(q('.espinas-moradas'), { zIndex: 60 }) }, 0.56);
-
-      gsap.to(q('.rama-morada'), { y: (10 + MOB_RAMAS_DOWN*0.4), ease: 'none',
-        scrollTrigger: { id: 'podio2-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1 }});
-      gsap.to(q('.rama-verde'), { y: (8 + MOB_RAMAS_DOWN*0.4), ease: 'none',
-        scrollTrigger: { id: 'podio2-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1 }});
-    });
-
-    mm.add("(min-width: 640px)", () => {
-      const fit = fitValues(true);
-      gsap.set(q('.podio-bg'),       { scale: 1.10, force3D: true });
-      gsap.set(q('.podio-lejos'),    { opacity: 0, scale: 0.98, y: fit.lejos,   force3D: true });
-      gsap.set(q('.podio-cerca'),    { opacity: 0, scale: 1.06, y: fit.cerca,   force3D: true });
-      gsap.set(q('.podio-muycerca'), { opacity: 1, scale: 1.12, y: fit.muy,     force3D: true });
-      gsap.set([q('.espinas-verdes'), q('.rama-verde'), q('.rama-morada'), q('.rama-libro'), q('.espinas-moradas')], { opacity: 0, y: 0 });
-
-      const tl = gsap.timeline({
-        defaults: { ease: 'power1.inOut' },
-        scrollTrigger: {
-          id: 'podio2-sequence',
-          trigger: podio,
-          start: 'top top',
-          end: '+=220%',
-          scrub: 2.0,
-          pin: true,
-          anticipatePin: 2,
-          invalidateOnRefresh: true
-        }
-      });
-
-      tl.to(q('.podio-bg'), { scale: 1.02, transformOrigin: 'center center' }, 0)
-        .to(q('.podio-muycerca'), { scale: 1.08, y: `+=${DESK_LOWER_LAST*0.25}` }, 0.08)
-        .to(q('.podio-cerca'),    { opacity: 1.00, scale: 1.04, y: `+=${DESK_LOWER_LAST*0.45}` }, 0.22)
-        .to(q('.podio-muycerca'), { opacity: 0.00 }, 0.26)
-        .to(q('.podio-cerca'),    { opacity: 0.00 }, 0.54)
-        .to(q('.podio-lejos'),    { opacity: 1.00, scale: 0.97,  y: `+=${DESK_LOWER_LAST}` }, 0.58)
-        .to(q('.espinas-verdes'),  { opacity: 1, y: (38 - DESK_RAMAS_UP) }, 0.24)
-        .to(q('.rama-verde'),      { opacity: 1, x: -46, y: (8 - DESK_RAMAS_UP*0.8) }, 0.32)
-        .to(q('.rama-morada'),     { opacity: 1, x:  36, y: (8 - DESK_RAMAS_UP*0.8) }, 0.40)
-        .to(q('.rama-libro'),      { opacity: 1, y: (52 - DESK_RAMAS_UP) }, 0.48)
-        .to(q('.espinas-moradas'), { opacity: 1, y: (64 - DESK_RAMAS_UP), scale: 1.04,
-                                     onStart: ()=> gsap.set(q('.espinas-moradas'), { zIndex: 60 }) }, 0.62);
-
-      gsap.to(q('.rama-morada'), { y: (24 - DESK_RAMAS_UP*0.3), ease: 'none',
-        scrollTrigger: { id: 'podio2-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
-      gsap.to(q('.rama-verde'), { y: (18 - DESK_RAMAS_UP*0.3), ease: 'none',
-        scrollTrigger: { id: 'podio2-rv-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
-      gsap.to(q('.rama-libro'), { x: -10, ease: 'none',
-        scrollTrigger: { id: 'podio2-rl-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1.1 }});
-    });
+    tl.to(q('.fortnite-bg'), { yPercent: 10, duration: 1.0 }, 0.0)
+      .to(q('.fortnite-badge'), { opacity: 1, scale: 1.0, y: 0, duration: 1.2 }, 0.12);
   }
 
-  addEventListener('load', () => { mountPodioAwaySequence(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
-  addEventListener('resize', () => { mountPodioAwaySequence(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
-  addEventListener('orientationchange', () => { mountPodioAwaySequence(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
+  addEventListener('load', () => { mountFortniteCTA(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
+  addEventListener('resize', () => { mountFortniteCTA(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
+  addEventListener('orientationchange', () => { mountFortniteCTA(); if (window.ScrollTrigger) ScrollTrigger.refresh(); });
 })();
 </script>
-
-<!-- Overrides SOLO móvil para #podio-away (copiados del #podio original) -->
-<style>
-@media (max-width: 639.98px) {
-  #podio-away .rama-verde  { top: 14% !important; }
-  #podio-away .rama-morada { top: 36% !important; }
-  #podio-away .espinas-verdes  { bottom: 14% !important; }
-  #podio-away .rama-libro      { bottom: 18% !important; }
-  #podio-away .espinas-moradas { bottom: 4%  !important; }
-}
-</style>
-
-
 
 </body>
 </html>
