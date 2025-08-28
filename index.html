@@ -1727,19 +1727,6 @@ html { scroll-behavior: auto; }
   }
 }
 
-/* Solo equipos con hover real (mouse) cambian OFF/ON al pasar */
-@media (hover: hover) and (pointer: fine){
-  .btn-swap:hover .off { opacity: 0; }
-  .btn-swap:hover .on  { opacity: 1; }
-}
-
-/* En pantallas táctiles: que el cambio sea al tocar, no al “primer tap hover” */
-@media (hover: none){
-  .btn-swap .off { opacity: 1; }
-  .btn-swap .on  { opacity: 0; }
-  .btn-swap:active .off { opacity: 0; }
-  .btn-swap:active .on  { opacity: 1; }
-}
 
 
 </style>
@@ -2461,7 +2448,56 @@ const order = [
   });
 
   
-  
+  /* --- Tap inmediato en móvil para elementos con [data-goto] --- */
+(() => {
+  const containers = [
+    'grid-home','grid-pantano','grid-bestial','grid-vampirico','grid-floral','grid-rocoso'
+  ];
+
+  const go = (e) => {
+    const m = e.target.closest('[data-goto]');
+    if (!m) return;
+    e.preventDefault();     // evita el "ghost click" posterior
+    e.stopPropagation();
+    // navega ya
+    show(m.dataset.goto);
+  };
+
+  containers.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    // Tap inmediato en táctiles
+    el.addEventListener('touchend', go, { passive: false });
+    el.addEventListener('pointerup', (e) => {
+      if (e.pointerType === 'touch' || e.pointerType === 'pen') go(e);
+    });
+
+    // Fallback desktop y navegadores viejos
+    el.addEventListener('click', (e) => {
+      // si viene de mouse, dejarlo; si vino inmediatamente tras touch, ya lo paramos en go()
+      const m = e.target.closest('[data-goto]');
+      if (!m) return;
+      show(m.dataset.goto);
+    });
+  });
+
+  // (opcional) Realm bar si sus tabs usan data-goto
+  const realmBarEl = document.querySelector('.realm-bar');
+  if (realmBarEl) {
+    const handle = (e) => {
+      const m = e.target.closest('[data-goto]');
+      if (!m) return;
+      e.preventDefault();
+      show(m.dataset.goto);
+    };
+    realmBarEl.addEventListener('touchend', handle, { passive: false });
+    realmBarEl.addEventListener('pointerup', (e) => {
+      if (e.pointerType === 'touch' || e.pointerType === 'pen') handle(e);
+    });
+    realmBarEl.addEventListener('click', handle);
+  }
+})();
 
   // Click en los “destacados” sobre la intro (ZELVIRA/DRACUTÁNICOS)
   document.querySelectorAll('.hero-monster').forEach(btn=>{
