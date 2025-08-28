@@ -2785,6 +2785,90 @@ const order = [
 </script>
 
 <script>
+(() => {
+  /* ===== Helper: fastTap (tap inmediato en táctiles, sin ghost-click) ===== */
+  function fastTap(el, handler){
+    if (!el) return;
+    let ignoreClickUntil = 0;
+
+    el.addEventListener('touchend', (e) => {
+      if (e.touches && e.touches.length) return;   // aún hay dedos tocando
+      ignoreClickUntil = Date.now() + 450;
+      e.preventDefault();                          // evita click nativo duplicado
+      e.stopPropagation();
+      handler(e);
+    }, { passive: false });
+
+    el.addEventListener('pointerup', (e) => {
+      if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+        ignoreClickUntil = Date.now() + 450;
+        e.preventDefault();
+        e.stopPropagation();
+        handler(e);
+      }
+    });
+
+    // Fallback desktop / navegadores sin touch
+    el.addEventListener('click', (e) => {
+      if (Date.now() < ignoreClickUntil) {         // ignora ghost-click
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      handler(e);
+    });
+  }
+
+  /* ===== Smooth scroll helper (usa tu función si existe) ===== */
+  function headerOffset(){
+    const h = document.querySelector('header');
+    return (h ? h.offsetHeight : 0) + 12;
+  }
+  function smoothToEl(el, hash){
+    if (!el) return;
+    const y = Math.min(
+      document.documentElement.scrollHeight - window.innerHeight,
+      el.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - headerOffset()
+    );
+    if (typeof window.smoothScrollTo === 'function') {
+      window.smoothScrollTo(y);        // usa tu animación lenta si está definida
+    } else {
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+    if (hash) history.replaceState(null, '', hash);
+  }
+
+  /* ===== CTA SALIR (no más doble tap) ===== */
+  const ctaSalir = document.getElementById('cta-salir');
+  fastTap(ctaSalir, () => {
+    const dest = document.getElementById('podio-away');
+    smoothToEl(dest, '#podio-away');
+  });
+
+  /* ===== HOME: abre fichas al primer toque ===== */
+  const gridHome = document.getElementById('grid-home');
+  fastTap(gridHome, (e) => {
+    const m = e.target.closest('[data-goto]');
+    if (!m) return;
+    // Navega a la ficha inmediatamente
+    if (typeof window.show === 'function') window.show(m.dataset.goto);
+  });
+
+  /* ===== Afinar botones con swap de imágenes en táctil ===== */
+  const isTouch = window.matchMedia && window.matchMedia('(hover: none)').matches;
+  if (isTouch) {
+    // que las imágenes no intercepten el tap
+    document.querySelectorAll('.btn-swap img').forEach(img => {
+      img.style.pointerEvents = 'none';
+      img.style.webkitUserDrag = 'none';
+      img.style.userSelect = 'none';
+    });
+  }
+})();
+</script>
+
+
+<script>
   tailwind.config = {
     theme: {
       extend: {
