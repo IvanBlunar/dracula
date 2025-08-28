@@ -420,19 +420,6 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
   }
 }
 
-/* Solo equipos con hover real (mouse) cambian OFF/ON al pasar */
-@media (hover: hover) and (pointer: fine){
-  .btn-swap:hover .off { opacity: 0; }
-  .btn-swap:hover .on  { opacity: 1; }
-}
-
-/* En pantallas táctiles: que el cambio sea al tocar, no al “primer tap hover” */
-@media (hover: none){
-  .btn-swap .off { opacity: 1; }
-  .btn-swap .on  { opacity: 0; }
-  .btn-swap:active .off { opacity: 0; }
-  .btn-swap:active .on  { opacity: 1; }
-}
 
 
 
@@ -2760,6 +2747,70 @@ const order = [
 </script>
 <script src="https://cdn.tailwindcss.com"></script>
 
+<script>
+/* FastTap: evita doble-tap en móviles (iOS/Safari y táctiles) */
+(() => {
+  const CLICKABLE =
+    'a,button,[role="button"],input[type="button"],input[type="submit"],' +
+    'input[type="checkbox"],input[type="radio"],label,.clickable,[data-tap]';
+
+  let lastTouchTime = 0;
+  let lastTarget = null;
+
+  const isEditable = el =>
+    el &&
+    (el.isContentEditable ||
+      (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) &&
+        !/^(button|submit|checkbox|radio)$/i.test(el.type)));
+
+  const closestClickable = el => (el.closest ? el.closest(CLICKABLE) : null);
+
+  function onTouchStart(e) {
+    const t = e.touches && e.touches[0];
+    const target = closestClickable(e.target);
+    if (target && t) target.__fastTapStart = { x: t.clientX, y: t.clientY };
+  }
+
+  function onTouchEnd(e) {
+    if (e.touches && e.touches.length) return; // aún hay dedos tocando
+
+    const target = closestClickable(e.target);
+    if (!target || target.hasAttribute('disabled') || target.getAttribute('aria-disabled') === 'true') return;
+    if (target.hasAttribute('data-no-fasttap')) return;
+    if (isEditable(target) || isEditable(e.target)) return;
+
+    // Considerar "tap" solo si no se movió mucho
+    const t = e.changedTouches ? e.changedTouches[0] : null;
+    if (t && target.__fastTapStart) {
+      const dx = Math.abs(t.clientX - target.__fastTapStart.x);
+      const dy = Math.abs(t.clientY - target.__fastTapStart.y);
+      if (dx > 10 || dy > 10) return; // fue scroll, no tap
+    }
+
+    lastTouchTime = Date.now();
+    lastTarget = target;
+
+    // Evita que Safari dispare el click nativo después (ghost click)
+    e.preventDefault();
+
+    // Dispara el click inmediatamente
+    target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+  }
+
+  function onClick(e) {
+    // Si acabamos de generar un click desde touch, cancela el nativo duplicado
+    if (Date.now() - lastTouchTime < 500 && lastTarget && (e.target === lastTarget || lastTarget.contains(e.target))) {
+      e.stopPropagation();
+      e.preventDefault();
+      lastTarget = null;
+    }
+  }
+
+  document.addEventListener('touchstart', onTouchStart, { passive: true });
+  document.addEventListener('touchend', onTouchEnd, { passive: false }); // usamos preventDefault
+  document.addEventListener('click', onClick, true); // captura para frenar ghost click
+})();
+</script>
 
 
 </body>
