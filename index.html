@@ -1727,6 +1727,19 @@ html { scroll-behavior: auto; }
   }
 }
 
+/* Solo equipos con hover real (mouse) cambian OFF/ON al pasar */
+@media (hover: hover) and (pointer: fine){
+  .btn-swap:hover .off { opacity: 0; }
+  .btn-swap:hover .on  { opacity: 1; }
+}
+
+/* En pantallas táctiles: que el cambio sea al tocar, no al “primer tap hover” */
+@media (hover: none){
+  .btn-swap .off { opacity: 1; }
+  .btn-swap .on  { opacity: 0; }
+  .btn-swap:active .off { opacity: 0; }
+  .btn-swap:active .on  { opacity: 1; }
+}
 
 
 </style>
