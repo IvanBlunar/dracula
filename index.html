@@ -2867,6 +2867,53 @@ const order = [
 })();
 </script>
 
+<script>
+(() => {
+  // ===== helpers de scroll suave (solo para este CTA) =====
+  function easeInOutCubic(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
+  function animateScrollTo(targetY, durationMs){
+    const startY = window.pageYOffset || document.documentElement.scrollTop;
+    const delta = targetY - startY;
+    if (Math.abs(delta) < 2) { window.scrollTo(0, targetY); return; }
+    let t0 = null;
+    function step(ts){
+      if (!t0) t0 = ts;
+      const t = Math.min(1, (ts - t0) / durationMs);
+      const eased = easeInOutCubic(t);
+      window.scrollTo(0, Math.round(startY + delta * eased));
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function headerOffset(){
+    const h = document.querySelector('header');
+    return (h ? h.offsetHeight : 0) + 12; // colchón
+  }
+  function targetTop(el){
+    const y = el.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - headerOffset();
+    const maxY = document.documentElement.scrollHeight - window.innerHeight;
+    return Math.max(0, Math.min(y, maxY));
+  }
+
+  // ===== CTA: salir del bosque con scroll más lento =====
+  const ctaSalir = document.getElementById('cta-salir');
+  if (ctaSalir) {
+    const go = (e) => {
+      e.preventDefault();
+      const dest = document.getElementById('podio-away');
+      if (!dest) return;
+      animateScrollTo(targetTop(dest), 2200);  // ← ajústalo (ms) si lo quieres aún más suave
+      history.replaceState(null, '', '#podio-away');
+    };
+
+    // Tap inmediato en táctil (evita doble tap) + fallback click
+    ctaSalir.addEventListener('touchend', (e)=>{ if(!e.touches?.length){ e.preventDefault(); go(e); } }, {passive:false});
+    ctaSalir.addEventListener('pointerup', (e)=>{ if(e.pointerType==='touch'||e.pointerType==='pen'){ e.preventDefault(); go(e); }});
+    ctaSalir.addEventListener('click', go);
+  }
+})();
+</script>
+
 
 <script>
   tailwind.config = {
