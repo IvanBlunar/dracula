@@ -4,12 +4,95 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="dark" />
-  <title>Drácula — Hero Parallax</title>
+  <title>Drácula</title>
+  <link rel="preload" as="font" href="assets/fonts/Berani.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="assets/fonts/JollyLodger-Regular.woff2" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="assets/fonts/Screature.woff2" type="font/woff2" crossorigin>
+
 
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+
+    /* === Asignación de tipografías global === */
+body{
+  font-family: "Jolly Lodger", system-ui, sans-serif; /* Párrafos */
+}
+h1,h2,h3,h4,h5,h6,
+.font-titulo{
+  font-family: "Berani", system-ui, sans-serif;       /* Títulos */
+  letter-spacing: .01em;
+}
+/* CTA: añade esta clase a los botones/enlaces de acción */
+.font-cta, .cta, .btn-cta{
+  font-family: "Screature", system-ui, sans-serif;    /* CTAs */
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+
+    /* Títulos */
+@font-face{
+  font-family: "Berani";
+  src: url("assets/fonts/Berani.woff2") format("woff2"),
+       url("assets/fonts/Berani.woff") format("woff");
+  font-weight: 200; /* ajusta si conoces el peso real */
+  font-style: normal;
+  font-display: swap;
+  
+}
+
+/* Párrafos */
+@font-face{
+  font-family: "Jolly Lodger";
+  src: url("assets/fonts/JollyLodger-Regular.woff2") format("woff2"),
+       url("assets/fonts/JollyLodger-Regular.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CTAs */
+@font-face{
+  font-family: "Screature";
+  src: url("assets/fonts/Screature.woff2") format("woff2"),
+       url("assets/fonts/Screature.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* TITULOS: siempre Berani */
+h1,h2,h3,h4,h5,h6, .font-titulo{
+  font-family: "Berani", system-ui, sans-serif !important;
+  line-height: 1.08;            /* evita que se monten las líneas */
+  letter-spacing: .02em;
+}
+
+/* PARRAFOS: Jolly Lodger más legible */
+p, .font-parrafo{
+  font-family: "Jolly Lodger", system-ui, sans-serif;
+  font-size: clamp(15px, 1.65vw, 18px);
+  line-height: 1.6;
+  letter-spacing: .015em;
+}
+
+/* CTAs: limitar la fuente Screature SOLO a botones/enlaces de acción */
+a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
+  font-family: "Screature", system-ui, sans-serif !important;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Si algún contenedor .cta/.font-cta envuelve títulos, forzamos que los h1–h6 sigan en Berani */
+.font-cta h1, .font-cta h2, .font-cta h3,
+.cta h1, .cta h2, .cta h3{
+  font-family: "Berani", system-ui, sans-serif !important;
+  text-transform: none;
+}
+
+
     .vignette::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow: inset 0 0 160px rgba(0,0,0,.8); }
     .willchange-transform { will-change: transform; }
     .nav-item.is-active .off { opacity: 0 !important; }
@@ -392,13 +475,18 @@
         <img src="assets/header/Logo Dracula.webp" alt="Drácula" class="h-[50px] sm:h-[42px] md:h-[50px] w-auto select-none">
         <nav class="flex items-center gap-10 sm:gap-14">
           <!-- Corregido: href al id real del bestiario -->
-          <a href="#captura-bestias" class="group relative inline-block nav-item" data-nav="bestiario" aria-label="El Bestiario">
-            <img src="assets/header/OFF EL BESTIARIO.webp" alt="El Bestiario" class="off h-[22px] sm:h-[26px] md:h-[28px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
-            <img src="assets/header/ON EL BESTIARIO.webp" alt="" class="on pointer-events-none absolute inset-0 h-[22px] sm:h-[26px] md:h-[28px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
-          </a>
-          <a href="#castillo" class="group relative inline-block nav-item mt-[2px]" data-nav="castillo" aria-label="El Castillo">
-            <img src="assets/header/OFF El Castilo.webp" alt="El Castillo" class="off h-[30px] sm:h-[36px] md:h-[42px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
-            <img src="assets/header/ON El Castilo.webp" alt="" class="on pointer-events-none absolute inset-0 h-[30px] sm:h-[36px] md:h-[42px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+          <!-- Bestiario → LIBRO -->
+<a href="#libro" class="group relative inline-block nav-item" data-nav="bestiario" aria-label="El Bestiario">
+  <img src="assets/header/OFF EL BESTIARIO.webp" alt="El Bestiario" class="off h-[22px] sm:h-[26px] md:h-[28px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+  <img src="assets/header/ON EL BESTIARIO.webp" alt="" class="on pointer-events-none absolute inset-0 h-[22px] sm:h-[26px] md:h-[28px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+</a>
+
+<!-- “Castillo Fortnite” → FORTNITE CTA -->
+<a href="#fortnite-cta" class="group relative inline-block nav-item mt-[2px]" data-nav="castillo" aria-label="El Castillo">
+  <img src="assets/header/OFF El Castilo.webp" alt="El Castillo" class="off h-[30px] sm:h-[36px] md:h-[42px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+  <img src="assets/header/ON El Castilo.webp"  alt="" class="on pointer-events-none absolute inset-0 h-[30px] sm:h-[36px] md:h-[42px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+</a>
+
           </a>
         </nav>
       </div>
@@ -437,7 +525,16 @@
         </button>
       </div>
       <div class="mt-6 text-center">
-        <a href="#captura-bestias" class="inline-block px-6 py-3 border-2 border-lime-500 bg-black text-white font-black tracking-wider text-lg hover:bg-lime-500 hover:text-black transition-colors">EXPLORA UNA NUEVA AVENTURA</a>
+        <a href="#captura-bestias"
+   class="font-titulo font-normal uppercase tracking-[.02em] inline-block
+          text-xl sm:text-2xl md:text-[26px] leading-none
+          px-6 md:px-7 py-3 md:py-3.5
+          border-2 border-lime-500 text-white
+          bg-black hover:bg-lime-500 hover:text-black
+          transition-colors duration-300">
+  EXPLORA UNA NUEVA AVENTURA
+</a>
+
         <div class="mt-3 animate-bounce text-lime-500">
           <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
         </div>
@@ -472,14 +569,23 @@
 
   <!-- Sello + CTA -->
   <div class="title absolute left-1/2 -translate-x-1/2 
-            top-[20vh] sm:top-[24vh] md:top-[30vh] 
+            top-[20vh] sm:top-[24vh] md:top-[17vh] 
             max-[639px]:top-[28vh]
-            w-[72vw] sm:w-[52vw] md:w-[44vw] max-w-[900px] 
+            w-[72vw] sm:w-[52vw] md:w-[44vw] max-w-[450px] 
             z-[60] willchange-transform flex flex-col items-center
             gap-0 sm:gap-3 md:gap-0">
     <img src="assets/Sello A.webp" alt="Secretos del Bosque Prohibido" class="w-full h-full object-contain mx-auto pointer-events-none select-none">
     <div class="mt-6 flex flex-col items-center">
-      <a href="#trailer" class="px-6 py-3 border-2 border-lime-500 text-white font-black tracking-wider text-lg sm:text-xl bg-black hover:bg-lime-500 hover:text-black transition-colors duration-300">CONOCE LA HISTORIA</a>
+      <a href="#trailer"
+   class="font-titulo font-normal uppercase tracking-[.02em]
+          text-xl sm:text-2xl md:text-[26px] leading-none
+          px-6 md:px-7 py-3 md:py-3.5
+          border-2 border-lime-500 text-white
+          bg-black hover:bg-lime-500 hover:text-black
+          transition-colors duration-300">
+  CONOCE LA HISTORIA
+</a>
+
       <div class="mt-3 animate-bounce">
         <svg class="w-6 h-6 text-lime-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
       </div>
@@ -493,9 +599,10 @@
   <img src="assets/icons/Icon Scroll.svg" alt="Icono Scroll" 
        class="w-6 h-6 sm:w-5 sm:h-5 animate-soft-blink">
   
-  <!-- Texto -->
+<p class="text-center text-[clamp(14px,3.2vw,22px)] leading-[1.35] opacity-90">
   Haz scroll con la barra del mouse para comenzar la aventura
 </p>
+
 
 <style>
 /* Titileo suave */
@@ -521,7 +628,7 @@
     <div class="absolute -bottom-16 sm:-bottom-20 md:-bottom-24 lg:-bottom-40 left-6 sm:left-8 md:left-12 w-56 sm:w-72 md:w-96 lg:w-[28rem] opacity-90 -z-10 pointer-events-none">
       <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
     </div>
-    <div class="absolute top-[-8vh] sm:top-[-20vh] left-[-4vw] sm:left-[-5vw] w-56 sm:w-72 md:w-96 lg:w-[28rem] opacity-90 -z-10 pointer-events-none" id="nube-c">
+    <div class="absolute top-[-8vh] sm:top-[-34vh] left-[-4vw] sm:left-[-5vw] w-56 sm:w-72 md:w-96 lg:w-[28rem] opacity-90 -z-10 pointer-events-none" id="nube-c">
       <img src="assets/Nube Verde B.webp" alt="Nube Verde B" class="w-full h-auto object-contain select-none" />
     </div>
 
@@ -539,25 +646,39 @@
     </div>
 
     <!-- Texto -->
-    <div class="relative z-30 max-w-xl text-white text-center md:text-center p-4 md:p-8 flex flex-col items-center md:items-start">
-      <h2 class="text-xl sm:text-2xl md:text-3xl font-black uppercase leading-tight mb-4">Conviértete en el<br /><span class="text-white">Señor del Castillo Drácula</span></h2>
-      <div class="border-2 border-lime-500 bg-black text-white p-4 md:p-6 rounded-lg max-w-md text-sm sm:text-base leading-relaxed text-center md:text-left mb-6">
-        Lorem ipsum dolor sit amet consectetur. Id tortor ipsum nisl duis massa. In non amet urna at in proin sed. Tellus facilisis ipsum iaculis mauris eget nisl in laoreet et.
-      </div>
-      <div class="text-center mt-2">
-        <p class="text-xs sm:text-sm uppercase tracking-widest text-gray-300 mb-1">Tienes el castillo. Ahora</p>
-        <p class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white uppercase tracking-wide mb-2">Captura a las bestias</p>
-        <div class="mt-2 animate-bounce">
-          <svg class="w-6 h-6 text-lime-500 mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" /></svg>
-        </div>
-      </div>
-    </div>
+<div class="relative z-30 max-w-xl text-white text-center p-4 md:p-8 flex flex-col items-center md:items-center mx-auto -mt-7 sm:mt-0">
 
-    <!-- Corte nubes borde inferior -->
-    <div class="absolute bottom-[14rem] sm:bottom-[-24rem] md:bottom-[-26rem] lg:bottom-[-30rem] left-0 right-0 w-full -z-20 pointer-events-none">
-      <img src="assets/Corte Nubes.webp" alt="Corte Nubes" class="w-full h-auto object-cover select-none pointer-events-none" />
+<h2 class="font-titulo text-center uppercase tracking-[.02em] leading-[1.08] text-3xl md:text-5xl mb-0">
+  CONVIÉRTETE EN EL<br>SEÑOR DEL CASTILLO DRÁCULA
+</h2>
+
+<div class="border-2 border-lime-500 bg-black text-white p-4 md:p-6 rounded-lg max-w-md mx-auto text-[15px] sm:text-[17px] md:text-[18px] lg:text-[19px] leading-[1.45] tracking-[.01em] text-center md:text-left mt-3 sm:mt-4 md:mt-5 mb-6">
+  Lorem ipsum dolor sit amet consectetur. Id tortor ipsum nisl duis massa. In non amet urna at in proin sed. Tellus facilisis ipsum iaculis mauris eget nisl in laoreet et.
+</div>
+
+
+
+  <div class="text-center mt-2 mx-auto">
+    <p class="text-xs sm:text-sm uppercase tracking-widest text-gray-300 mb-1">Tienes el castillo. Ahora</p>
+
+    <h2 class="font-titulo font-normal text-center text-2xl sm:text-3xl md:text-4xl text-white uppercase tracking-[.02em] leading-[1.08] mb-2">
+      Captura a las bestias
+    </h2>
+
+    <div class="mt-2 animate-bounce">
+      <svg class="w-6 h-6 text-lime-500 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd" />
+      </svg>
     </div>
-  </section>
+  </div>
+</div>
+
+<!-- Corte nubes borde inferior (oculto en móvil) -->
+<div class="hidden sm:block absolute bottom-[14rem] sm:bottom-[-24rem] md:bottom-[-26rem] lg:bottom-[-30rem] left-0 right-0 w-full -z-20 pointer-events-none">
+  <img src="assets/Corte Nubes.webp" alt="Corte Nubes" class="w-full h-auto object-cover select-none pointer-events-none" />
+</div>
+</section>
+
 
   <!-- ===== CASTILLO ===== -->
   <section id="castillo" class="relative z-10 overflow-visible">
@@ -593,6 +714,13 @@
 
     <!-- Overrides SOLO móvil dentro de #castillo y #podio -->
 <style>
+
+  /* Scroll suave para anclas */
+html { scroll-behavior: auto; }
+#libro, #fortnite-cta { scroll-margin-top: clamp(72px, 12vh, 128px); }
+
+
+
 @media (max-width: 639.98px) {
   /* --- CASTILLO: subir ramas/enredaderas en móvil --- */
   #castillo .branch-purple-far  { top: 10%  !important; }  /* antes 30% */
@@ -1487,8 +1615,21 @@
 </section>
 
 <!-- ===== FORTNITE CTA — escena con scroll suave hacia abajo ===== -->
-<section id="fortnite-cta" class="relative z-[8] overflow-hidden">
+<section id="fortnite-cta"
+  class="relative overflow-hidden
+         z-[8] md:z-[90]
+         md:-mt-[14svh] lg:-mt-[18svh]">
+
+         
+
   <div class="relative w-full min-h-[100vh] md:min-h-[120vh]">
+
+    
+    
+
+    
+
+    
     <!-- Fondo -->
     <img src="assets/Background Castillo Cierre.webp" alt="Castillo y luna verde"
          class="fortnite-bg absolute inset-0 w-full h-full object-cover select-none pointer-events-none willchange-transform -z-10" />
@@ -1502,18 +1643,21 @@
         <img src="assets/Sello con Fortnite.webp" alt="Sello Fortnite Bosque Prohibido"
              class="fortnite-badge mx-auto w-[76%] sm:w-[64%] md:w-[520px] willchange-transform drop-shadow-[0_8px_30px_rgba(0,0,0,.6)]" />
         <div class="mt-6 md:mt-8 space-y-3 md:space-y-4 text-white">
-          <p class="text-[clamp(14px,3.2vw,24px)] font-extrabold tracking-wide leading-tight">
-            ENTRA A FORTNITE Y EXPLORA<br class="hidden sm:block" />
-            EL BOSQUE PROHIBIDO DE DRÁCULA.
-          </p>
-          <p class="text-[clamp(12px,2.8vw,20px)] opacity-90">
-            Ingresa el código <span class="text-lime-400 font-bold">xxx-xxx-xxx</span> en <span class="font-semibold">Código de Isla</span>… si te atreves.
-          </p>
+          <h2 class="font-titulo font-normal tracking-[.02em] leading-[1.06] text-[clamp(18px,4vw,34px)]">
+  ENTRA A FORTNITE Y EXPLORA<br>
+  EL BOSQUE PROHIBIDO DE DRÁCULA.
+</h2>
+
+          <p class="text-[clamp(19px,3.4vw,24px)] opacity-90">
+  Ingresa el código <span class="text-lime-400 font-bold">xxx-xxx-xxx</span> en <span class="font-semibold">Código de Isla</span>… si te atreves.
+</p>
+
         </div>
       </div>
     </div>
   </div>
 </section>
+
 
 
 
@@ -2287,6 +2431,7 @@ const order = [
   });
 
   
+  
 
   // Click en los “destacados” sobre la intro (ZELVIRA/DRACUTÁNICOS)
   document.querySelectorAll('.hero-monster').forEach(btn=>{
@@ -2486,6 +2631,104 @@ const order = [
   #podio-away .espinas-moradas { bottom: 4%  !important; }
 }
 </style>
+
+<script>
+(() => {
+  // ====== Ajustes de velocidad ======
+  // Aumenta MS_PER_PX para hacerlo más lento
+  const MS_PER_PX = 1.8;       // milisegundos por píxel (1.8 = más lento)
+  const MIN_DURATION = 1200;   // mínimo 1.2s
+  const MAX_DURATION = 4000;   // máximo 4s
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function getHeaderOffset() {
+    const header = document.querySelector('header');
+    const h = header ? header.offsetHeight : 0;
+    // colchón extra pequeño
+    return h + 12;
+  }
+
+  function clamp(val, min, max) {
+    return Math.max(min, Math.min(max, val));
+  }
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  }
+
+  function smoothScrollTo(targetY) {
+    const startY = window.pageYOffset || document.documentElement.scrollTop;
+    const delta = targetY - startY;
+    const distance = Math.abs(delta);
+
+    // Duración basada en distancia (más lejos = más tiempo)
+    const duration = prefersReduced
+      ? 0
+      : clamp(distance * MS_PER_PX, MIN_DURATION, MAX_DURATION);
+
+    if (duration === 0 || distance < 2) {
+      window.scrollTo(0, targetY);
+      return;
+    }
+
+    let startTime = null;
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      const elapsed = ts - startTime;
+      const t = clamp(elapsed / duration, 0, 1);
+      const eased = easeInOutCubic(t);
+      window.scrollTo(0, Math.round(startY + delta * eased));
+      if (elapsed < duration) {
+        requestAnimationFrame(step);
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  function getTargetTop(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    const offsetTop = rect.top + (window.pageYOffset || document.documentElement.scrollTop);
+    const target = offsetTop - getHeaderOffset();
+
+    // Evitar rebasar el final del documento
+    const maxY = document.documentElement.scrollHeight - window.innerHeight;
+    return clamp(target, 0, maxY);
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const targetY = getTargetTop(id);
+      if (targetY === null) return; // deja enlaces raros intactos
+      e.preventDefault();
+      smoothScrollTo(targetY);
+
+      // Actualiza la URL sin “brinco”
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+})();
+</script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          titulo:  ['"Berani"', 'system-ui', 'sans-serif'],
+          parrafo: ['"Jolly Lodger"', 'system-ui', 'sans-serif'],
+          cta:     ['"Screature"', 'system-ui', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
 
 
 
