@@ -2709,7 +2709,7 @@ const order = [
 (() => {
   // ====== Ajustes de velocidad ======
   // Aumenta MS_PER_PX para hacerlo más lento
-  const MS_PER_PX = 1.8;       // milisegundos por píxel (1.8 = más lento)
+  const MS_PER_PX = 2.2;       // milisegundos por píxel (1.8 = más lento)
   const MIN_DURATION = 1200;   // mínimo 1.2s
   const MAX_DURATION = 4000;   // máximo 4s
 
@@ -2906,7 +2906,7 @@ const order = [
       e.preventDefault();
       const dest = document.getElementById('podio-away');
       if (!dest) return;
-      animateScrollTo(targetTop(dest), 2200);  // ← ajústalo (ms) si lo quieres aún más suave
+      animateScrollTo(targetTop(dest), 2400);  // ← ajústalo (ms) si lo quieres aún más suave
       history.replaceState(null, '', '#podio-away');
     };
 
@@ -2920,28 +2920,29 @@ const order = [
 
 <script>
 (() => {
-  const logo = document.getElementById('logo-home');
+  const logo = document.getElementById('logo-home'); // <a id="logo-home">…</a>
   if (!logo) return;
 
-  function smoothToTop(ms = 1200){
+  function easeInOutCubic(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
+  function scrollToTopSlow(ms){
     const start = window.pageYOffset || document.documentElement.scrollTop;
-    const delta = -start;
-    if (Math.abs(delta) < 2){ window.scrollTo(0,0); return; }
-    const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
+    if (start < 2) { window.scrollTo(0,0); return; }
     let t0 = null;
     function step(ts){
-      if(!t0) t0 = ts;
-      const p = Math.min(1, (ts - t0)/ms);
-      window.scrollTo(0, Math.round(start + delta * ease(p)));
+      if (!t0) t0 = ts;
+      const p = Math.min(1, (ts - t0) / ms);
+      const eased = easeInOutCubic(p);
+      window.scrollTo(0, Math.round(start * (1 - eased)));
       if (p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
 
-  // Tap inmediato (evita doble tap) + fallback click
-  const go = e => { e.preventDefault(); smoothToTop(1400); };
-  logo.addEventListener('touchend', e => { if(!e.touches?.length){ go(e); } }, {passive:false});
-  logo.addEventListener('pointerup', e => { if(e.pointerType==='touch'||e.pointerType==='pen'){ go(e); }});
+  const go = e => { e.preventDefault(); scrollToTopSlow(3400); }; // ← ajusta ms aquí
+
+  // Tap inmediato en táctil (evita doble-tap) + fallback click
+  logo.addEventListener('touchend', e => { if(!e.touches?.length) go(e); }, { passive:false });
+  logo.addEventListener('pointerup', e => { if(e.pointerType==='touch'||e.pointerType==='pen') go(e); });
   logo.addEventListener('click', go);
 })();
 </script>
