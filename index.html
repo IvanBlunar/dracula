@@ -1735,6 +1735,13 @@ html { scroll-behavior: auto; }
 [data-goto] { cursor: pointer; touch-action: manipulation; }
 [data-goto] img { pointer-events: none; -webkit-user-drag: none; user-select: none; }
 
+@media (max-width: 767px) {
+  #grid-home {
+    margin-top: -11px; 
+  }
+}
+
+
 
 </style>
 
@@ -2489,7 +2496,7 @@ const order = [
     });
   });
 
-  // (opcional) Realm bar si sus tabs usan data-goto
+  // Realm bar si sus tabs usan data-goto
   const realmBarEl = document.querySelector('.realm-bar');
   if (realmBarEl) {
     const handle = (e) => {
