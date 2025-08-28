@@ -1410,11 +1410,18 @@
 
 <!-- ===== PODIO (AWAY) — copia del podio, se aleja con scroll ===== -->
 <section id="podio-away" class="relative z-10 overflow-visible">
-  <div class="relative w-full min-h-[180svh] md:min-h-[200vh]" style="perspective:1000px;">
+  <div class="relative w-full min-h-[190svh] md:min-h-[200vh]" style="perspective:1000px;">
     <!-- Punto focal invisible del libro -->
     <div class="podio-focus absolute left-1/2 -translate-x-1/2 
                 top-[34svh] sm:top-[38svh] md:top-[42vh] max-[639px]:top-[48svh]
                 h-0 w-0 pointer-events-none select-none"></div>
+
+                 <!-- Enredaderas que cubren la unión LIBRO ↔ PODIO -->
+    <img src="assets/Corte Enredaderas Final.webp" alt="Enredaderas unión"
+         class="seam-vines absolute left-1/2 -translate-x-1/2
+                -top-[20svh] sm:-top-[24svh] md:-top-[28svh] lg:-top-[65svh]
+                w-[190vw] sm:w-[170vw] md:w-[150vw]
+                pointer-events-none select-none z-[80]" />
 
     <!-- Imagen de fondo del bosque -->
     <img src="assets/Background Bosque - Podio.webp" alt="Bosque Podio"
