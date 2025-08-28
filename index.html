@@ -66,7 +66,7 @@ h1,h2,h3,h4,h5,h6,
 /* TITULOS: siempre Berani */
 h1,h2,h3,h4,h5,h6, .font-titulo{
   font-family: "Berani", system-ui, sans-serif !important;
-  line-height: 1.08;            /* evita que se monten las líneas */
+  line-height: 1.08;            
   letter-spacing: .02em;
 }
 
@@ -100,14 +100,14 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
       html, body {
     width: 100%;
     max-width: 100%;
-    overflow-x: hidden;            /* corta desbordes al documento */
-    overscroll-behavior-x: none;   /* sin “arrastre” lateral */
-    touch-action: pan-y;           /* solo desplazamiento vertical */
+    overflow-x: hidden;            
+    overscroll-behavior-x: none;   
+    touch-action: pan-y;           
     position: relative;
 
     #libro {
   position: relative;
-  overflow: hidden; /* opcional, para evitar desbordes */
+  overflow: hidden; 
 }
 
     
@@ -257,7 +257,7 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
 
     /* (pequeño fix) faltaba la unidad en móvil */
     @media (max-width:768px){
-      #cta-salir{ bottom: 20px; } /* antes: bottom:20; */
+      #cta-salir{ bottom: 20px; } 
     }
 
     /* Desktop: empuja el título hacia la derecha */
@@ -272,7 +272,7 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
        ========================== */
     .hero-monster{
       position:absolute;
-      z-index:26;                  /* por encima de la intro */
+      z-index:26;                  
       top:7%;
       left:10%;
       width: clamp(140px, 26%, 240px);
@@ -361,7 +361,7 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
   mix-blend-mode: multiply;
 }
 
-/* Opcionales: atenuar o desactivar si un asset queda muy oscuro */
+
 .blend-soft{ opacity:.9; }
 .blend-normal{ mix-blend-mode: normal !important; }
 
@@ -384,11 +384,11 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
     bottom:-1.2%;
     background-position:center;
     background-repeat:no-repeat;
-    background-size:contain;   /* respeta proporción del PNG/WebP */
+    background-size:contain;   
     pointer-events:none;
-    z-index:25;                /* debajo de action-bar (28) y héroes (26) */
-    mix-blend-mode:multiply;   /* modo de fusión */
-    display:none;              /* solo se muestra con data-realm */
+    z-index:25;                
+    mix-blend-mode:multiply;   
+    display:none;              
   }
 
 /* FICHA — marco más bajo (menos alto superior/inferior) */
@@ -617,10 +617,10 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
 /* Titileo suave */
 @keyframes soft-blink {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; } /* no desaparece del todo, solo baja un poco */
+  50% { opacity: 0.6; } 
 }
 .animate-soft-blink {
-  animation: soft-blink 2.5s ease-in-out infinite; /* más lento y suave */
+  animation: soft-blink 2.5s ease-in-out infinite; 
 }
 </style>
 
@@ -743,21 +743,20 @@ html { scroll-behavior: auto; }
 
 @media (max-width: 639.98px) {
   /* --- CASTILLO: subir ramas/enredaderas en móvil --- */
-  #castillo .branch-purple-far  { top: 10%  !important; }  /* antes 30% */
-  #castillo .branch-green-cut   { bottom: -8vh  !important; } /* antes -20vh */
-  #castillo .branch-book-purple { bottom: -12vh !important; } /* antes -24vh */
-  #castillo .vine-blurr         { bottom: -46vh !important; } /* antes -62vh */
-  #castillo .vine-cut           { bottom: -24vh !important; } /* antes -36vh */
+  #castillo .branch-purple-far  { top: 10%  !important; }  
+  #castillo .branch-green-cut   { bottom: -8vh  !important; } 
+  #castillo .branch-book-purple { bottom: -12vh !important; } 
+  #castillo .vine-blurr         { bottom: -46vh !important; } 
+  #castillo .vine-cut           { bottom: -24vh !important; } 
 
   /* --- PODIO: subir elementos (mismo bloque/área) --- */
-  /* Los que usan TOP: menor valor = más arriba */
-  #podio .rama-verde  { top: 14% !important; }  /* antes 18% */
-  #podio .rama-morada { top: 36% !important; }  /* antes 42% */
+  #podio .rama-verde  { top: 14% !important; }  
+  #podio .rama-morada { top: 36% !important; }  
 
   /* Los que usan BOTTOM: mayor valor = más arriba */
-  #podio .espinas-verdes  { bottom: 14% !important; } /* antes 10% */
-  #podio .rama-libro      { bottom: 18% !important; } /* antes 12% */
-  #podio .espinas-moradas { bottom: 4%  !important; } /* antes 0 */
+  #podio .espinas-verdes  { bottom: 14% !important; } 
+  #podio .rama-libro      { bottom: 18% !important; } 
+  #podio .espinas-moradas { bottom: 4%  !important; } 
 }
 </style>
 
@@ -1543,8 +1542,8 @@ html { scroll-behavior: auto; }
           </div>
         </div>
 
-        <!-- CTA (reemplazo con tu arte) -->
-   <!-- CTA (ocupa scroll suave hacia #podio-away) -->
+        <!-- CTA -->
+   <!-- CTA (scroll hacia #podio-away) -->
 <a id="cta-salir" href="#podio-away" class="btn-swap cta-swap" aria-label="Salir del bosque">
   <img class="off" src="assets/BT SALIR OFF.webp" alt="Salir del bosque">
   <img class="on"  src="assets/BT SALIR ON.webp"  alt="">
@@ -1688,9 +1687,9 @@ html { scroll-behavior: auto; }
 .icon-grid-tight {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: -10px !important; /* Espacio negativo para máxima cercanía */
+  column-gap: -10px !important; 
   row-gap: 6px;
-  justify-items: center; /* Puedes usar start/end/stretch según lo que prefieras */
+  justify-items: center; 
   align-items: center;
 }
 
@@ -1704,14 +1703,14 @@ html { scroll-behavior: auto; }
   transition: all 0.3s ease;
 }
 
-/* En móviles, ajusta el ancho aún más */
+/*móviles ancho */
 @media (max-width: 640px) {
   .stamp-icon {
     width: 65%;
   }
 
   .icon-grid-tight {
-    column-gap: -14px !important; /* más negativo en móviles */
+    column-gap: -14px !important; 
   }
 }
 
@@ -1720,12 +1719,12 @@ html { scroll-behavior: auto; }
   filter: brightness(1.5) drop-shadow(0 0 8px limegreen);
 }
 
-/* Clase auxiliar para espaciado entre columnas ultra pegado */
+/* espaciado entre columnas*/
 .col-gap-tighter {
   column-gap: -60px !important;
 }
 
-/* En móviles, aún más pegadas */
+/*móviles */
 @media (max-width: 640px) {
   .col-gap-tighter {
     column-gap: -16px !important;
@@ -1752,7 +1751,7 @@ html { scroll-behavior: auto; }
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ===== Ajustar altura del fondo hasta el inicio de #castillo ===== */
+  /* =====  fondo hasta el inicio de #castillo ===== */
   function fitBgToBestiarioEnd() {
     const castillo = document.querySelector('#castillo');
     const bgWrap   = document.querySelector('.bg-wrap');
@@ -1764,7 +1763,7 @@ html { scroll-behavior: auto; }
   addEventListener('resize', fitBgToBestiarioEnd);
   addEventListener('orientationchange', fitBgToBestiarioEnd);
 
-  /* ===== Parallax del fondo en Bestiario (más suave) ===== */
+  /* ===== Parallax del fondo en Bestiario  ===== */
   function mountBgParallax() {
     ScrollTrigger.killTweensOf('.bg-bosque');
     ScrollTrigger.getAll().forEach(st => { if (st.vars?.id === 'bg-parallax') st.kill(); });
@@ -1783,14 +1782,14 @@ html { scroll-behavior: auto; }
   addEventListener('load', mountBgParallax);
   addEventListener('resize', () => { fitBgToBestiarioEnd(); mountBgParallax(); });
 
-  /* ===== Flotación suave (igual) ===== */
+  /* ===== Flotación suave  ===== */
   gsap.to(".moon",            { y: 18,  scale: 1.025, duration: 6,  yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-left",      { x: 24,  y: -8, duration: 10, yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-right",     { x: -22, y: 6, duration: 12, yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-low",       { x: 16,  y: 12, duration: 14, yoyo:true, repeat:-1, ease:"sine.inOut" });
   gsap.to(".cloud-low-left",  { x: -16, y: 12, duration: 14, yoyo:true, repeat:-1, ease:"sine.inOut" });
 
-  /* ===== Parallax en HERO (más suave) ===== */
+  /* ===== Parallax en HERO  ===== */
   gsap.timeline({
     scrollTrigger:{ trigger: ".hero", start: "top top", end: "bottom top", scrub: 1.1 }
   })
@@ -1809,7 +1808,7 @@ html { scroll-behavior: auto; }
     });
   });
 
-  /* ===== One-scroll: hero -> trailer (igual; ya usa smooth) ===== */
+  /* ===== One-scroll: hero -> trailer  ===== */
   (function(){
     const hero = document.querySelector('.hero'), target = document.querySelector('#trailer');
     if (!hero || !target) return;
@@ -1821,7 +1820,7 @@ html { scroll-behavior: auto; }
     hero.addEventListener('touchend', e=>{ if(!inV()||touchStartY==null)return; const dy=touchStartY-(e.changedTouches?.[0]?.clientY??touchStartY); touchStartY=null; if(dy>30) go(); },{passive:true});
   })();
 
-  /* ===== One-scroll: trailer -> bestiario (igual; ya usa smooth) ===== */
+  /* ===== One-scroll: trailer -> bestiario ===== */
   (function(){
     const trailer=document.querySelector('#trailer'), bestiario=document.querySelector('#captura-bestias');
     if(!trailer||!bestiario) return;
@@ -1833,7 +1832,7 @@ html { scroll-behavior: auto; }
     trailer.addEventListener('touchend', e=>{ if(!inV(trailer)||touchStartY==null||locking) return; const dy=touchStartY-(e.changedTouches?.[0]?.clientY??touchStartY); touchStartY=null; if(dy>30){ locking=true; go(bestiario);} },{passive:true});
   })();
 
-  /* ===== Morph LUNA: Hero → Bestiario (más sedoso) ===== */
+  /* ===== Morph LUNA: Hero → Bestiario  ===== */
   let moonMorphST;
   function centerOf(el){ const r=el.getBoundingClientRect(); return {x:r.left+r.width/2+scrollX,y:r.top+r.height/2+scrollY}; }
   function mountMoonMorph(){
@@ -1882,7 +1881,7 @@ html { scroll-behavior: auto; }
     });
   })();
 
-  /* ===== Nubes: descenso hero -> trailer (más suave) ===== */
+  /* ===== Nubes: descenso hero -> trailer ===== */
   function mountCloudDropToTrailer(){
     ScrollTrigger.getAll().forEach(st=>{ if(['cloud-drop-left','cloud-drop-right'].includes(st.vars?.id)) st.kill(); });
     const hero=document.querySelector('.hero'), trailer=document.querySelector('#trailer');
@@ -1899,7 +1898,7 @@ html { scroll-behavior: auto; }
   addEventListener('resize', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountCloudDropToTrailer(); ScrollTrigger.refresh(); });
 
-  /* ===== Parallax continuidad en #trailer (más suave) ===== */
+  /* ===== Parallax continuidad en #trailer ===== */
   function mountTrailerCarryParallax(){
     ScrollTrigger.getAll().forEach(st=>{ if(st.vars?.id==='trailer-carry') st.kill(); });
     const desk=()=> innerWidth>=768;
@@ -1954,7 +1953,7 @@ function mountCastilloReveal() {
     }
   });
 
-  // 🌿 Ramas laterales → MÁS hacia los lados
+  //Ramas laterales
   tl.from(q('.branch-green-cut'), {
     x: -600, opacity: 0, duration: 1.6, immediateRender: false
   }, 0);
@@ -1967,7 +1966,7 @@ function mountCastilloReveal() {
     x: 700, opacity: 0, duration: 1.8, immediateRender: false
   }, 0.1);
 
-  // 🌱 Enredaderas desde MÁS abajo
+  //Enredaderas
   tl.from(q('.vine-cut'), {
     y: 300, opacity: 0, duration: 1.8, immediateRender: false
   }, 0.2);
@@ -2076,7 +2075,7 @@ window.addEventListener('orientationchange', () => { mountCastilloReveal(); Scro
   addEventListener('resize', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
   addEventListener('orientationchange', ()=>{ mountGreenDropToCastillo(); ScrollTrigger.refresh(); });
 
-  /* ===== PODIO: acercamiento (scrub + ease más suaves) ===== */
+  /* ===== PODIO: acercamiento (scrub + ease) ===== */
   let podioMM;
 
   function mountPodioSequence() {
@@ -2146,7 +2145,7 @@ window.addEventListener('orientationchange', () => { mountCastilloReveal(); Scro
         .to(q('.espinas-moradas'), { opacity: 1, y: -(48 + MOB_RAMAS_UP), scale: 1.06,
                                      onStart: ()=> gsap.set(q('.espinas-moradas'), { zIndex: 60 }) }, 0.58);
 
-      // Parallax sutil
+      // Parallax 
       gsap.to(q('.rama-morada'), { y: -(10 + MOB_RAMAS_UP*0.4), ease: 'none',
         scrollTrigger: { id: 'podio-rm-parallax', trigger: podio, start: 'top top', end: 'bottom bottom', scrub: 1 }});
       gsap.to(q('.rama-verde'), { y: -(8 + MOB_RAMAS_UP*0.4), ease: 'none',
@@ -2212,7 +2211,7 @@ function mountLibroScene() {
   const section = document.querySelector('#libro');
   if (!section) return;
 
-  // Limpieza por si re-montamos
+  // Limpieza re-montamos
   ScrollTrigger.getAll().forEach(st => { 
     if (st.vars?.id?.startsWith('libro-')) st.kill(); 
   });
@@ -2572,7 +2571,7 @@ const order = [
   // ⬇️ NUEVO: indicamos el reino activo al contenedor del libro
   const libro = document.getElementById('libro');
   if (active) { libro.dataset.realm = active; }
-  else { delete libro.dataset.realm; }  // en Home no hay marco
+  else { delete libro.dataset.realm; }  
 }
 
 </script>
@@ -2736,7 +2735,7 @@ const order = [
     const delta = targetY - startY;
     const distance = Math.abs(delta);
 
-    // Duración basada en distancia (más lejos = más tiempo)
+    // Duración basada en distancia 
     const duration = prefersReduced
       ? 0
       : clamp(distance * MS_PER_PX, MIN_DURATION, MAX_DURATION);
@@ -2778,7 +2777,7 @@ const order = [
     a.addEventListener('click', e => {
       const id = a.getAttribute('href').slice(1);
       const targetY = getTargetTop(id);
-      if (targetY === null) return; // deja enlaces raros intactos
+      if (targetY === null) return; 
       e.preventDefault();
       smoothScrollTo(targetY);
 
@@ -2797,9 +2796,9 @@ const order = [
     let ignoreClickUntil = 0;
 
     el.addEventListener('touchend', (e) => {
-      if (e.touches && e.touches.length) return;   // aún hay dedos tocando
+      if (e.touches && e.touches.length) return;  
       ignoreClickUntil = Date.now() + 450;
-      e.preventDefault();                          // evita click nativo duplicado
+      e.preventDefault();                          
       e.stopPropagation();
       handler(e);
     }, { passive: false });
@@ -2815,7 +2814,7 @@ const order = [
 
     // Fallback desktop / navegadores sin touch
     el.addEventListener('click', (e) => {
-      if (Date.now() < ignoreClickUntil) {         // ignora ghost-click
+      if (Date.now() < ignoreClickUntil) {        
         e.preventDefault();
         e.stopPropagation();
         return;
@@ -2836,14 +2835,14 @@ const order = [
       el.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - headerOffset()
     );
     if (typeof window.smoothScrollTo === 'function') {
-      window.smoothScrollTo(y);        // usa tu animación lenta si está definida
+      window.smoothScrollTo(y);        
     } else {
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
     if (hash) history.replaceState(null, '', hash);
   }
 
-  /* ===== CTA SALIR (no más doble tap) ===== */
+  /* ===== CTA SALIR  ===== */
   const ctaSalir = document.getElementById('cta-salir');
   fastTap(ctaSalir, () => {
     const dest = document.getElementById('podio-away');
@@ -2892,7 +2891,7 @@ const order = [
   }
   function headerOffset(){
     const h = document.querySelector('header');
-    return (h ? h.offsetHeight : 0) + 12; // colchón
+    return (h ? h.offsetHeight : 0) + 12; 
   }
   function targetTop(el){
     const y = el.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - headerOffset();
@@ -2907,7 +2906,7 @@ const order = [
       e.preventDefault();
       const dest = document.getElementById('podio-away');
       if (!dest) return;
-      animateScrollTo(targetTop(dest), 2400);  // ← ajústalo (ms) si lo quieres aún más suave
+      animateScrollTo(targetTop(dest), 2400);  
       history.replaceState(null, '', '#podio-away');
     };
 
@@ -2939,7 +2938,7 @@ const order = [
     requestAnimationFrame(step);
   }
 
-  const go = e => { e.preventDefault(); scrollToTopSlow(3400); }; // ← ajusta ms aquí
+  const go = e => { e.preventDefault(); scrollToTopSlow(3400); }; 
 
   // Tap inmediato en táctil (evita doble-tap) + fallback click
   logo.addEventListener('touchend', e => { if(!e.touches?.length) go(e); }, { passive:false });
