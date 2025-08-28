@@ -637,7 +637,18 @@ a.font-cta, button.font-cta, a.cta, button.cta, .btn-cta{
 
     <!-- Castillo maqueta + LUNA VERDE -->
     <div class="relative -z-30 mt-8 md:mt-0 md:mr-12 w-[80vw] sm:w-[70vw] md:w-[60vw] max-w-[600px]">
-      <img src="assets/Castillo Maqueta.webp" alt="Castillo Maqueta" class="w-full h-auto select-none pointer-events-none" />
+      <img
+  src="assets/Castillo Maqueta.webp"
+  alt="Castillo Maqueta"
+  class="w-full h-auto select-none pointer-events-none"
+  style="
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+    mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat;
+    mask-size: 100% 100%; -webkit-mask-size: 100% 100%;
+  "
+/>
+
       <img src="assets/Luna Verde.webp" alt="Luna Verde"
            class="absolute top-[calc(-40vh-20px)]
                   max-[639px]:top-[-20vh]
