@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Bestiario — Home / Pantano / Bestial / Vampírico / Floral / Rocoso</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    html, body { max-width:100%; overflow-x:hidden; touch-action:pan-y; }
+    .hidden { display:none !important; }
+
+    /* Botones ON/OFF (medallas, flechas, iconos) */
+    .btn-swap { position: relative; width: 72px; height: 72px; }
+    .btn-swap img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; transition:opacity .15s ease; }
+    .btn-swap .on { opacity:0; }
+    .btn-swap:hover .on, .btn-swap.is-active .on { opacity:1; }
+    .btn-swap:hover .off, .btn-swap.is-active .off { opacity:0; }
+
+    /* Barra de categorías (encima del libro) */
+    .realm-bar { position:absolute; left:50%; transform:translateX(-50%); top:9%; z-index:30; display:flex; align-items:center; gap:.5rem; }
+    @media (min-width:768px){ .realm-bar { gap:.75rem; } }
+    .realm-tab { width:72px; height:72px; }
+    @media (min-width:768px){ .realm-tab { width:80px; height:80px; } }
+
+    /* Navegación lateral (flechas) */
+    .side-nav { position:absolute; top:45%; transform:translateY(-50%); z-index:20; }
+    @media (max-width:640px){
+      .side-nav { top:48%; }
+    }
+
+    /* Área de páginas (ajustada a la imagen del libro) */
+    .pages-area { position:absolute; top:18%; left:9.5%; width:81%; height:60%; }
+    .page-left  { position:absolute; top:0; left:40px;   width:44.5%; height:100%; padding:1rem; }
+    .page-right { position:absolute; top:0; right:23px; width:46.5%; height:100%; padding:1rem; }
+
+    /* Ajustes responsive de páginas dentro del libro */
+    @media (max-width:1024px){
+      .pages-area { top:16%; left:8.5%; width:83%; height:60%; }
+      .page-left { left:34px; }
+      .page-right { right:18px; }
+    }
+    @media (max-width:640px){
+      .pages-area { top:17%; left:6.5%; width:85%; height:58%; }
+      .page-left { left:26px; padding:.75rem; }
+      .page-right { right:13px; padding:.75rem; }
+    }
+
+    /* Fichas a doble página (subidas un poco respecto al atril) */
+    .pages-area.ficha { top:20.5%; height:34%; }
+    @media (min-width:1280px){ .pages-area.ficha { top:20%; height:35%; } }
+    @media (max-width:1024px){ .pages-area.ficha { top:21%; height:33.5%; } }
+    @media (max-width:640px){ .pages-area.ficha { top:20%; height:33%; } }
+
+    /* Barra de acciones sobre la ficha (encima de la página izquierda) */
+    .action-bar{
+      position:absolute;
+      z-index:28;
+      top:1%;
+      left:9.8%;
+      width:34.2%;
+      display:flex;
+      justify-content:space-between;
+      gap:1rem;
+      pointer-events:auto;
+      filter: drop-shadow(0 0 8px rgba(0,0,0,.35));
+    }
+    @media (max-width:1024px){
+      .action-bar{ top:-2%; left:11.8%; width:31.8%; }
+    }
+    @media (max-width:640px){
+      .action-bar{ top:-7%; left:15.5%; width:26.5%; }
+      .btn-swap{ width:64px; height:64px; }
+    }
+
+    /* Tarjeta monstruo (cuadrícula de miniaturas) */
+    .monster { background:rgba(120,53,15,.04); transition:transform .2s ease, background .2s ease; }
+    .monster .thumb { width:100%; aspect-ratio:1/1; background:rgba(120,53,15,.12); object-fit:content; }
+    .monster:hover { background: rgba(120,53,15,.15); transform: scale(1.02); }
+
+    /* Toast simple */
+    #toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:1.75rem; z-index:60; background:rgba(16,185,129,.95); color:#fff; padding:.6rem 1rem; border-radius:.75rem; box-shadow:0 8px 30px rgba(0,0,0,.35); font-weight:600; letter-spacing:.02em; }
+
+    /* Iconos del HOME (tamaño fluido) */
+    .icon-btn { width:clamp(64px, 8.5vw, 96px); height:clamp(64px, 8.5vw, 96px); }
+
+    /* --- Ajuste vertical del HOME (intro) --- */
+    #pagina-home{
+      top: 20.5%;
+      height: 58%;
+    }
+    @media (min-width: 1280px){
+      #pagina-home{ top: 21.5%; height: 56%; }
+    }
+    @media (max-width: 768px){
+      #pagina-home{ top: 17%; height: 54%; }
+    }
+    #pagina-home .page-left{  padding-top: 1.25rem; }
+    #pagina-home .page-right{ padding-top: 1.25rem; }
+
+    /* Íconos de la HOME más pequeños en móvil */
+    @media (max-width:640px){
+      .icon-btn{
+        width: clamp(39px, 13vw, 58px);
+        height: clamp(39px, 13vw, 54px);
+      }
+      #grid-home{ gap: .5rem; }
+    }
+
+    /* Medallas (barra superior) también un poco más pequeñas en móvil */
+    @media (max-width:640px){
+      .realm-tab{
+        width: 56px;
+        height: 56px;
+      }
+    }
+
+    /* --- CTA SALIR AL BOSQUE (imagen ON/OFF pegada al libro) --- */
+    #cta-salir{
+      position:absolute;
+      left:50%; transform:translateX(-50%);
+      bottom: 25.5%;
+      z-index:22;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.45));
+    }
+    .cta-swap{
+      width: clamp(220px, 36vw, 520px);
+      aspect-ratio: 354 / 150;
+      height:auto;
+    }
+    @media (min-width:1280px){
+      #cta-salir{ bottom:-1.5%; }
+    }
+    @media (max-width:768px){
+      #cta-salir{ bottom:25% !important; }
+      .cta-swap{ width: clamp(200px, 50vw, 420px); }
+    }
+
+    /* Título de la home encima de los iconos */
+    .home-heading{
+      width: clamp(220px, 55%, 520px);
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.35));
+      margin-bottom: .3rem;
+    }
+
+    /* (pequeño fix) faltaba la unidad en móvil */
+    @media (max-width:768px){
+      #cta-salir{ bottom: 20px; } /* antes: bottom:20; */
+    }
+
+    /* Desktop: empuja el título hacia la derecha */
+    @media (min-width:1024px){
+      .home-heading{
+        margin-left: clamp(16px, 3vw, 56px);
+      }
+    }
+
+    /* ==========================
+       Destacados sobre la intro
+       ========================== */
+    .hero-monster{
+      position:absolute;
+      z-index:26;                  /* por encima de la intro */
+      top:7%;
+      left:10%;
+      width: clamp(140px, 26%, 240px);
+      height:auto;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,.45));
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .hero-monster:hover{ transform: translateY(-2px) scale(1.02); }
+
+    /* Ajustes responsivos */
+    @media (max-width:1024px){
+      .hero-monster{ top:6%; left:9%; width: clamp(120px, 28%, 210px); }
+    }
+    @media (max-width:640px){
+      .hero-monster{ top:5%; left:8%; width: clamp(110px, 34%, 200px); }
+    }
+
+    /* Modificadores por reino (tócalos si quieres mover un poco) */
+    .hero-monster--vamp{ left:11%; top:8%; }
+
+    /* DRACUTÁNICOS — más pequeño */
+.hero-monster--vamp{
+  top: 45%;
+  left: 26%;
+  /* ↓ reduce tamaño en desktop */
+  width: clamp(120px, 22%, 160px);
+}
+@media (max-width:1024px){
+  .hero-monster--vamp{
+    top: 14%; left: 24%;
+    width: clamp(76px, 20%, 140px);
+  }
+}
+@media (max-width:640px){
+  .hero-monster--vamp{
+    top: 50%; left: 35%;
+    /* ↓ bastante más pequeño en móvil */
+    width: clamp(50px, 22%, 110px);
+  }
+}
+
+/* ZELVIRA — más pequeño */
+.hero-monster--floral{
+  top: 50%;
+  left: 30%;
+  width: clamp(90px, 22%, 160px);
+}
+@media (max-width:1024px){
+  .hero-monster--floral{
+    top: 14%; left: 24%;
+    width: clamp(76px, 20%, 140px);
+  }
+}
+@media (max-width:640px){
+  .hero-monster--floral{
+    top: 55%; left: 35%;
+    width: clamp(45px, 22%, 110px);
+  }
+}
+
+/* === Fusión MULTIPLY en iconos y fichas === */
+/* Aísla el libro para que el blend no afecte fuera */
+#libro .relative{ isolation:isolate; }
+
+/* Aplica a: medallas/flechas/home (btn-swap), miniaturas de monstruo, fichas y destacados */
+.btn-swap img,
+.monster .thumb,
+.pages-area.ficha > img,
+.hero-monster img{
+  mix-blend-mode: multiply;
+}
+
+/* (Opcional) si algún asset se ve demasiado oscuro, puedes suavizarlo con esta clase extra */
+.blend-soft{ opacity:.9; }
+
+/* === Fusión MULTIPLY en iconos, miniaturas, fichas, destacados e INTROS === */
+#libro .relative{ isolation:isolate; }
+
+.btn-swap img,               /* medallas, flechas, home */
+.monster .thumb,             /* miniaturas */
+.pages-area.ficha > img,     /* fichas a doble página */
+.hero-monster img,           /* destacados sobre la intro */
+.pages-area .page-left > img,/* INTROS (imagen grande de la página izquierda) */
+.pages-area .page-right > img/* por si usas intros en la derecha */
+{
+  mix-blend-mode: multiply;
+}
+
+/* Opcionales: atenuar o desactivar si un asset queda muy oscuro */
+.blend-soft{ opacity:.9; }
+.blend-normal{ mix-blend-mode: normal !important; }
+
+
+  /* ============================
+    MARCOS DEL LIBRO (por reino)
+    ============================ */
+
+  /* Aísla el libro para que el blend no “salga” del contenedor */
+  #libro .relative{ isolation:isolate; }
+
+  /* Base del overlay de marco sobre cada pages-area */
+  .pages-area::after{
+    content:"";
+    position:absolute;
+    /* un pelín más ancho/alto que el área para que quede pegado al papel */
+    left:-0.5%;
+    right:-0.5%;
+    top:-35%;      /* ⬅️ sube el marco (más negativo = más arriba) */
+    bottom:-1.2%;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;   /* respeta proporción del PNG/WebP */
+    pointer-events:none;
+    z-index:25;                /* debajo de action-bar (28) y héroes (26) */
+    mix-blend-mode:multiply;   /* modo de fusión */
+    display:none;              /* solo se muestra con data-realm */
+  }
+
+/* FICHA — marco más bajo (menos alto superior/inferior) */
+.pages-area.ficha::after{
+  background-size: 100% 100%;
+  background-position: center;
+  /*         top   right  bottom left  */
+  inset:   -19%   -1.6%   -9%   -1.6%;
+  mix-blend-mode: multiply;
+  z-index: 25;
+  pointer-events: none;
+}
+
+/* Ajustes por reino (todos aún más bajos que antes) */
+#libro[data-realm="bestial"]   .pages-area.ficha::after{ inset: -17% -1.6% -10% -1.6%; }
+#libro[data-realm="vampirico"] .pages-area.ficha::after{ inset: -17% -1.6% -10% -1.6%; }
+#libro[data-realm="floral"]    .pages-area.ficha::after{ inset: -16% -1.6%  -9% -1.6%;  }
+#libro[data-realm="pantano"]   .pages-area.ficha::after{ inset: -16% -1.6%  -9% -1.6%;  }
+#libro[data-realm="rocoso"]    .pages-area.ficha::after{ inset: -16% -1.6%  -9% -1.6%;  }
+
+/* Tablet */
+@media (max-width:1024px){
+  .pages-area.ficha::after{ inset: -17% -1.8% -10% -1.8%; }
+}
+/* Móvil */
+@media (max-width:640px){
+  .pages-area.ficha::after {
+    inset: -10% -4% -15%  -1% !important;
+  }
+}
+
+
+
+
+  
+
+  /* Mostrar el marco solo en la página visible del reino actual */
+  #libro[data-realm] .pages-area:not(.hidden)::after{ display:block; }
+
+  /* ---- Marcos por reino (ajusta rutas si cambian) ---- */
+  #libro[data-realm="pantano"]   .pages-area:not(.hidden)::after{
+    background-image:url("assets/marcos/MARCO PANTANO.webp");
+  }
+  #libro[data-realm="bestial"]   .pages-area:not(.hidden)::after{
+    background-image:url("assets/marcos/MARCO BESTIAL VERDE.webp");
+  }
+  #libro[data-realm="vampirico"] .pages-area:not(.hidden)::after{
+    background-image:url("assets/marcos/MARCO VAMPIRICO NARANJA.webp");
+  }
+  #libro[data-realm="floral"]    .pages-area:not(.hidden)::after{
+    background-image:url("assets/marcos/MARCO FLORAL ROSA.webp");
+  }
+  #libro[data-realm="rocoso"]    .pages-area:not(.hidden)::after{
+    background-image:url("assets/marcos/MARCO ROCOSO PURPURA.webp");
+  }
+
+  /* ---- Ajustes responsivos (toca a gusto) ---- */
+  @media (max-width:1024px){
+    .pages-area::after{ top:-27.0%; bottom:-1.4%; }
+    .pages-area.ficha::after{ top:-10.8%; bottom:-1.8%; }
+  }
+  @media (max-width:640px){
+    .pages-area::after{ top:-30%; bottom:-1.6%; }
+    .pages-area.ficha::after{ top:-9.2%; bottom:-2.0%; }
+  }
+
+  /* Utilidades opcionales */
+  .pages-area--sin-marco::after{ display:none !important; }  /* por si quieres ocultarlo en alguna página */
+
+
+
+
+  </style>
+</head>
+<body class="bg-black text-white antialiased">
+
+  <!-- Fondo -->
+  <img src="assets/Background Libro.webp" alt="" class="fixed inset-0 -z-20 w-full h-full object-cover">
+
+  <!-- Toast -->
+  <div id="toast" class="hidden"></div>
+
+  <section id="libro" class="relative min-h-[120svh] py-16 sm:py-20 md:py-24">
+    <div class="mx-auto w-[95%] max-w-[1200px]">
+      <div class="relative mx-auto w-[100%] sm:w-[92%] md:w-[82%] lg:w-[74%]">
+
+        <!-- Barra superior: Home + categorías -->
+        <div class="realm-bar">
+          <!-- HOME -->
+          <button id="btnHome" class="btn-swap" aria-label="Inicio">
+            <img class="off" src="assets/BT HOME OFF.webp" alt="Home OFF">
+            <img class="on"  src="assets/BT HOME ON.webp"  alt="Home ON">
+          </button>
+
+          <!-- PANTANO -->
+          <button id="tab-pantano" class="btn-swap realm-tab" data-goto="pantano" aria-label="Reino Pantano">
+            <img class="off" src="assets/BT REINO PANTANO OFF.webp" alt="Pantano OFF">
+            <img class="on"  src="assets/BT REINO PANTANO ON.webp"  alt="Pantano ON">
+          </button>
+
+          <!-- FLORAL -->
+          <button id="tab-floral" class="btn-swap realm-tab" data-goto="floral" aria-label="Reino Floral">
+            <img class="off" src="assets/BT REINO FLORAL OFF.webp" alt="Floral OFF">
+            <img class="on"  src="assets/BT REINO FLORAL ON.webp"  alt="Floral ON">
+          </button>
+
+          <!-- BESTIAL -->
+          <button id="tab-bestial" class="btn-swap realm-tab" data-goto="bestial" aria-label="Reino Bestial">
+            <img class="off" src="assets/BT REINO BESTIAL OFF.webp" alt="Bestial OFF">
+            <img class="on"  src="assets/BT REINO BESTIAL ON.webp"  alt="Bestial ON">
+          </button>
+
+          <!-- ROCOSO -->
+          <button id="tab-rocoso" class="btn-swap realm-tab" data-goto="rocoso" aria-label="Reino Rocoso">
+            <img class="off" src="assets/BT REINO ROCOSO OFF.webp" alt="Rocoso OFF">
+            <img class="on"  src="assets/BT REINO ROCOSO ON.webp"  alt="Rocoso ON">
+          </button>
+
+          <!-- VAMPÍRICO -->
+          <button id="tab-vampirico" class="btn-swap realm-tab" data-goto="vampirico" aria-label="Reino Vampírico">
+            <img class="off" src="assets/BT REINO VAMPIRICO OFF.webp" alt="Vampírico OFF">
+            <img class="on"  src="assets/BT REINO VAMPIRICO ON.webp"  alt="Vampírico ON">
+          </button>
+        </div>
+
+        <!-- Libro+atril -->
+        <img src="assets/Libro Abierto Escena.webp" alt="Libro y atril"
+             class="block w-full h-auto pointer-events-none select-none drop-shadow-2xl" />
+
+        <!-- Flechas laterales -->
+        <button id="btnBack" class="btn-swap side-nav left-[-5%]" aria-label="Anterior">
+          <img class="off" src="assets/BT BACK OFF.webp" alt="Back OFF">
+          <img class="on"  src="assets/BT BACK ON.webp"  alt="Back ON">
+        </button>
+        <button id="btnNext" class="btn-swap side-nav right-[-5%]" aria-label="Siguiente">
+          <img class="off" src="assets/BT NEXT OFF.webp" alt="Next OFF">
+          <img class="on"  src="assets/BT NEXT ON.webp"  alt="Next ON">
+        </button>
+
+<!-- =========================
+     P0: INTRO / HOME (dos columnas, responsive)
+========================== -->
+<div id="pagina-home" class="pages-area" data-page="home">
+  <div class="page-left grid items-start pt-5">
+    <img src="assets/Sello Intro Libro.webp"
+         alt="Las Bestias del Bosque Prohibido"
+         class="w-full object-contain">
+  </div>
+
+  <div class="page-right">
+    <!-- Título arriba -->
+    <img class="home-heading"
+         src="assets/selecciona un reino.png"
+         alt="Selecciona un reino">
+
+    <!-- Iconos -->
+    <div id="grid-home" class="grid grid-cols-2 gap-3 md:gap-4 place-items-center">
+      <!-- PANTANO -->
+      <button class="btn-swap icon-btn" data-goto="pantano" aria-label="Ir al Reino Pantano">
+        <img class="off" src="assets/Icon Reino Pantano.webp" alt="Pantano">
+        <img class="on"  src="assets/Icon Reino Pantano HOVER.webp" alt="">
+      </button>
+      <!-- FLORAL -->
+      <button class="btn-swap icon-btn" data-goto="floral" aria-label="Ir al Reino Floral">
+        <img class="off" src="assets/Icon Reino Floral.webp" alt="Floral">
+        <img class="on"  src="assets/Icon Reino Floral HOVER.webp" alt="">
+      </button>
+      <!-- BESTIAL -->
+      <button class="btn-swap icon-btn" data-goto="bestial" aria-label="Ir al Reino Bestial">
+        <img class="off" src="assets/Icon Reino Bestial.webp" alt="Bestial">
+        <img class="on"  src="assets/Icon Reino Bestial HOVER.webp" alt="">
+      </button>
+      <!-- ROCOSO -->
+      <button class="btn-swap icon-btn" data-goto="rocoso" aria-label="Ir al Reino Rocoso">
+        <img class="off" src="assets/Icon Reino Rocoso.webp" alt="Rocoso">
+        <img class="on"  src="assets/Icon Reino Rocoso HOVER.webp" alt="">
+      </button>
+      <!-- VAMPÍRICO -->
+      <button class="btn-swap icon-btn" data-goto="vampirico" aria-label="Ir al Reino Vampírico">
+        <img class="off" src="assets/Icon Reino Vampirico.webp" alt="Vampírico">
+        <img class="on"  src="assets/Icon Reino Vampirico HOVER.webp" alt="">
+      </button>
+    </div>
+  </div>
+</div>
+
+
+        <!-- =========================
+             P1: REINO PANTANO (grid)
+        ========================== -->
+        <div id="pagina-pantano" class="pages-area" data-page="pantano">
+          <div class="page-left grid items-start pt-5">
+            <img src="assets/INTRO PANTANO.webp" alt="Introducción Reino Pantano" class="w-full object-contain">
+          </div>
+          <div class="page-right">
+            <div id="grid-pantano" class="grid grid-cols-2 gap-3 md:gap-4">
+              <button class="monster" data-goto="plathom"><img class="thumb" src="assets/13 M-PLATHOM.webp" alt="Plathom"></button>
+              <button class="monster" data-goto="venarth"><img class="thumb" src="assets/06 M-VENARTH.webp" alt="Venarth"></button>
+              <button class="monster" data-goto="nebrashkarn"><img class="thumb" src="assets/14 M-NEBRASHKARN.webp" alt="Nebrashkarn"></button>
+              <button class="monster" data-goto="noctalum"><img class="thumb" src="assets/21 M-NOCTALUM.webp" alt="Noctalum"></button>
+              <button class="monster" data-goto="hexalga"><img class="thumb" src="assets/25 M-HEXALGA.webp" alt="Hexalga"></button>
+              <button class="monster" data-goto="narthuun"><img class="thumb" src="assets/27 M-NARTHUUN.webp" alt="Narthuun"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             P2..P7: FICHAS PANTANO (cada una con action-bar)
+        ========================== -->
+        <div id="pagina-plathom" class="pages-area ficha hidden" data-page="plathom">
+          <img src="assets/13 F-PLATHOM.webp" alt="Plathom — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/13 F-PLATHOM.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-venarth" class="pages-area ficha hidden" data-page="venarth">
+          <img src="assets/06 F-VENARTH.webp" alt="Venarth — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/06 F-VENARTH.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-nebrashkarn" class="pages-area ficha hidden" data-page="nebrashkarn">
+          <img src="assets/14 F-NEBRASHKARN.webp" alt="Nebrashkarn — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/14 F-NEBRASHKARN.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-noctalum" class="pages-area ficha hidden" data-page="noctalum">
+          <img src="assets/21 F-NOCTALUM.webp" alt="Noctalum — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/21 F-NOCTALUM.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-hexalga" class="pages-area ficha hidden" data-page="hexalga">
+          <img src="assets/25 F-HEXALGA.webp" alt="Hexalga — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/25 F-HEXALGA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-narthuun" class="pages-area ficha hidden" data-page="narthuun">
+          <img src="assets/27 F-NARTHUUN.webp" alt="Narthuun — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/27 F-NARTHUUN.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <!-- =========================
+             P8: REINO BESTIAL (grid)
+        ========================== -->
+        <div id="pagina-bestial" class="pages-area" data-page="bestial">
+          <div class="page-left grid items-start pt-5">
+            <img src="assets/INTRO BESTIAL.webp" alt="Introducción Reino Bestial" class="w-full object-contain">
+          </div>
+          <div class="page-right">
+            <div id="grid-bestial" class="grid grid-cols-2 gap-3 md:gap-4">
+              <button class="monster" data-goto="cenethra"><img class="thumb" src="assets/bestial/10 M-CENETHRA.webp" alt="Cenethra"></button>
+              <button class="monster" data-goto="taralith"><img class="thumb" src="assets/bestial/11 M-TARALITH.webp" alt="Taralith"></button>
+              <button class="monster" data-goto="celtrion"><img class="thumb" src="assets/bestial/18 M-CELTRION.webp" alt="Celtrion"></button>
+              <button class="monster" data-goto="mopheraidos"><img class="thumb" src="assets/bestial/23 M-MOHERAIDOS.webp" alt="Mopheraidos"></button>
+              <button class="monster" data-goto="ardanox"><img class="thumb" src="assets/bestial/24 M-ARDANOX.webp" alt="Ardanox"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             P9..P13: FICHAS BESTIAL
+        ========================== -->
+        <div id="pagina-cenethra" class="pages-area ficha hidden" data-page="cenethra">
+          <img src="assets/10 F-CENETHRA.webp" alt="Cenethra — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/10 F-CENETHRA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-taralith" class="pages-area ficha hidden" data-page="taralith">
+          <img src="assets/11 F-TARALITH.webp" alt="Taralith — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/11 F-TARALITH.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-celtrion" class="pages-area ficha hidden" data-page="celtrion">
+          <img src="assets/18 F-CELTRION.webp" alt="Celtrion — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/18 F-CELTRION.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-mopheraidos" class="pages-area ficha hidden" data-page="mopheraidos">
+          <img src="assets/23 F-MOPHERAIDOS.webp" alt="Mopheraidos — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/23 F-MOPHERAIDOS.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-ardanox" class="pages-area ficha hidden" data-page="ardanox">
+          <img src="assets/24 F-ARDANOX.webp" alt="Ardanox — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/24 F-ARDANOX.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <!-- =========================
+             P14: REINO VAMPÍRICO (grid)
+        ========================== -->
+        <div id="pagina-vampirico" class="pages-area" data-page="vampirico">
+          <div class="page-left grid items-start pt-5">
+            <img src="assets/vampirico/INTRO VAMPIRICO.webp" alt="Introducción Reino Vampírico" class="w-full object-contain">
+            <!-- DESTACADO: DRACUTÁNICOS -->
+            <button class="hero-monster hero-monster--vamp" data-goto="dracutanicos" aria-label="DRACUTÁNICOS">
+              <img src="assets/vampirico/30 M-DRACUTANICUS.webp" alt="DRACUTÁNICOS">
+            </button>
+          </div>
+          <div class="page-right">
+            <div id="grid-vampirico" class="grid grid-cols-2 gap-3 md:gap-4">
+              <button class="monster" data-goto="v1"><img class="thumb" src="assets/vampirico/08 M-NUBRAKAI.webp" alt="V1"></button>
+              <button class="monster" data-goto="v2"><img class="thumb" src="assets/vampirico/09 M-INFERNELLE.webp" alt="V2"></button>
+              <button class="monster" data-goto="v3"><img class="thumb" src="assets/vampirico/17 M-NOCTARIZ.webp" alt="V3"></button>
+              <button class="monster" data-goto="v4"><img class="thumb" src="assets/vampirico/19 M-CAVERNUX.webp" alt="V4"></button>
+              <button class="monster" data-goto="v5"><img class="thumb" src="assets/vampirico/28 M-DRAKYRA.webp" alt="V5"></button>
+              <button class="monster" data-goto="v6"><img class="thumb" src="assets/vampirico/31 M-DRACULA.webp" alt="V6"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             P15..P20: FICHAS VAMPÍRICO
+        ========================== -->
+        <div id="pagina-v1" class="pages-area ficha hidden" data-page="v1">
+          <img src="assets/vampirico/08 F-NUBRAKAI.webp" alt="V1 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/vampirico/08 F-NUBRAKAI.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-v2" class="pages-area ficha hidden" data-page="v2">
+          <img src="assets/vampirico/09 F-INFERNELLE.webp" alt="V2 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/vampirico/09 F-INFERNELLE.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-v3" class="pages-area ficha hidden" data-page="v3">
+          <img src="assets/vampirico/17 F-NOCTARIZ.webp" alt="V3 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/vampirico/17 F-NOCTARIZ.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-v4" class="pages-area ficha hidden" data-page="v4">
+          <img src="assets/vampirico/19 F-CAVURNOX.webp" alt="V4 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/vampirico/19 F-CAVURNOX.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-v5" class="pages-area ficha hidden" data-page="v5">
+          <img src="assets/vampirico/28 F-DRAKYRA.webp" alt="V5 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/vampirico/28 F-DRAKYRA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-v6" class="pages-area ficha hidden" data-page="v6">
+          <img src="assets/vampirico/31 F-DRACULA.webp" alt="V6 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/vampirico/31 F-DRACULA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <!-- =========================
+             P21: REINO FLORAL (grid)
+        ========================== -->
+        <div id="pagina-floral" class="pages-area" data-page="floral">
+          <div class="page-left grid items-start pt-5">
+            <img src="assets/floral/INTRO FLORAL.webp" alt="Introducción Reino Floral" class="w-full object-contain">
+            <!-- DESTACADO: ZELVIRA -->
+            <button class="hero-monster hero-monster--floral" data-goto="zelvira" aria-label="ZELVIRA">
+              <img src="assets/floral/01 M-ZELVIRA.webp" alt="ZELVIRA">
+            </button>
+          </div>
+          <div class="page-right">
+            <div id="grid-floral" class="grid grid-cols-2 gap-3 md:gap-4">
+              <button class="monster" data-goto="fl1"><img class="thumb" src="assets/floral/04 M-HIEDRISS.webp" alt="FL1"></button>
+              <button class="monster" data-goto="fl2"><img class="thumb" src="assets/floral/05 M-VOLTHERIA.webp" alt="FL2"></button>
+              <button class="monster" data-goto="fl3"><img class="thumb" src="assets/floral/07 M-CARDANTAE.webp" alt="FL3"></button>
+              <button class="monster" data-goto="fl4"><img class="thumb" src="assets/floral/12 M-LOTHARAK.webp" alt="FL4"></button>
+              <button class="monster" data-goto="fl5"><img class="thumb" src="assets/floral/22 M-QUIRISDEA.webp" alt="FL5"></button>
+              <button class="monster" data-goto="fl6"><img class="thumb" src="assets/floral/29 M-NEKROPHOS.webp" alt="FL6"></button>
+              
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             P22..P27: FICHAS FLORAL
+        ========================== -->
+        <div id="pagina-fl1" class="pages-area ficha hidden" data-page="fl1">
+          <img src="assets/floral/04 F-HIEDRISS.webp" alt="FL1 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/floral/04 F-HIEDRISS.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-fl2" class="pages-area ficha hidden" data-page="fl2">
+          <img src="assets/floral/05 F-VOLTHERIA.webp" alt="FL2 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/floral/05 F-VOLTHERIA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-fl3" class="pages-area ficha hidden" data-page="fl3">
+          <img src="assets/floral/07 F-CARDANTAE.webp" alt="FL3 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/floral/07 F-CARDANTAE.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-fl4" class="pages-area ficha hidden" data-page="fl4">
+          <img src="assets/floral/12 F-LOTHARAX.webp" alt="FL4 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/floral/12 F-LOTHARAX.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-fl5" class="pages-area ficha hidden" data-page="fl5">
+          <img src="assets/floral/22 F-QUIRISDEA.webp" alt="FL5 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/floral/22 F-QUIRISDEA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-fl6" class="pages-area ficha hidden" data-page="fl6">
+          <img src="assets/floral/29 F-NEKROPHOS.webp" alt="FL6 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/floral/29 F-NEKROPHOS.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <!-- =========================
+             P28: REINO ROCOSO (grid)
+        ========================== -->
+        <div id="pagina-rocoso" class="pages-area" data-page="rocoso">
+          <div class="page-left grid items-start pt-5">
+            <img src="assets/rocoso/INTRO ROCOSO.webp" alt="Introducción Reino Rocoso" class="w-full object-contain">
+          </div>
+          <div class="page-right">
+            <div id="grid-rocoso" class="grid grid-cols-2 gap-3 md:gap-4">
+              <button class="monster" data-goto="r1"><img class="thumb" src="assets/rocoso/02 M-MULKAR.webp" alt="R1"></button>
+              <button class="monster" data-goto="r2"><img class="thumb" src="assets/rocoso/03 M-IGNAROK.webp" alt="R2"></button>
+              <button class="monster" data-goto="r3"><img class="thumb" src="assets/rocoso/15 M-OPTAROC.webp" alt="R3"></button>
+              <button class="monster" data-goto="r4"><img class="thumb" src="assets/rocoso/16 M-LUTHERION.webp" alt="R4"></button>
+              <button class="monster" data-goto="r5"><img class="thumb" src="assets/rocoso/20 M-MONOCRIT.webp" alt="R5"></button>
+              <button class="monster" data-goto="r6"><img class="thumb" src="assets/rocoso/26 M-KARNIZUL.webp" alt="R6"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             P29..P34: FICHAS ROCOSO
+        ========================== -->
+        <div id="pagina-r1" class="pages-area ficha hidden" data-page="r1">
+          <img src="assets/rocoso/02 F-MULKAR.webp" alt="R1 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/rocoso/02 F-MULKAR.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-r2" class="pages-area ficha hidden" data-page="r2">
+          <img src="assets/rocoso/03 F-IGNAROK.webp" alt="R2 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/rocoso/03 F-IGNAROK.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-r3" class="pages-area ficha hidden" data-page="r3">
+          <img src="assets/rocoso/15 F-OPTAROC.webp" alt="R3 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/rocoso/15 F-OPTAROC.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-r4" class="pages-area ficha hidden" data-page="r4">
+          <img src="assets/rocoso/16 F-LUTHERION.webp" alt="R4 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/rocoso/16 F-LUTHERION.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-r5" class="pages-area ficha hidden" data-page="r5">
+          <img src="assets/rocoso/20 F-MONOCRIT.webp" alt="R5 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/rocoso/20 F-MONOCRIT.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-r6" class="pages-area ficha hidden" data-page="r6">
+          <img src="assets/rocoso/26 F-KARNIZUL.webp" alt="R6 — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/rocoso/26 F-KARNIZUL.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <!-- NUEVAS FICHAS: ZELVIRA (Floral) y DRACUTÁNICOS (Vampírico) -->
+        <div id="pagina-zelvira" class="pages-area ficha hidden" data-page="zelvira">
+          <img src="assets/floral/01 F-ZELVIRA.webp" alt="ZELVIRA — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/floral/ZELVIRA FICHA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <div id="pagina-dracutanicos" class="pages-area ficha hidden" data-page="dracutanicos">
+          <img src="assets/vampirico/30 F-DRACUTANICUS.webp" alt="DRACUTÁNICOS — ficha" class="absolute inset-0 w-full h-full object-contain">
+          <div class="action-bar">
+            <a class="btn-swap btn-download" href="assets/vampirico/DRACUTANICOS FICHA.webp" download aria-label="Descarga para colorear">
+              <img class="off" src="assets/BT COLOREAR OFF.webp" alt="">
+              <img class="on"  src="assets/BT COLOREAR ON.webp"  alt="">
+            </a>
+            <button class="btn-swap btn-upload" aria-label="Añádelo a tu Bestiario">
+              <img class="off" src="assets/BT BESTIARIO OFF.webp" alt="">
+              <img class="on"  src="assets/BT BESTIARIO ON.webp"  alt="">
+            </button>
+            <input type="file" class="file-input hidden" accept="application/pdf">
+          </div>
+        </div>
+
+        <!-- CTA (reemplazo con tu arte) -->
+        <a id="cta-salir" href="#" class="btn-swap cta-swap" aria-label="Salir al bosque">
+          <img class="off" src="assets/BT SALIR OFF.webp" alt="Salir al bosque">
+          <img class="on"  src="assets/BT SALIR ON.webp"  alt="">
+        </a>
+      </div>
+    </div>
+  </section>
+
+<script>
+  // Orden de navegación (Home → resto)
+const order = [
+  'home',
+
+  // PANTANO
+  'pantano','plathom','venarth','nebrashkarn','noctalum','hexalga','narthuun',
+
+  // FLORAL (ZELVIRA destacado tras la intro)
+  'floral','zelvira','fl1','fl2','fl3','fl4','fl5','fl6',
+
+  // BESTIAL
+  'bestial','cenethra','taralith','celtrion','mopheraidos','ardanox',
+
+  // ROCOSO
+  'rocoso','r1','r2','r3','r4','r5','r6',
+
+  // VAMPÍRICO (DRACUTÁNICOS destacado tras la intro)
+  'vampirico','dracutanicos','v1','v2','v3','v4','v5','v6'
+];
+
+  const pages = Object.fromEntries(order.map(id => [id, document.querySelector(`[data-page="${id}"]`)]) );
+
+  const btnNext = document.getElementById('btnNext');
+  const btnBack = document.getElementById('btnBack');
+  const btnHome = document.getElementById('btnHome');
+  const realmBar = document.querySelector('.realm-bar');
+
+  // Pertenencia de páginas a cada reino (para activar medalla)
+  const realms = {
+    pantano: ['pantano','plathom','venarth','nebrashkarn','noctalum','hexalga','narthuun'],
+    bestial: ['bestial','cenethra','taralith','celtrion','mopheraidos','ardanox'],
+    vampirico: ['vampirico','dracutanicos','v1','v2','v3','v4','v5','v6'],
+    floral:   ['floral','zelvira','fl1','fl2','fl3','fl4','fl5','fl6'],
+    rocoso:   ['rocoso','r1','r2','r3','r4','r5','r6'],
+  };
+  const tabEls = {
+    pantano: document.getElementById('tab-pantano'),
+    bestial: document.getElementById('tab-bestial'),
+    vampirico: document.getElementById('tab-vampirico'),
+    floral:   document.getElementById('tab-floral'),
+    rocoso:   document.getElementById('tab-rocoso'),
+  };
+  function realmOf(pageId){
+    for (const [realm, list] of Object.entries(realms)) if (list.includes(pageId)) return realm;
+    return null;
+  }
+
+  let current = 'home';
+
+  function setActiveRealm(pageId){
+    const active = realmOf(pageId);
+    Object.entries(tabEls).forEach(([key, el])=>{
+      el.classList.toggle('is-active', key === active);
+    });
+  }
+
+  function show(id){
+    Object.values(pages).forEach(el => el?.classList.add('hidden'));
+    pages[id]?.classList.remove('hidden');
+    current = id;
+
+    const i = order.indexOf(current);
+    const isHome = current === 'home';
+
+    // flechas y barra de categorías visibles solo fuera del home
+    [btnBack, btnNext].forEach(b => b.classList.toggle('hidden', isHome));
+    realmBar.classList.toggle('hidden', isHome);
+
+    // activar flechas (cuando no es home)
+    if(!isHome){
+      btnBack.classList.toggle('is-active', i > 0);
+      btnNext.classList.toggle('is-active', i < order.length - 1);
+    }
+
+    // activar medalla del reino (no aplica en home)
+    setActiveRealm(current);
+  }
+
+  // Click en grillas para abrir fichas o saltar desde HOME/intro
+  ['grid-home','grid-pantano','grid-bestial','grid-vampirico','grid-floral','grid-rocoso'].forEach(id=>{
+    const grid = document.getElementById(id);
+    if(!grid) return;
+    grid.addEventListener('click', (e)=>{
+      const m = e.target.closest('[data-goto]');
+      if(!m) return;
+      show(m.dataset.goto);
+    });
+  });
+
+  // Click en los “destacados” sobre la intro (ZELVIRA/DRACUTÁNICOS)
+  document.querySelectorAll('.hero-monster').forEach(btn=>{
+    btn.addEventListener('click', ()=> show(btn.dataset.goto));
+  });
+
+  // Flechas
+  btnNext.addEventListener('click', ()=>{
+    const i = order.indexOf(current);
+    if (i < order.length - 1) show(order[i+1]);
+  });
+  btnBack.addEventListener('click', ()=>{
+    const i = order.indexOf(current);
+    if (i > 0) show(order[i-1]);
+  });
+
+  // Home → vuelve al home
+  btnHome.addEventListener('click', (e)=>{ e.preventDefault(); show('home'); });
+
+  // Medallas (tabs) → van a la intro del reino
+  document.querySelectorAll('.realm-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = btn.dataset.goto; // pantano | bestial | vampirico | floral | rocoso
+      show(target);
+    });
+  });
+
+  // Subida de PDFs (todas las fichas)
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.remove('hidden');
+    setTimeout(()=>t.classList.add('hidden'), 1800);
+  }
+  document.querySelectorAll('.pages-area.ficha').forEach(ficha=>{
+    const upBtn = ficha.querySelector('.btn-upload');
+    const fileIn = ficha.querySelector('.file-input');
+    if(upBtn && fileIn){
+      upBtn.addEventListener('click', ()=> fileIn.click());
+      fileIn.addEventListener('change', ()=>{
+        if(fileIn.files?.length){
+          showToast('¡PDF agregado a tu Bestiario!');
+        }
+      });
+    }
+  });
+
+  // Teclado ← → y ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') btnNext.click();
+    if (e.key === 'ArrowLeft')  btnBack.click();
+    if (e.key === 'Escape')     btnHome.click();
+  });
+
+  // Estado inicial
+  show(current);
+
+  function setActiveRealm(pageId){
+  const active = realmOf(pageId);
+  Object.entries(tabEls).forEach(([key, el])=>{
+    el.classList.toggle('is-active', key === active);
+  });
+
+  // ⬇️ NUEVO: indicamos el reino activo al contenedor del libro
+  const libro = document.getElementById('libro');
+  if (active) { libro.dataset.realm = active; }
+  else { delete libro.dataset.realm; }  // en Home no hay marco
+}
+
+</script>
+
+</body>
+</html>
