@@ -342,6 +342,7 @@
       .pages-area.ficha {
         top: 20%;
         height: 33%;
+        
       }
     }
 
@@ -660,143 +661,148 @@
       mix-blend-mode: normal !important;
     }
 
+    
 
-    /* ============================
-    MARCOS DEL LIBRO (por reino)
-    ============================ */
+/*
 
-    /* Aísla el libro para que el blend no “salga” del contenedor */
-    #libro .relative {
-      isolation: isolate;
-    }
+============================
+MARCOS DEL LIBRO (por reino)
+============================
 
-    /* Base del overlay de marco sobre cada pages-area */
-    .pages-area::after {
-      content: "";
-      position: absolute;
-      /* un pelín más ancho/alto que el área para que quede pegado al papel */
-      left: -0.5%;
-      right: -0.5%;
-      top: -35%;
-      /* ⬅️ sube el marco (más negativo = más arriba) */
-      bottom: -1.2%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-      pointer-events: none;
-      z-index: 25;
-      mix-blend-mode: multiply;
-      display: none;
-    }
+Aísla el libro para que el blend no “salga” del contenedor
+-----------------------------------------------------------
+#libro .relative {
+  isolation: isolate;
+}
 
-    /* FICHA — marco más bajo (menos alto superior/inferior) */
-    .pages-area.ficha::after {
-      background-size: 100% 100%;
-      background-position: center;
-      /*         top   right  bottom left  */
-      inset: -19% -1.6% -9% -1.6%;
-      mix-blend-mode: multiply;
-      z-index: 25;
-      pointer-events: none;
-    }
+Base del overlay de marco sobre cada pages-area
+------------------------------------------------
+.pages-area::after {
+  content: "";
+  position: absolute;
+  left: -0.5%;
+  right: -0.5%;
+  top: -35%;
+  bottom: -1.2%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
+  z-index: 25;
+  mix-blend-mode: multiply;
+  display: none;
+}
 
-    /* Ajustes por reino (todos aún más bajos que antes) */
-    #libro[data-realm="bestial"] .pages-area.ficha::after {
-      inset: -17% -1.6% -10% -1.6%;
-    }
+FICHA — marco más bajo (menos alto superior/inferior)
+------------------------------------------------------
+.pages-area.ficha::after {
+  background-size: 100% 100%;
+  background-position: center;
+  inset: -19% -1.6% -9% -1.6%;
+  mix-blend-mode: multiply;
+  z-index: 25;
+  pointer-events: none;
+}
 
-    #libro[data-realm="vampirico"] .pages-area.ficha::after {
-      inset: -17% -1.6% -10% -1.6%;
-    }
+Ajustes por reino (todos aún más bajos que antes)
+--------------------------------------------------
+#libro[data-realm="bestial"] .pages-area.ficha::after {
+  inset: -17% -1.6% -10% -1.6%;
+}
 
-    #libro[data-realm="floral"] .pages-area.ficha::after {
-      inset: -16% -1.6% -9% -1.6%;
-    }
+#libro[data-realm="vampirico"] .pages-area.ficha::after {
+  inset: -17% -1.6% -10% -1.6%;
+}
 
-    #libro[data-realm="pantano"] .pages-area.ficha::after {
-      inset: -16% -1.6% -9% -1.6%;
-    }
+#libro[data-realm="floral"] .pages-area.ficha::after {
+  inset: -16% -1.6% -9% -1.6%;
+}
 
-    #libro[data-realm="rocoso"] .pages-area.ficha::after {
-      inset: -16% -1.6% -9% -1.6%;
-    }
+#libro[data-realm="pantano"] .pages-area.ficha::after {
+  inset: -16% -1.6% -9% -1.6%;
+}
 
-    /* Tablet */
-    @media (max-width:1024px) {
-      .pages-area.ficha::after {
-        inset: -17% -1.8% -10% -1.8%;
-      }
-    }
+#libro[data-realm="rocoso"] .pages-area.ficha::after {
+  inset: -16% -1.6% -9% -1.6%;
+}
 
-    /* Móvil */
-    @media (max-width:640px) {
-      .pages-area.ficha::after {
-        inset: -10% -4% -15% -1% !important;
-      }
-    }
+Tablet
+------
+@media (max-width:1024px) {
+  .pages-area.ficha::after {
+    inset: -17% -1.8% -10% -1.8%;
+  }
+}
 
+Móvil
+-----
+@media (max-width:640px) {
+  .pages-area.ficha::after {
+    inset: -10% -4% -15% -1% !important;
+  }
+}
 
+Mostrar el marco solo en la página visible del reino actual
+-------------------------------------------------------------
+#libro[data-realm] .pages-area:not(.hidden)::after {
+  display: block;
+}
 
+Marcos por reino (ajusta rutas si cambian)
+------------------------------------------
+#libro[data-realm="pantano"] .pages-area:not(.hidden)::after {
+  background-image: url("assets/marcos/MARCO PANTANO.webp");
+}
 
+#libro[data-realm="bestial"] .pages-area:not(.hidden)::after {
+  background-image: url("assets/marcos/MARCO BESTIAL VERDE.webp");
+}
 
+#libro[data-realm="vampirico"] .pages-area:not(.hidden)::after {
+  background-image: url("assets/marcos/MARCO VAMPIRICO NARANJA.webp");
+}
 
+#libro[data-realm="floral"] .pages-area:not(.hidden)::after {
+  background-image: url("assets/marcos/MARCO FLORAL ROSA.webp");
+}
 
+#libro[data-realm="rocoso"] .pages-area:not(.hidden)::after {
+  background-image: url("assets/marcos/MARCO ROCOSO PURPURA.webp");
+}
 
-    /* Mostrar el marco solo en la página visible del reino actual */
-    #libro[data-realm] .pages-area:not(.hidden)::after {
-      display: block;
-    }
+Ajustes responsivos (toca a gusto)
+-----------------------------------
+@media (max-width:1024px) {
+  .pages-area::after {
+    top: -27.0%;
+    bottom: -1.4%;
+  }
 
-    /* ---- Marcos por reino (ajusta rutas si cambian) ---- */
-    #libro[data-realm="pantano"] .pages-area:not(.hidden)::after {
-      background-image: url("assets/marcos/MARCO PANTANO.webp");
-    }
+  .pages-area.ficha::after {
+    top: -10.8%;
+    bottom: -1.8%;
+  }
+}
 
-    #libro[data-realm="bestial"] .pages-area:not(.hidden)::after {
-      background-image: url("assets/marcos/MARCO BESTIAL VERDE.webp");
-    }
+@media (max-width:640px) {
+  .pages-area::after {
+    top: -30%;
+    bottom: -1.6%;
+  }
 
-    #libro[data-realm="vampirico"] .pages-area:not(.hidden)::after {
-      background-image: url("assets/marcos/MARCO VAMPIRICO NARANJA.webp");
-    }
+  .pages-area.ficha::after {
+    top: -9.2%;
+    bottom: -2.0%;
+  }
+}
 
-    #libro[data-realm="floral"] .pages-area:not(.hidden)::after {
-      background-image: url("assets/marcos/MARCO FLORAL ROSA.webp");
-    }
+Utilidades opcionales
+----------------------
+.pages-area--sin-marco::after {
+  display: none !important;
+}
 
-    #libro[data-realm="rocoso"] .pages-area:not(.hidden)::after {
-      background-image: url("assets/marcos/MARCO ROCOSO PURPURA.webp");
-    }
-
-    /* ---- Ajustes responsivos (toca a gusto) ---- */
-    @media (max-width:1024px) {
-      .pages-area::after {
-        top: -27.0%;
-        bottom: -1.4%;
-      }
-
-      .pages-area.ficha::after {
-        top: -10.8%;
-        bottom: -1.8%;
-      }
-    }
-
-    @media (max-width:640px) {
-      .pages-area::after {
-        top: -30%;
-        bottom: -1.6%;
-      }
-
-      .pages-area.ficha::after {
-        top: -9.2%;
-        bottom: -2.0%;
-      }
-    }
-
-    /* Utilidades opcionales */
-    .pages-area--sin-marco::after {
-      display: none !important;
-    }
+*/
 
     /* por si quieres ocultarlo en alguna página */
   </style>
