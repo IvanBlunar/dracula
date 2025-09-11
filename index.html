@@ -877,6 +877,8 @@ Utilidades opcionales
               class="on pointer-events-none absolute inset-0 h-[48px] sm:h-[52px] md:h-[60px] w-auto object-contain select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
           </a>
 
+          
+
           <!-- Castillo -->
           <a href="#fortnite-cta" class="group relative inline-block nav-item mt-[2px]" data-nav="castillo"
             aria-label="El Castillo">
@@ -3638,6 +3640,89 @@ Utilidades opcionales
   </script>
 
   
+<script>
+(() => {
+  // === AJUSTES ===
+  const DURATION_MS = 1600;        // duración del scroll 
+  const EXTRA_PIXELS = 32;         // respiro al final
+  const CASTILLO_SELECTOR = 'a[data-nav="castillo"], a[href="#fortnite-cta"]';
+
+  
+  function easeInOutQuad(t){ return t<0.5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
+
+  
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const headerH = () => {
+    const h = document.querySelector('header, .site-header, #header');
+    return h ? h.getBoundingClientRect().height : 0;
+  };
+
+  function yFinalFortnite() {
+    const sec = document.querySelector('#fortnite-cta');
+    if (!sec) return null;
+
+    
+    const sub = sec.querySelector('[data-cta-anchor]');
+    if (sub) {
+      const y = sub.getBoundingClientRect().top + window.scrollY - headerH() - 12;
+      const yMax = document.documentElement.scrollHeight - window.innerHeight;
+      return Math.max(0, Math.min(y, yMax));
+    }
+
+    const top = sec.getBoundingClientRect().top + window.scrollY;
+    const y = top + sec.offsetHeight - window.innerHeight + EXTRA_PIXELS;
+    const yMax = document.documentElement.scrollHeight - window.innerHeight;
+    return Math.max(0, Math.min(y, yMax));
+  }
+
+  
+  function animateScrollTo(targetY, duration = DURATION_MS) {
+    if (reduceMotion) { window.scrollTo(0, targetY); return; }
+
+    const startY = window.scrollY;
+    const dist = targetY - startY;
+    const start = performance.now();
+
+    function frame(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = easeInOutQuad(t);
+      window.scrollTo(0, startY + dist * eased);
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function goToFortniteSlow() {
+    const y = yFinalFortnite();
+    if (y == null) return;
+    animateScrollTo(y);
+  
+    setTimeout(() => { const y2 = yFinalFortnite(); if (y2!=null) window.scrollTo(0, y2); }, DURATION_MS + 60);
+  }
+
+  // Intercepta clic en “Castillo”
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest(CASTILLO_SELECTOR);
+    if (!a) return;
+    if (!document.querySelector('#fortnite-cta')) return;
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    history.pushState(null, '', '#fortnite-cta');
+   
+    setTimeout(goToFortniteSlow, 0);
+  }, true); 
+
+ 
+  function adjustOnHash() {
+    if (location.hash !== '#fortnite-cta') return;
+    setTimeout(goToFortniteSlow, 0);
+    window.addEventListener('load', () => setTimeout(goToFortniteSlow, 60), { once: true });
+  }
+  adjustOnHash();
+  window.addEventListener('hashchange', adjustOnHash);
+})();
+</script>
 
 
   
