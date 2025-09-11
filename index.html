@@ -320,21 +320,22 @@
 
     /* Fichas a doble página (subidas un poco respecto al atril) */
     .pages-area.ficha {
-      top: 20.5%;
-      height: 34%;
+      top: 19.5%;
+      height: 39%;
+      
     }
 
     @media (min-width:1280px) {
       .pages-area.ficha {
-        top: 17%;
-        height: 42%;
+        top: 19.5%;
+        height: 40%;
       }
     }
 
     @media (max-width:1024px) {
       .pages-area.ficha {
         top: 21%;
-        height: 33.5%;
+        height: 39%;
       }
     }
 
@@ -347,40 +348,69 @@
       }
     }
 
-    /* Barra de acciones sobre la ficha (encima de la página izquierda) */
-    .action-bar {
-      position: absolute;
-      z-index: 28;
-      top: 1%;
-      left: 9.8%;
-      width: 34.2%;
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      pointer-events: auto;
-      filter: drop-shadow(0 0 8px rgba(0, 0, 0, .35));
-    }
+  /* Barra de acciones */
+.action-bar {
+  position: absolute;
+  z-index: 28;
+  top: -6%;
+  left: 9.8%;
+  width: 34.2%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  pointer-events: auto;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, .35));
+}
 
-    @media (max-width:1024px) {
-      .action-bar {
-        top: -2%;
-        left: 11.8%;
-        width: 31.8%;
-      }
-    }
+/* Solo los botones de upload/download más grandes */
+.btn-upload,
+.btn-download {
+  width: 140px;
+  height: 140px;
+  font-size: 1.5rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
 
-    @media (max-width:640px) {
-      .action-bar {
-        top: -7%;
-        left: 15.5%;
-        width: 26.5%;
-      }
+.btn-upload img,
+.btn-download img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
 
-      .btn-swap {
-        width: 64px;
-        height: 64px;
-      }
-    }
+/* Tablets */
+@media (max-width: 1024px) {
+  .action-bar {
+    top: -2%;
+    left: 11.8%;
+    width: 31.8%;
+  }
+
+  .btn-upload,
+  .btn-download {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 640px) {
+  .action-bar {
+    top: -16%; 
+    left: 15.5%;
+    width: 26.5%;
+  }
+
+  .btn-upload,
+  .btn-download {
+    width: 120px; 
+    height: 120px;
+  }
+}
+
 
     /* Tarjeta monstruo (cuadrícula de miniaturas) */
     .monster {
@@ -598,15 +628,15 @@
 
     @media (max-width:1024px) {
       .hero-monster--floral {
-        top: 14%;
-        left: 24%;
+        top: 47%;
+        left: 35%;
         width: clamp(76px, 20%, 140px);
       }
     }
 
     @media (max-width:640px) {
       .hero-monster--floral {
-        top: 52%;
+        top: 51%;
         left: 35%;
         width: clamp(45px, 22%, 110px);
       }
@@ -813,43 +843,59 @@ Utilidades opcionales
 
 <body class="bg-black text-white overflow-x-hidden antialiased">
 
-  <!-- ===== Header ===== -->
-  <header class="fixed inset-x-0 top-0 z-[100]">
-    <div class="relative mx-auto mt-4 w-[94%] max-w-[1400px]">
-      <div
-        class="flex flex-col sm:flex-row items-center justify-center sm:justify-between px-4 md:px-6 py-2 bg-black/40 backdrop-blur-md rounded-3xl">
-        <div class="flex items-center justify-center sm:justify-between w-full gap-12 sm:gap-0">
-          <a href="#top" id="logo-home" aria-label="Ir al inicio" class="inline-block align-middle">
-            <img src="assets/header/Logo Dracula.webp" alt="Drácula"
-              class="h-[50px] sm:h-[42px] md:h-[50px] w-auto select-none pointer-events-none">
+<!-- ===== Header ===== -->
+<header class="fixed inset-x-0 top-0 z-[100]">
+  <div class="relative mx-auto mt-4 w-[94%] max-w-[1400px]">
+    <div
+      class="flex flex-col sm:flex-row items-center justify-center sm:justify-between px-4 md:px-6 py-2 bg-black/40 backdrop-blur-md rounded-3xl">
+      <div class="flex items-center justify-center sm:justify-between w-full gap-12 sm:gap-0">
+
+        <!-- Logo Drácula (más grande en escritorio) -->
+        <a href="#top" id="logo-home" aria-label="Ir al inicio" class="inline-block align-middle">
+          <img src="assets/header/Logo Dracula.webp" alt="Drácula"
+            class="h-[60px] sm:h-[50px] md:h-[70px] w-auto object-contain select-none pointer-events-none">
+        </a>
+
+        <!-- Navegación -->
+        <nav class="flex items-center gap-10 sm:gap-14">
+
+          <!-- Rappi Fulll (más pequeño en escritorio) -->
+          <a href="https://rappi.onelink.me/y6GB/64kh2eho" target="_blank" rel="noopener noreferrer"
+            class="group relative inline-block nav-item" data-nav="rappi" aria-label="Rappi Fulll">
+            <img src="assets/header/Rappi Fulll Off.webp" alt="Rappi Fulll"
+              class="off h-[48px] sm:h-[52px] md:h-[50px] w-auto object-contain select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+            <img src="assets/header/Rappi Fulll.webp" alt=""
+              class="on pointer-events-none absolute inset-0 h-[48px] sm:h-[52px] md:h-[50px] w-auto object-contain select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
           </a>
 
-          <nav class="flex items-center gap-10 sm:gap-14">
-            <!-- Corregido: href al id real del bestiario -->
-            <!-- Bestiario → LIBRO -->
-            <a href="#libro" class="group relative inline-block nav-item" data-nav="bestiario"
-              aria-label="El Bestiario">
-              <img src="assets/header/OFF EL BESTIARIO.webp" alt="El Bestiario"
-                class="off h-[40px] sm:h-[48px] md:h-[52px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
-              <img src="assets/header/ON EL BESTIARIO.webp" alt=""
-                class="on pointer-events-none absolute inset-0 h-[40px] sm:h-[48px] md:h-[52px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
-            </a>
+          <!-- Bestiario -->
+          <a href="#libro" class="group relative inline-block nav-item" data-nav="bestiario"
+            aria-label="El Bestiario">
+            <img src="assets/header/OFF EL BESTIARIO.webp" alt="El Bestiario"
+              class="off h-[48px] sm:h-[52px] md:h-[60px] w-auto object-contain select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+            <img src="assets/header/ON EL BESTIARIO.webp" alt=""
+              class="on pointer-events-none absolute inset-0 h-[48px] sm:h-[52px] md:h-[60px] w-auto object-contain select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+          </a>
 
-            <a href="#fortnite-cta" class="group relative inline-block nav-item mt-[2px]" data-nav="castillo"
-              aria-label="El Castillo">
-              <img src="assets/header/OFF El Castilo.webp" alt="El Castillo"
-                class="off h-[50px] sm:h-[60px] md:h-[70px] w-auto select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
-              <img src="assets/header/ON El Castilo.webp" alt=""
-                class="on pointer-events-none absolute inset-0 h-[50px] sm:h-[60px] md:h-[70px] w-auto select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
-            </a>
+          <!-- Castillo -->
+          <a href="#fortnite-cta" class="group relative inline-block nav-item mt-[2px]" data-nav="castillo"
+            aria-label="El Castillo">
+            <img src="assets/header/OFF El Castilo.webp" alt="El Castillo"
+              class="off h-[50px] sm:h-[60px] md:h-[70px] w-auto object-contain select-none transition-opacity duration-200 ease-out group-hover:opacity-0">
+            <img src="assets/header/ON El Castilo.webp" alt=""
+              class="on pointer-events-none absolute inset-0 h-[50px] sm:h-[60px] md:h-[70px] w-auto object-contain select-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+          </a>
 
-
-            </a>
-          </nav>
-        </div>
+        </nav>
       </div>
     </div>
-  </header>
+  </div>
+</header>
+
+
+
+
+
 
   <main class="relative z-0">
     <!-- Fondo bosque que llega hasta castillo -->
@@ -877,7 +923,7 @@ Utilidades opcionales
           class="relative rounded-3xl border-4 border-lime-500/90 bg-black/40 backdrop-blur-sm overflow-hidden shadow-[0_0_40px_rgba(132,255,0,0.2)]">
           <video id="draculaTrailer" loop controls playsinline class="block w-full aspect-video object-cover"
             preload="metadata">
-            <source src="assets/video/MASTER_1MIN_V4_ON_20250828 (v).mp4" type="video/mp4">
+            <source src="assets/video/MASTER_1MIN_V4_ON_20250828_v.mp4" type="video/mp4">
             Tu navegador no soporta video HTML5.
           </video>
           <button id="trailerPlay"
@@ -3327,6 +3373,8 @@ Utilidades opcionales
 </style>
 
 
+
+
   <script>
     (() => {
       // ====== Ajustes de velocidad ======
@@ -3341,7 +3389,7 @@ Utilidades opcionales
         const header = document.querySelector('header');
         const h = header ? header.offsetHeight : 0;
         // colchón extra pequeño
-        return h + 12;
+        return h + -100;
       }
 
       function clamp(val, min, max) {
@@ -3588,6 +3636,8 @@ Utilidades opcionales
       }
     }
   </script>
+
+  
 
 
   
