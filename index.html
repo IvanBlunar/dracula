@@ -348,6 +348,8 @@
       }
     }
 
+    
+
   /* Barra de acciones */
 .action-bar {
   position: absolute;
@@ -1329,6 +1331,10 @@ Utilidades opcionales
                 w-[180vw] sm:w-[160vw] md:w-[140vw]
                 opacity-0 pointer-events-none select-none z-[24] willchange-transform" />
         </div>
+
+        <!-- Overlay pasar página -->
+<div id="pageflip-overlay" aria-hidden="true"></div>
+
 
 
 
@@ -3721,6 +3727,105 @@ Utilidades opcionales
   }
   adjustOnHash();
   window.addEventListener('hashchange', adjustOnHash);
+})();
+</script>
+
+<script>
+(() => {
+  // === CONFIG ===
+  const GIF_FORWARD = "assets/Libro_V3.gif";
+  const GIF_BACK    = "assets/Libro_V3REVER.gif";
+  const HOLD_MS     = 400; 
+  const NEXT_ID     = "btnNext";
+  const BACK_ID     = "btnBack";
+  const BOOK_WRAP_SEL = "#libro .mx-auto > .relative";
+  const BOOK_IMG_SEL  = '#libro img[alt="Libro y atril"]';
+
+  const SCALE    = 0.94;  
+  const OFFSET_X = -5;    
+  const EXTRA_W  = 0;     
+  const EXTRA_H  = 0;     
+  // === /CONFIG ===
+
+  // offset vertical dinámico
+  function getOffsetY() {
+    const isMobile = window.matchMedia("(max-width: 640px)").matches;
+    return isMobile ? -65 : -152; // en móvil queda más abajo
+  }
+
+  // z-index dinámico
+  function getZIndex() {
+    const isMobile = window.matchMedia("(max-width: 640px)").matches;
+    return isMobile ? 5 : 200; // en móvil se va detrás, en desktop queda al frente
+  }
+
+  const wrap = document.querySelector(BOOK_WRAP_SEL);
+  const bookImg = document.querySelector(BOOK_IMG_SEL);
+  if (!wrap || !bookImg) return;
+
+  if (getComputedStyle(wrap).position === "static") wrap.style.position = "relative";
+
+  const overlay = document.createElement("div");
+  overlay.id = "pageflip-overlay";
+  overlay.style.cssText = [
+    "position:absolute","left:0","top:0","width:0","height:0",
+    "pointer-events:none","opacity:0","transition:opacity .2s"
+  ].join(";");
+
+  const imgFwd = document.createElement("img");
+  const imgBack = document.createElement("img");
+  imgFwd.src = GIF_FORWARD; imgBack.src = GIF_BACK;
+  [imgFwd, imgBack].forEach(el => {
+    el.style.cssText = "position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none";
+    overlay.appendChild(el);
+  });
+  wrap.appendChild(overlay);
+
+  function syncOverlayBox() {
+    const iR = bookImg.getBoundingClientRect();
+    const wR = wrap.getBoundingClientRect();
+
+    const width  = iR.width  * SCALE + EXTRA_W;
+    const height = iR.height * SCALE + EXTRA_H;
+
+    const left = (iR.left - wR.left) + (iR.width  - width)  / 2 + OFFSET_X;
+    const top  = (iR.top  - wR.top ) + (iR.height - height) / 2 + getOffsetY();
+
+    overlay.style.left   = left + "px";
+    overlay.style.top    = top  + "px";
+    overlay.style.width  = width  + "px";
+    overlay.style.height = height + "px";
+    overlay.style.zIndex = getZIndex();
+  }
+
+  if (bookImg.complete) syncOverlayBox();
+  else bookImg.addEventListener("load", syncOverlayBox, {once:true});
+
+  window.addEventListener("resize", syncOverlayBox);
+  window.addEventListener("orientationchange", () => setTimeout(syncOverlayBox, 50));
+  new ResizeObserver(syncOverlayBox).observe(bookImg);
+
+  function restartGif(img) {
+    const s = img.src;
+    img.src = "";
+    requestAnimationFrame(() => img.src = s);
+  }
+
+  function play(dir) {
+    syncOverlayBox();
+    overlay.style.opacity = "1";
+    imgFwd.style.display = imgBack.style.display = "none";
+    const target = dir === "back" ? imgBack : imgFwd;
+    restartGif(target);
+    target.style.display = "block";
+    setTimeout(() => {
+      overlay.style.opacity = "0";
+      target.style.display = "none";
+    }, HOLD_MS);
+  }
+
+  document.getElementById(NEXT_ID)?.addEventListener("click", () => play("forward"));
+  document.getElementById(BACK_ID)?.addEventListener("click", () => play("back"));
 })();
 </script>
 
